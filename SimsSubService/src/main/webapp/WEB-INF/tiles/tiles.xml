@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+ 
+<tiles-definitions>
+     
+     <!-- 메인 레이아웃 정의 -->
+     <definition name="layouts-tiles" template="/WEB-INF/jsp/comm/defaultLayout.jsp">
+     	<!-- <put-attribute name="navigation" value="/WEB-INF/jsp/comm/navigation.jsp" /> -->        
+        <put-attribute name="header" value="/WEB-INF/jsp/comm/header.jsp" />        
+        <put-attribute name="content" value="" />
+        <put-attribute name="footer" value="/WEB-INF/jsp/comm/footer.jsp" />                
+    </definition> 
+    
+    <definition name="*.tiles" extends="layouts-tiles">
+        <put-attribute name="content" value="/WEB-INF/jsp/{1}.jsp" />
+    </definition>       
+    
+    <definition name="*/*.tiles" extends="layouts-tiles">
+        <put-attribute name="content" value="/WEB-INF/jsp/{1}/{2}.jsp" />
+    </definition>
+    
+    <definition name="*/*/*.tiles" extends="layouts-tiles">
+        <put-attribute name="content" value="/WEB-INF/jsp/{1}/{2}/{3}.jsp" />
+    </definition>
+   
+</tiles-definitions>

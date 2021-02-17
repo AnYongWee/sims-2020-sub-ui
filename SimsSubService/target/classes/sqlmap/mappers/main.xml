@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.bed.mapper.MainMapper">
+
+	<resultMap type="sqisoft.com.bed.model.BldMainInfo" id="bldMainInfoMap">
+		<id column="BLD_ID" property="bldId" />
+		<id column="BLD_NM" property="bldNm" />
+		<id column="CORP_NM" property="corpNm" />
+		<id column="OWN" property="own" />
+		<id column="BLD_PURPS_CD" property="bldPurpsCd" />
+		<id column="BLD_PURPS_VAL" property="bldPurpsVal" />
+		<id column="FAC_MGMT_CD" property="facMgmtCd" />
+		<id column="FAC_MGMT_VAL" property="facMgmtVal" />
+		<id column="OWN_CD" property="ownCd" />
+		<id column="OWN_VAL" property="ownVal" />
+		<id column="WRIT_MAN_ID" property="writManId" />
+		<id column="WRIT_DTM" property="writDtm" />
+		<id column="USER_NM" property="regUserNm" />
+		<id column="totalCnt" property="totalCnt" />	
+		<id column="rowNumber" property="rowNumber" />
+	</resultMap>	
+	
+	
+	<!-- 건축물 리스트 조회 -->
+	<select id="selectBldList" parameterType="map" resultMap="bldMainInfoMap">
+		 SELECT Z.*  FROM (
+		     SELECT ROWNUM AS rowNumber, A.* FROM (
+				SELECT B3.BLD_ID,
+				       B3.BLD_NM,
+				       B3.CORP_NM,
+				       B3.OWN,
+				       B3.BLD_PURPS_CD,
+       				   B1_2_1.CODE_VAL AS BLD_PURPS_VAL,
+       				   B3.FAC_MGMT_CD,
+       				   B1_2_2.CODE_VAL AS FAC_MGMT_VAL,
+				       B3.OWN_CD,
+				       B1_2_3.CODE_VAL AS OWN_VAL,
+				       B3.WRIT_MAN_ID,
+				       B3.WRIT_DTM,
+				       B26.USER_NM,
+				       COUNT(*) OVER() AS totalCnt
+				FROM TB_BEM003 B3
+				LEFT OUTER JOIN TB_BEM026 B26 ON B3.WRIT_MAN_ID = B26.USER_ID
+				LEFT OUTER JOIN TB_BEM001_02 B1_2_1 ON B1_2_1.GRP_CODE_ID = 'BLD_PURPS_CD' AND B1_2_1.CODE_ID = B3.BLD_PURPS_CD
+				LEFT OUTER JOIN TB_BEM001_02 B1_2_2 ON B1_2_2.GRP_CODE_ID = 'FAC_MGMT_CD' AND B1_2_2.CODE_ID = B3.FAC_MGMT_CD
+				LEFT OUTER JOIN TB_BEM001_02 B1_2_3 ON B1_2_3.GRP_CODE_ID = 'OWN_CD' AND B1_2_3.CODE_ID = B3.OWN_CD
+				<where>
+					<if test="searchType  == 'bldNm' and searchVal != null and searchVal != '' "> AND B3.BLD_NM like '%' || #{searchVal} || '%' </if>
+					<if test="searchType  == 'own' and searchVal != null and searchVal != '' "> AND B3.OWN like '%' || #{searchVal} || '%' </if>
+					<if test="searchType  == 'corpNm' and searchVal != null and searchVal != '' "> AND B3.CORP_NM like '%' || #{searchVal} || '%' </if>
+					
+					<if test="regUserNm  != null and regUserNm != '' "> AND B26.USER_NM like '%' || #{regUserNm} || '%' </if>
+								 	
+					<if test="stDate != null and stDate != '' "> AND B3.WRIT_DTM <![CDATA[>=]]> TO_DATE(#{stDate}, 'YYYY-MM-DD')</if>
+					<if test="edDate != null and edDate != '' "> AND B3.WRIT_DTM <![CDATA[<=]]> TO_DATE(#{edDate}, 'YYYY-MM-DD')</if>
+				</where>
+								 
+				<!-- <if test="ordNo == 0 "> ORDER BY B3.BLD_ID ${sort} </if>
+				<if test="ordNo == 1 "> ORDER BY B3.BLD_NM ${sort} </if>
+				<if test="ordNo == 2 "> ORDER BY B3.CORP_NM ${sort} </if>
+				<if test="ordNo == 3 "> ORDER BY B3.OWN ${sort} </if>
+				<if test="ordNo == 4 "> ORDER BY B1_2_1.CODE_VAL ${sort} </if>
+				<if test="ordNo == 5 "> ORDER BY B1_2_2.CODE_VAL ${sort} </if>
+				<if test="ordNo == 6 "> ORDER BY B1_2_3.CODE_VAL ${sort} </if>
+				<if test="ordNo == 7 "> ORDER BY B26.USER_NM ${sort} </if>
+				<if test="ordNo == 8 "> ORDER BY B3.WRIT_DTM ${sort} </if> -->
+				
+				ORDER BY B3.WRIT_DTM DESC
+				
+			) A WHERE ROWNUM <![CDATA[<=]]> #{length}
+		) Z WHERE rowNumber <![CDATA[>]]> #{start}
+	</select>	
+	
+	
+	<!-- 건축물 정보 삭제 -->
+	<delete id="deleteBldInfo1" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM002
+        WHERE RESPOND_ID = #{bldId}
+    </delete>
+	
+	<delete id="deleteBldInfo2" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+	    DELETE FROM TB_BEM003
+        WHERE BLD_ID = #{bldId}
+	</delete>
+	
+	<delete id="deleteBldInfo3" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_01
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo4" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_02
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo5" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_03
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo6" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_04
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo7" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_05
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo8" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_06
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo9" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_07
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo10" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_08
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo11" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_09
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo12" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_10
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo13" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_11
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo14" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_12
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo15" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_13
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo16" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_14
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo17" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_15
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo18" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_16
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo19" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_17
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo20" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_18
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    <delete id="deleteBldInfo21" parameterType="sqisoft.com.bed.model.GeneralInfo2">
+        DELETE FROM TB_BEM003_19
+        WHERE BLD_ID = #{bldId}
+    </delete>
+    
+    
+	
+</mapper>

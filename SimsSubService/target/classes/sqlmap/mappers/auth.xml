@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.bed.mapper.AuthMapper">
+
+	<select id="selectUserInfo" parameterType="sqisoft.com.bed.model.UserInfo" resultType="sqisoft.com.bed.model.UserInfo">
+			
+			SELECT USER_SEQ,
+				USER_ID,
+				PWD,
+				USER_NM,
+				EMAIL,
+				PART_NM,
+				LAST_DT,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UP_ID,
+				UP_DT FROM TB_USER
+			
+	</select>
+
+</mapper>

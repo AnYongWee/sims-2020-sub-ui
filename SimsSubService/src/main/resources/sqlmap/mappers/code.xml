@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.bed.mapper.CodeMapper">
+
+	<resultMap type="sqisoft.com.bed.model.CodeInfo" id="codeInfoMap">
+		<id column="GRP_CODE_ID" property="grpCodeId" />
+		<id column="CODE_ID" property="codeId" />
+		<id column="CODE_VAL" property="codeVal" />
+		<id column="SORT_SEQN" property="sortSeqn" />				
+	</resultMap>
+	
+	<!-- 코드그룹 공통코드 조회 -->
+	<select id="selectCode" parameterType="map" resultMap="codeInfoMap">
+
+			SELECT GRP_CODE_ID, CODE_ID, CODE_VAL, SORT_SEQN FROM TB_BEM001_02
+			WHERE USE_YN = 'Y' AND GRP_CODE_ID = #{grpCodeId}
+			<if test="codeExpl  != null and codeExpl != '' "> 
+				AND CODE_EXPL = #{codeExpl} 
+			</if>
+			ORDER BY SORT_SEQN ASC
+				
+	</select>
+	
+	<!-- 코드값 코드 조회 -->
+     <select id="findCode" parameterType="map" resultType="String">
+        SELECT CODE_ID
+        FROM TB_BEM001_02
+        WHERE USE_YN = 'Y' AND GRP_CODE_ID = #{grpCodeId} AND CODE_VAL = #{codeVal} AND ROWNUM = 1        
+     </select> 
+     
+     <!-- 엑셀입력 주소 시,도 코드로 바꾸기 -->
+     <select id="findCodeSido" parameterType="map" resultType="String">
+        SELECT 
+            SUBSTR(SIGUNGU_CD, 1,2)
+        FROM TB_BEM003_20
+        WHERE USE_YN = 'Y' 
+        AND SIDO_NM =  #{sidoNm} 
+        AND SIGUNGU_NM = #{sigunguNm}   
+     </select>
+     
+     <!-- 엑셀입력 주소 구,군 코드로 바꾸기 -->
+     <select id="findCodeSigungu" parameterType="map" resultType="String">
+        SELECT 
+            SIGUNGU_CD
+        FROM TB_BEM003_20
+        WHERE USE_YN = 'Y' 
+        AND SIDO_NM =  #{sidoNm} 
+        AND SIGUNGU_NM = #{sigunguNm}   
+     </select>
+     
+     
+	
+	<resultMap type="sqisoft.com.bed.model.SiDoInfo" id="siDoInfoMap">
+		<id column="SIGUNGU_CD" property="sigunguCd" />
+		<id column="SIDO_NM" property="sidoNm" />
+		<id column="SIGUNGU_NM" property="sigunguNm" />					
+	</resultMap>
+	
+	<!-- 주소 시,도 조회 -->
+	<select id="selectAddressBySiDo" parameterType="String" resultMap="siDoInfoMap">
+
+			SELECT DISTINCT A.SIGUNGU_CD, A.SIDO_NM FROM
+			(SELECT SUBSTR(SIGUNGU_CD, 1, 2) AS SIGUNGU_CD, SIDO_NM FROM TB_BEM003_20 WHERE USE_YN = 'Y') A
+			ORDER BY SIGUNGU_CD
+				
+	</select>
+	
+	<!-- 주소 구,군 조회 -->
+	<select id="selectAddressByGunGu" parameterType="String" resultMap="siDoInfoMap">
+
+			SELECT SIGUNGU_CD, SIGUNGU_NM FROM TB_BEM003_20 WHERE SIDO_NM = #{sidoNm} AND USE_YN = 'Y' AND SIGUNGU_NM IS NOT NULL
+			ORDER BY SIGUNGU_CD
+				
+	</select>
+    
+    
+	
+
+
+</mapper>

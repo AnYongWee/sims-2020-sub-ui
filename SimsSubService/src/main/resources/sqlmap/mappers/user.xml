@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.bed.mapper.UserMapper">
+
+	<resultMap type="sqisoft.com.bed.model.UserInfo" id="userInfoMap">
+		<id column="UNIQUE_ID" property="uniqueId" />
+		<id column="USER_ID" property="userId" />
+		<id column="USER_NM" property="userNm" />
+		<id column="USER_PWD" property="userPwd" />
+		<id column="MB_TELNO" property="mbTleNo" />
+		<id column="TELNO" property="telNo" />
+		<id column="EMAIL_ADDR" property="emailAddr" />
+		<id column="USER_STAT_CODE" property="userStatCode" />		
+		<id column="SBSCRB_DT" property="sbscrbDt" />
+		<id column="ENTE_ID" property="enteId" />
+		<id column="totalCnt" property="totalCnt" />		
+	</resultMap>
+	
+	<!-- 사용자 리스트 조회 -->
+	<select id="selectUserList" parameterType="map" resultMap="userInfoMap">
+		 SELECT Z.*  FROM (
+		     SELECT ROWNUM AS rowNumber, A.* FROM (
+		          SELECT UNIQUE_ID
+		                ,USER_ID
+		                ,USER_NM
+		                ,USER_PWD											
+		        	    ,MB_TELNO
+		        	    ,TELNO											
+		        	    ,EMAIL_ADDR											
+		        	    ,USER_STAT_CODE		        	    
+		        	    ,SBSCRB_DT
+		                ,ENTE_ID
+		                ,COUNT(*) OVER() AS totalCnt
+				 FROM TB_BEM026
+				 <where>
+				 	<if test="userId  != null and userId != '' "> AND USER_ID = #{userId} </if>
+				 	<if test="userNm != null and userNm != '' "> AND USER_NM like '%' || #{userNm} || '%' </if>				 	
+				 	
+				 	<if test="stDate != null and stDate != '' "> AND SBSCRB_DT <![CDATA[>=]]> TO_DATE(#{stDate}, 'YYYY-MM-DD')</if>
+				 	<if test="edDate != null and edDate != '' "> AND SBSCRB_DT <![CDATA[<=]]> TO_DATE(#{edDate}, 'YYYY-MM-DD')</if>
+				 	
+				 </where>
+				 
+				 <if test="ordNo == 0 "> ORDER BY USER_ID ${sort} </if>
+				 <if test="ordNo == 1 "> ORDER BY USER_NM ${sort} </if>
+				 <if test="ordNo == 2 "> ORDER BY MB_TELNO ${sort} </if>
+				 <if test="ordNo == 3 "> ORDER BY EMAIL_ADDR ${sort} </if>
+				 <if test="ordNo == 4 "> ORDER BY USER_STAT_CODE ${sort} </if>
+				 <if test="ordNo == 5 "> ORDER BY ENTE_ID ${sort} </if>
+				 <if test="ordNo == 6 "> ORDER BY USER_ID ${sort} </if>
+				 
+		    ) A WHERE ROWNUM <![CDATA[<=]]> #{length}
+		) Z WHERE rowNumber <![CDATA[>]]> #{start}
+	</select>
+	
+	<!-- 사용자 정보 조회 -->
+	<select id="selectUserInfo" parameterType="sqisoft.com.bed.model.UserInfo" resultMap="userInfoMap">
+		 SELECT UNIQUE_ID
+					,USER_ID
+					,USER_NM
+					,USER_PWD											
+					,MB_TELNO
+					,TELNO											
+					,EMAIL_ADDR											
+					,USER_STAT_CODE		        	    
+					,SBSCRB_DT
+					,ENTE_ID					
+		  FROM TB_BEM026
+		<where>
+			<if test="uniqueId  != null and uniqueId != '' "> AND UNIQUE_ID = #{uniqueId} </if>
+			<if test="userId  != null and userId != '' "> AND USER_ID = #{userId} </if>
+			<if test="userPwd  != null and userPwd != '' "> AND USER_PWD = #{userPwd} </if>
+		</where>
+	</select>
+	
+	<!-- 사용자 아이디 중복 확인 -->
+	<select id="selectUserByIdCnt" parameterType="sqisoft.com.bed.model.UserInfo" resultType="int">
+		 SELECT COUNT(*) FROM TB_BEM026 
+		 WHERE 	USER_ID = #{userId}
+	</select>
+	
+	<!-- 사용자 추가 -->
+	<insert id="insertUserInfo" parameterType="sqisoft.com.bed.model.UserInfo">
+		 INSERT INTO TB_BEM026 (UNIQUE_ID
+		 									,USER_ID
+										   	,USER_NM
+											,USER_PWD											
+											,MB_TELNO
+											,TELNO											
+											,EMAIL_ADDR											
+											,USER_STAT_CODE
+											,LOCK_YN
+											,LOCK_CNT
+											,SBSCRB_DT
+											,ENTE_ID)
+								 VALUES(SYS_GUID() || TO_CHAR(SYSDATE, 'YYYYMMDD')
+								 			,#{userId}
+								 			,#{userNm}
+								 			,#{userPwd}
+								 			,#{mbTleNo}
+								 			,#{telNo}								 			
+								 			,#{emailAddr}
+								 			,#{userStatCode}
+								 			,'N'
+								 			,0
+								 			,SYSDATE
+								 			,#{enteId})				
+	</insert>
+	
+	<!-- 사용자 수정 -->
+	<update id="updateUserInfo" parameterType="sqisoft.com.bed.model.UserInfo">
+		UPDATE TB_BEM026 SET USER_NM = #{userNm},
+								   		 MB_TELNO = #{mbTleNo},
+								   		 TELNO = #{telNo},
+								   		 EMAIL_ADDR = #{emailAddr},
+								   		 USER_STAT_CODE = #{userStatCode}
+		WHERE UNIQUE_ID = #{uniqueId}
+	</update>
+	
+	<!-- 비밀번호 수정 -->
+	<update id="updateUserPassword" parameterType="sqisoft.com.bed.model.UserInfo">
+		UPDATE TB_BEM026 SET USER_PWD = #{userPwd} WHERE UNIQUE_ID = #{uniqueId}
+	</update>
+
+</mapper>

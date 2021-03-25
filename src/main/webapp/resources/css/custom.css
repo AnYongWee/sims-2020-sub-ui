@@ -56,3 +56,15 @@ transparent
     font-size: 1rem;    
 }
 
+.site-image{
+	width: 3.425rem;
+    height: 3.425rem;
+	background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50% !important;
+}
+
+.site-border {
+    border: 1px solid #1a4c7d !important;
+}
+

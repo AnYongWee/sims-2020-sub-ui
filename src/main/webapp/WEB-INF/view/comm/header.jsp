@@ -79,19 +79,19 @@
 					
 					<c:if test="${row.childCnt > 0 }">
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
+							<a class="nav-link dropdown-toggle fw-700" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						
 						<c:set var="isChild"	value="1" />
 					</c:if>
 					
 					<c:if test="${not empty row.upperMenuId and isChild eq '1'}">
-						<a class="dropdown-item" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
+						<a class="dropdown-item fw-700" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
 					</c:if>
 					
 					<c:if test="${row.childCnt eq 0 and row.lv eq 0}">
 						<li class="nav-item">
-							<a class="nav-link" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
+							<a class="nav-link fw-700" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
 						</li>
 					</c:if>
 					
@@ -179,20 +179,82 @@
 						</div>
 					</div>
 					<hr class="mb-0 mt-4">
+					
+					
 					<div class="mt-4 d-table w-100 pl-5 pr-3">
+                                <div class="d-table-cell align-middle">
+                                    <h5 class="p-0 pr-2 d-flex">테마 색상 설정</h5>
+                                </div>
+                            </div>
+                            <div class="expanded theme-colors pl-5 pr-3">
+                                <ul class="m-0">
+                                    <li>
+                                        <a href="#" id="myapp-0" data-action="theme-update" data-themesave data-theme="" data-toggle="tooltip" data-placement="top" title="Wisteria (base css)" data-original-title="Wisteria (base css)"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-1" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-1.css" data-toggle="tooltip" data-placement="top" title="Tapestry" data-original-title="Tapestry"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-2" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-2.css" data-toggle="tooltip" data-placement="top" title="Atlantis" data-original-title="Atlantis"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-3" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-3.css" data-toggle="tooltip" data-placement="top" title="Indigo" data-original-title="Indigo"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-4" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-4.css" data-toggle="tooltip" data-placement="top" title="Dodger Blue" data-original-title="Dodger Blue"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-5" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-5.css" data-toggle="tooltip" data-placement="top" title="Tradewind" data-original-title="Tradewind"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-6" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-6.css" data-toggle="tooltip" data-placement="top" title="Cranberry" data-original-title="Cranberry"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-7" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-7.css" data-toggle="tooltip" data-placement="top" title="Oslo Gray" data-original-title="Oslo Gray"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-8" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-8.css" data-toggle="tooltip" data-placement="top" title="Chetwode Blue" data-original-title="Chetwode Blue"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-9" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-9.css" data-toggle="tooltip" data-placement="top" title="Apricot" data-original-title="Apricot"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-10" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-10.css" data-toggle="tooltip" data-placement="top" title="Blue Smoke" data-original-title="Blue Smoke"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-11" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-11.css" data-toggle="tooltip" data-placement="top" title="Green Smoke" data-original-title="Green Smoke"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-12" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-12.css" data-toggle="tooltip" data-placement="top" title="Wild Blue Yonder" data-original-title="Wild Blue Yonder"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-13" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-13.css" data-toggle="tooltip" data-placement="top" title="Emerald" data-original-title="Emerald"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-14" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-14.css" data-toggle="tooltip" data-placement="top" title="Supernova" data-original-title="Supernova"></a>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="myapp-15" data-action="theme-update" data-themesave data-theme="${pageContext.request.contextPath}/resources/css/smart/themes/cust-theme-15.css" data-toggle="tooltip" data-placement="top" title="Hoki" data-original-title="Hoki"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <hr class="mb-0 mt-4">
+                    
+                    <div class="mt-4 d-table w-100 pl-5 pr-3">
 						<div class="d-table-cell align-middle">
 							<h5 class="p-0 pr-2 d-flex">테마 설정</h5>
 						</div>
 					</div>
+					        
 					<div class="pl-5 pr-3 py-3">						
-						<div class="row no-gutters">
+						<div class="row no-gutters">					
 							<div class="col-4 px-1 text-center">
 								<div id="skin-light" data-action="toggle-replace" data-replaceclass="mod-skin-dark" data-class="mod-skin-light" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-secondary rounded overflow-hidden text-success js-waves-on" data-original-title="Light Mode" style="height: 80px">
 									<div class="bg-white px-2 pt-0 border-right border-"></div>
 									<div class="d-flex flex-column flex-1">
 										<div class="bg-white border-bottom border- py-1"></div>
 										<div class="bg-white flex-1 pt-3 pb-3 px-2">
-											<div class="py-3" style="background: url('img/demo/s-1.png') top left no-repeat; background-size: 100%;"></div>
+											<div class="py-3" style="background: url('${pageContext.request.contextPath}/resources/assets/smart/demo/s-1.png') top left no-repeat; background-size: 100%;"></div>
 										</div>
 									</div>
 								</div>
@@ -204,12 +266,20 @@
 									<div class="d-flex flex-column flex-1">
 										<div class="bg-fusion-600 border-bottom py-1"></div>
 										<div class="bg-fusion-300 flex-1 pt-3 pb-3 px-2">
-											<div class="py-3 opacity-30" style="background: url('img/demo/s-1.png') top left no-repeat; background-size: 100%;"></div>
+											<div class="py-3 opacity-30" style="background: url('${pageContext.request.contextPath}/resources/assets/smart/demo/s-1.png') top left no-repeat; background-size: 100%;"></div>
 										</div>
 									</div>
 								</div>
 								Dark
 							</div>
+						</div>
+					</div>
+					<hr class="mb-0 mt-4">
+					<div class="pl-5 pr-3 py-3 bg-faded">
+						<div class="row no-gutters">
+							<div class="col-6 pr-1">
+								<a href="#" class="btn btn-danger fw-500 btn-block" data-action="factory-reset">테마 설정 초기화</a>
+							</div>							
 						</div>
 					</div>
 				</div>

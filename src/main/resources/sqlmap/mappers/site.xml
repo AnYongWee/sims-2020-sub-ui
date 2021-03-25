@@ -14,6 +14,13 @@
 		<id column="DST_NM" property="dstNm" />
 		<id column="DST_CD" property="dstCd" />
 		<id column="RMRK" property="rmrk" />		
+		<id column="ADDR_SIDO" property="addrSido" />
+		<id column="ADDR_SIGUNGU" property="addrSigungu" />
+		<id column="ADDR_EUBMYUN" property="addrEubmyun" />
+		<id column="ADDR_DONGRI" property="addrDongri" />
+		<id column="GENT_QNT" property="gentQnt" />
+		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />
+		<id column="INSTL_CPCT" property="instlCpct" />
 	</resultMap>
 	
 	<!-- 전체 사이트 리스트 조회 -->
@@ -28,8 +35,49 @@
 				   A.ADDR_ADT,
 				   A.DST_NM,
 				   A.DST_CD,
-				   A.RMRK
-			FROM REMS.SITE_INF A
+				   A.RMRK,				   
+				   A.ADDR_SIDO,
+				   A.ADDR_SIGUNGU,
+				   A.ADDR_EUBMYUN,
+				   A.ADDR_DONGRI,	
+				   A.CNT_PSN_HPNO,
+				   A.CNT_PSN_NM,			   
+				   F.GENT_QNT,
+				   F.ACCUM_GENT_QNT,
+				   SUM(G.INSTL_CPCT) AS INSTL_CPCT
+			FROM REMS.SITE_INF A			
+			LEFT OUTER JOIN REMS.DEV_INF G ON A.SITE_SEQ = G.SITE_SEQ AND G.SVC_CD = 'PV_POW'			
+			LEFT OUTER JOIN (
+				SELECT SA.SITE_SEQ,	   
+					       SUM(SA.GENT_QNT) AS GENT_QNT,
+					       SUM(SA.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT
+				FROM REMS.invrtr_oprt_min_hst SA
+				LEFT JOIN REMS.invrtr_oprt_min_hst SB
+				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
+				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW'
+				GROUP BY SA.SITE_SEQ
+			) F ON A.SITE_SEQ = F.SITE_SEQ 
+			
+			
+			GROUP BY A.SITE_SEQ,
+				       A.CUST_SEQ,
+					   A.SITE_NM,
+					   A.LAT,
+					   A.LNG,
+					   A.ZIPCD,
+					   A.ADDR,
+					   A.ADDR_ADT,
+					   A.DST_NM,
+					   A.DST_CD,
+					   A.RMRK,				   
+					   A.ADDR_SIDO,
+					   A.ADDR_SIGUNGU,
+					   A.ADDR_EUBMYUN,
+					   A.ADDR_DONGRI,
+					   A.CNT_PSN_HPNO,
+				       A.CNT_PSN_NM,
+				       F.GENT_QNT,
+				   	   F.ACCUM_GENT_QNT
 	</select>
 	
 	<!-- 사용자 사이트 리스트 조회 -->
@@ -44,26 +92,43 @@
 				   A.ADDR_ADT,
 				   A.DST_NM,
 				   A.DST_CD,
-				   A.RMRK
+				   A.RMRK,
+				   A.ADDR_SIDO,
+				   A.ADDR_SIGUNGU,
+				   A.ADDR_EUBMYUN,
+				   A.ADDR_DONGRI,		
+				   A.CNT_PSN_HPNO,
+				   A.CNT_PSN_NM,		   
+				   SUM(F.GENT_QNT) AS GENT_QNT,
+				   SUM(F.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(G.INSTL_CPCT) AS INSTL_CPCT
 			FROM REMS.SITE_INF A
 			LEFT OUTER JOIN REMS.USR_SITE_REL B ON A.SITE_SEQ = B.SITE_SEQ
 			LEFT OUTER JOIN REMS.GRP_SITE_REL C ON A.SITE_SEQ = C.SITE_SEQ
 			LEFT OUTER JOIN REMS.USR_INF D ON B.USR_ID = D.USR_ID
 			LEFT OUTER JOIN REMS.USR_INF E ON C.GRP_SEQ = E.GRP_SEQ
+			LEFT OUTER JOIN REMS.INVRTR_OPRT_MIN_HST F ON A.SITE_SEQ = F.SITE_SEQ AND F.SVC_CD = 'PV_POW'
+			LEFT OUTER JOIN REMS.DEV_INF G ON A.SITE_SEQ = G.SITE_SEQ AND G.SVC_CD = 'PV_POW'
 			
 			WHERE D.USR_ID = #{usrId} or E.USR_ID = #{usrId}
 			
 			GROUP BY A.SITE_SEQ,
-			       A.CUST_SEQ,
-				   A.SITE_NM,
-				   A.LAT,
-				   A.LNG,
-				   A.ZIPCD,
-				   A.ADDR,
-				   A.ADDR_ADT,
-				   A.DST_NM,
-				   A.DST_CD,
-				   A.RMRK
+				       A.CUST_SEQ,
+					   A.SITE_NM,
+					   A.LAT,
+					   A.LNG,
+					   A.ZIPCD,
+					   A.ADDR,
+					   A.ADDR_ADT,
+					   A.DST_NM,
+					   A.DST_CD,
+					   A.RMRK,				   
+					   A.ADDR_SIDO,
+					   A.ADDR_SIGUNGU,
+					   A.ADDR_EUBMYUN,
+					   A.ADDR_DONGRI,
+					   A.CNT_PSN_HPNO,
+				       A.CNT_PSN_NM
 	</select>
 		
 </mapper>

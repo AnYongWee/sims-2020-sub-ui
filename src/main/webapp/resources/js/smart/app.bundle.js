@@ -705,17 +705,17 @@ var initApp = (function(app) {
 		if (typeof bootbox  != 'undefined') {
 
 			bootbox.confirm({
-				title: "<i class='" + myapp_config.appIconPrefix +  " fa-exclamation-triangle text-warning mr-2'></i> You are about to reset all of your localStorage settings",
-				message: "<span><strong>Warning:</strong> This action is not reversable. You will lose all your layout settings.</span>",
+				title: "<i class='" + myapp_config.appIconPrefix +  " fa-exclamation-triangle text-warning mr-2'></i> 테마설정 정보를 초기화 합니다.",
+				message: "<span>계속 진행 하시겠습니까?</span>",
 				centerVertical: true,
 				swapButtonOrder: true,
 				buttons: {
 					confirm: {
-						label: 'Factory Reset',
+						label: '테마 설정 초기화',
 						className: 'btn-warning shadow-0'
 					},
 					cancel: {
-						label: 'Cancel',
+						label: '취소',
 						className: 'btn-success'
 					}
 				},

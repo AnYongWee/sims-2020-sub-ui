@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.StatsMapper">
+
+	<resultMap type="sqisoft.com.model.GentTimeSumInfo" id="gentTimeSumInfoMap">
+		<id column="tgt_date" property="tgtDate" />
+		<id column="tgt_time" property="tgtTime" />
+		<id column="gent_qnt" property="gentQnt" />
+		<id column="min_gent_qnt" property="minGentQnt" />
+		<id column="max_gent_qnt" property="maxGentQnt" />
+		<id column="accum_gent_qnt" property="accumGentQnt" />
+		<id column="std_gent_qnt" property="stdGentQnt" />
+		<id column="gent_effi" property="gentEffi" />		
+		<id column="accum_gent_effi" property="accumGentEffi" />
+		<id column="invrtr_effi" property="invrtrEffi" />
+		<id column="sys_effi" property="sysEffi" />
+		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
+		<id column="rduc_ucost" property="rducUcost" />		
+		<id column="rduc_amt" property="rducAmt" />
+	</resultMap>
+	
+	<resultMap type="sqisoft.com.model.GentDaySumInfo" id="gentDaySumInfoMap">
+		<id column="tgt_date" property="tgtDate" />
+		<id column="tday_gent_qnt" property="tdayGentQnt" />
+		<id column="min_tday_gent_qnt" property="minTdayGentQnt" />
+		<id column="max_tday_gent_qnt" property="maxTdayGentQnt" />
+		<id column="accum_gent_qnt" property="accumGentQnt" />
+		<id column="std_gent_qnt" property="stdGentCnt" />
+		<id column="gent_effi" property="gentEffi" />		
+		<id column="accum_gent_effi" property="accumGentEffi" />
+		<id column="invrtr_effi" property="invrtrEffi" />
+		<id column="sys_effi" property="sysEffi" />
+		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
+		<id column="rduc_ucost" property="rducUcost" />		
+		<id column="rduc_amt" property="rducAmt" />
+	</resultMap>
+	
+	<!-- 시간별 발전량 통계 -->
+	<select id="selectGentTimeSum" parameterType="map" resultMap="gentTimeSumInfoMap">
+	    SELECT A.TGT_DATE, 
+			  	   A.TGT_TIME, 
+				   SUM(A.GENT_QNT) AS GENT_QNT,
+				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(GENT_EFFI) AS GENT_EFFI,
+				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(SYS_EFFI) AS SYS_EFFI,
+				   SUM(RDUC_AMT) AS RDUC_AMT	   
+		FROM 
+		REMS.GENT_TIME_SUM A
+		
+		WHERE A.TGT_DATE = #{startDate}
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_DATE, A.TGT_TIME
+		ORDER BY A.TGT_TIME
+	</select>
+	
+	<!-- 시간별 발전량 최대,최소 통계 -->
+	<select id="selectGentTimeMinMaxSum" parameterType="map" resultMap="gentTimeSumInfoMap">
+	
+		SELECT TGT_TIME,
+				   MIN(GENT_QNT) AS MIN_GENT_QNT,
+				   MAX(GENT_QNT) AS MAX_GENT_QNT
+		FROM				   
+		(
+		SELECT A.TGT_DATE, 
+			  	   A.TGT_TIME, 
+				   SUM(A.GENT_QNT) AS GENT_QNT				   	   
+		FROM 
+		REMS.GENT_TIME_SUM A
+		
+		WHERE A.TGT_DATE <![CDATA[<]]> #{startDate} AND TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMMDD') + '-7 days')
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_DATE, A.TGT_TIME
+		) Z
+		
+		GROUP BY TGT_TIME
+		ORDER BY TGT_TIME
+		
+	</select>
+	
+	<!-- 일별 발전량 통계 -->
+	<select id="selectGentDaySum" parameterType="map" resultMap="gentDaySumInfoMap">
+	    SELECT A.TGT_DATE,
+				   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT,
+				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(GENT_EFFI) AS GENT_EFFI,
+				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(SYS_EFFI) AS SYS_EFFI,
+				   SUM(RDUC_AMT) AS RDUC_AMT	   
+		FROM 
+		REMS.GENT_DAY_SUM A
+		
+		WHERE A.TGT_DATE <![CDATA[>=]]> #{startDate} AND A.TGT_DATE <![CDATA[<=]]> #{endDate}
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_DATE
+		ORDER BY A.TGT_DATE
+	</select>
+	
+	<!-- 일자별 발전량 최대,최소 통계 -->
+	<select id="selectGentDayMinMaxSum" parameterType="map" resultMap="gentDaySumInfoMap">
+		SELECT TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD') AS TGT_DATE,
+				   MIN(TDAY_GENT_QNT) AS MIN_TDAY_GENT_QNT,
+				   MAX(TDAY_GENT_QNT) AS MAX_TDAY_GENT_QNT
+		FROM				   
+		(
+		    SELECT A.TGT_DATE,
+					   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT
+			FROM 
+			REMS.GENT_DAY_SUM A
+			
+			WHERE A.TGT_DATE <![CDATA[<]]> #{startDate} AND TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMMDD') + '-90 days')
+				 
+				<choose>
+					<when test="sites != null and sites.size != 0">
+						AND A.SITE_SEQ IN 
+						<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+							#{item}
+						</foreach>					
+					</when>
+					<otherwise>
+						AND A.SITE_SEQ IN (-99)
+					</otherwise>
+				</choose>
+			     
+			GROUP BY A.TGT_DATE			
+		) Z
+		
+		GROUP BY TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD')
+		ORDER BY TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD')
+	</select>
+		
+</mapper>

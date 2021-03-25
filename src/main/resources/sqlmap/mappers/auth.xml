@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.AuthMapper">
+
+	<resultMap type="sqisoft.com.model.UsrInfo" id="userInfoMap">
+		<id column="USR_ID" property="usrId" />
+		<id column="CUST_SEQ" property="custSeq" />
+		<id column="USR_NM" property="usrNm" />
+		<id column="USR_DIV_CD" property="usrDivCd" />
+		<id column="GRP_SEQ" property="grpSeq" />
+		<id column="PWD" property="pwd" />		
+	</resultMap>
+	
+	<resultMap type="sqisoft.com.model.MenuInfo" id="menuInfoMap">
+		<id column="MENU_ID" property="menuId" />
+		<id column="UPPER_MENU_ID" property="upperMenuId" />
+		<id column="MENU_NAME" property="menuName" />
+		<id column="DESCRIPTION" property="description" />
+		<id column="TAG" property="tag" />
+		<id column="LV" property="lv" />		
+		<id column="URL" property="url" />
+		<id column="CHILD_CNT" property="childCnt" />
+	</resultMap>
+	
+	<!-- 사용자 정보 조회 -->
+	<select id="selectUsrInfo" parameterType="sqisoft.com.model.UsrInfo" resultMap="userInfoMap">
+		 SELECT USR_ID
+			  ,CUST_SEQ
+			  ,USR_NM
+			  ,USR_DIV_CD
+			  ,GRP_SEQ
+			  ,PWD			  
+		FROM REMS.USR_INF
+		<where>			
+			<if test="usrId  != null and usrId != '' "> AND USR_ID = #{usrId} </if>
+			<if test="pwd  != null and pwd != '' "> AND PWD = #{pwd} </if>
+		</where>
+	</select>
+	
+	<!-- 사용자 메뉴 정보 조회 -->
+	<select id="selectUsrMenuList" parameterType="sqisoft.com.model.UsrInfo" resultMap="menuInfoMap">
+		SELECT A.MENU_ID,
+				   A.UPPER_MENU_ID,
+				   A.MENU_NAME,
+				   A.DESCRIPTION,
+				   A.TAG,
+				   A.LV,
+				   A.URL,
+				   (SELECT COUNT(*) FROM REMS.MENU WHERE UPPER_MENU_ID = A.MENU_ID) AS CHILD_CNT
+			FROM 
+			REMS.MENU A
+			INNER JOIN REMS.MENU_ROLE B ON A.MENU_ID = B.MENU_ID
+			INNER JOIN REMS.ROLES C ON B.AUTHORITY = C.AUTHORITY
+			INNER JOIN REMS.AUTHORITIES D ON C.AUTHORITY = D.AUTHORITY
+			WHERE D.USR_ID = #{usrId}
+			GROUP BY A.MENU_ID,
+				     A.UPPER_MENU_ID,
+				     A.MENU_NAME,
+				     A.DESCRIPTION,
+				     A.TAG
+			ORDER BY A.SORT_ORDER			
+	</select>
+		
+</mapper>

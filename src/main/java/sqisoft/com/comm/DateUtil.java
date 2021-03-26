@@ -314,6 +314,7 @@ public class DateUtil {
 		        // Date.getTime() 은 해당날짜를 기준으로1970년 00:00:00 부터 몇 초가 흘렀는지를 반환해준다. 
 		        // 이제 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수가 나온다.
 		        calDateDays = calDate / ( 24*60*60*1000);
+		        
 	    }
 	    catch(Exception e){
 	            // 예외 처리
@@ -322,7 +323,17 @@ public class DateUtil {
 	    return calDateDays;
 	}    
 
-	
+	/**
+	* 두 날짜간의 월 차이 구하기
+	* */
+	public static int getMonthsDifference(Date date1, Date date2){
+
+	        /* 해당년도에 12를 곱해서 총 개월수를 구하고 해당 월을 더 한다. */
+		int month1 = date1.getYear() * 12 + date1.getMonth();
+		int month2 = date2.getYear() * 12 + date2.getMonth();
+
+		return month1 - month2;
+	}
 	/********************************************************************/	
 	/********************************************************************/
 	/********************************************************************/

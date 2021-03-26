@@ -68,3 +68,11 @@ transparent
     border: 1px solid #1a4c7d !important;
 }
 
+.mod-skin-light:not(.mod-skin-dark):not(.mod-nav-dark) .page-logo, .mod-skin-light:not(.mod-skin-dark):not(.mod-nav-dark)  {
+    background: #505050;
+}
+
+.mod-skin-light:not(.mod-skin-dark):not(.mod-nav-dark) .page-logo-text {
+    color: #ffffff;
+}
+

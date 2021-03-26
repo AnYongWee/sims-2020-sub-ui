@@ -1,10 +1,13 @@
 	//데이터 테이블 설정
-	function datatable_hour() {
+	function datatable_month() {
 		
-		var startDate = $("#start-date-hour").val();
+		var startDate = $("#start-date-month").val();
 		startDate = startDate.replace(/-/gi, "");
 		
-        var myTable = $('#hour-list').dataTable(
+		var endDate = $("#end-date-month").val();
+		endDate = endDate.replace(/-/gi, "");
+		
+        var myTable = $('#month-list').dataTable(
         {       
             fixedHeader: true,
             destroy: true,
@@ -18,33 +21,39 @@
             paging : false,
             
             ajax : {
-				url : '/ajax/stats/getSolarHourSummary.do',
+				url : '/ajax/stats/getSolarMonthSummary.do',
 				type : 'POST',
 				data : {
-					startDate : startDate
+					startDate : startDate,
+					endDate : endDate
 				},
 				dataSrc: function ( data ) {
 	                
 					//그래프 생성
-					var genList = [], genRanges = [], prnmtrList = [];
+					var genList = [], genRanges = [], prnmtrList = [], categories = [];
 					
 					for (var i = 0; i < data.genList.length; i++){
-						genList[i] = [data.genList[i].tgtTime, data.genList[i].gentQnt];	
+						categories[i] = [data.genList[i].tgtYm];
+						genList[i] = [data.genList[i].tgtYm, data.genList[i].monGentQnt];	
 					}
 					
 					for (var i = 0; i < data.genRanges.length; i++){
-						genRanges[i] = [data.genRanges[i].tgtTime, data.genRanges[i].minGentQnt, data.genRanges[i].maxGentQnt];	
+						genRanges[i] = [data.genRanges[i].tgtYm, data.genRanges[i].minMonGentQnt, data.genRanges[i].maxMonGentQnt];	
 					}
 					
-					drawChart_hour(genList, genRanges, prnmtrList);
+					drawHighChart_month(categories, genList, genRanges, prnmtrList);
 					
 	                return data.genList;
 	            }     
 			},
 			
             columns: [
-            	{  id: "tgtTime", data: "tgtTime", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "gentQnt", data: "gentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
+            	{ id: "tgtYm", data: "tgtYm", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            		render: function(data, type) {            			
+            			return data.substr(0,4) + "-" + data.substr(4,2);
+            		}
+            	},
+            	{ id: "monGentQnt", data: "monGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "accumGentQnt", data: "accumGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "gentEffi", data: "gentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "accumGentEffi", data: "accumGentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
@@ -56,7 +65,7 @@
 	}
 	
 	//시간별 그래프 그리기
-	function drawChart_hour(genList, genRanges, prnmtrList){
+	function drawHighChart_month(categories, genList, genRanges, prnmtrList){
 		
 		Highcharts.chart('container', {
 
@@ -71,7 +80,13 @@
 	            enabled: false
 			},
 		    xAxis: {
-		    	categories: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+		    	categories: categories,
+		    	labels: {
+		            formatter: function() {
+		            	var data = String(this.value);		            	
+		            	return data.substr(2,2) + "/" + data.substr(4,2);
+		            }
+		          }
 		    },
 		    yAxis: [{ 
 		    	// 발전량 Y축 설정
@@ -127,9 +142,9 @@
 		        		}
 		    		}
 		    		//최고, 최저 발전량 데이터 설정
-		    		,{name: '7일전 최저, 최고 발전량', data: genRanges, type: 'arearange', lineWidth: 0, linkedTo: ':previous', color: "#FFBDBD", fillOpacity: 0.3, zIndex: 1,
+		    		,{name: '최저, 최고 발전량', data: genRanges, type: 'arearange', lineWidth: 0, linkedTo: ':previous', color: "#FFBDBD", fillOpacity: 0.3, zIndex: 1,
 		        		marker: {
-		        			fillColor: "#FFBDBD",
+		        			fillColor: '#FFBDBD',
 		            		enabled: false
 		        		},
 		        		tooltip: {

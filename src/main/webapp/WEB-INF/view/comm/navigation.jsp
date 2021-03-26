@@ -4,7 +4,7 @@
 
 <!-- BEGIN Left Aside -->
 <aside class="page-sidebar">
-	<div class="page-logo">
+	<div class="page-logo bg-fusion-500">
 		<a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut"> 
 			<img src="${pageContext.request.contextPath}/resources/assets/smart/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo"> 
 			<span class="page-logo-text mr-2">태양광모니터링시스템</span> 
@@ -13,7 +13,7 @@
 		</a>
 	</div>
 	<!-- BEGIN PRIMARY NAVIGATION -->
-	<nav id="js-primary-nav2" class="primary-nav p-2" role="navigation" style="overflow: scroll;width: auto;height: 100%;">
+	<nav id="js-primary-nav2" class="primary-nav p-2" role="navigation" style="overflow: auto;width: auto;height: 100%;">
 
 		<c:forEach items="${siteList}" var="row" varStatus="i">
 		<div class="card site-border mb-3">				
@@ -61,7 +61,7 @@
 	<!-- END PRIMARY NAVIGATION -->
 	
 	<!-- NAV FOOTER -->
-	<div class="nav-footer shadow-top justify-content-end">
+	<div class="nav-footer shadow-top justify-content-end ">
 
 		<div class="custom-control custom-switch align-self-center float-right mr-3">
 			<input type="checkbox" class="custom-control-input" id="customSwitch2" checked="">

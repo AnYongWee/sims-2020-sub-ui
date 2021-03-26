@@ -1,10 +1,10 @@
 	//데이터 테이블 설정
 	function datatable_day() {
 		
-		var startDate = $("#start-date").val();
+		var startDate = $("#start-date-day").val();
 		startDate = startDate.replace(/-/gi, "");
 		
-		var endDate = $("#end-date").val();
+		var endDate = $("#end-date-day").val();
 		endDate = endDate.replace(/-/gi, "");
 		
         var myTable = $('#day-list').dataTable(
@@ -41,7 +41,7 @@
 						genRanges[i] = [data.genRanges[i].tgtDate, data.genRanges[i].minTdayGentQnt, data.genRanges[i].maxTdayGentQnt];	
 					}
 					
-					drawHighChart(categories, genList, genRanges, prnmtrList);
+					drawHighChart_month(categories, genList, genRanges, prnmtrList);
 					
 	                return data.genList;
 	            }     
@@ -65,7 +65,7 @@
 	}
 	
 	//시간별 그래프 그리기
-	function drawHighChart(categories, genList, genRanges, prnmtrList){
+	function drawHighChart_month(categories, genList, genRanges, prnmtrList){
 		
 		Highcharts.chart('container', {
 
@@ -142,9 +142,9 @@
 		        		}
 		    		}
 		    		//최고, 최저 발전량 데이터 설정
-		    		,{name: '90일 전 최저, 최고 발전량', data: genRanges, type: 'arearange', lineWidth: 0, linkedTo: ':previous', color: Highcharts.getOptions().colors[0], fillOpacity: 0.3, zIndex: 1,
+		    		,{name: '최저, 최고 발전량', data: genRanges, type: 'arearange', lineWidth: 0, linkedTo: ':previous', color: "#FFBDBD", fillOpacity: 0.3, zIndex: 1,
 		        		marker: {
-		        			fillColor: '#A9BCF5',
+		        			fillColor: '#FFBDBD',
 		            		enabled: false
 		        		},
 		        		tooltip: {

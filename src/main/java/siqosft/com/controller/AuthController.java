@@ -1,5 +1,6 @@
 package siqosft.com.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,7 @@ public class AuthController extends  CommHandlr{
 		//관리 사이트 정보 조회
 		@SuppressWarnings("unchecked")
 		List<SiteInfo> siteList = (List<SiteInfo>)session.getAttribute("siteList");
-		
+			
 		for(SiteInfo site : siteList) {
 			if(site.getSiteSeq() == siteSeq) {
 				site.setChecked(checked);
@@ -191,5 +192,47 @@ public class AuthController extends  CommHandlr{
 		}   
 		
 		return resultMap(result, CommConst.COMM_SUCCESS, "");		
+	}
+	
+	/**
+	 * 사용 사이트 정보 갱신
+	 *
+	 * @param startDate - 시작일자
+	 * @return 
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/siteReplace.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> siteReplace(Model model, HttpSession session) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		//관리 사이트 정보 조회		
+		UsrInfo usrInfo = (UsrInfo)session.getAttribute("usrInfo");	
+		
+		//기존 사이트 정보 조회
+		@SuppressWarnings("unchecked")
+		List<SiteInfo> oldSiteList = (List<SiteInfo>)session.getAttribute("siteList");
+				
+		//사이트 정보 조회
+		List<SiteInfo> siteList = siteService.selectUsrMenuList(usrInfo);
+		
+		for(SiteInfo site : siteList) {
+			
+			for(SiteInfo old : oldSiteList) {
+				if (site.getSiteSeq() == old.getSiteSeq()) {
+					site.setChecked(old.isChecked());
+					break;
+				}
+			}
+		}   
+		
+		//새로운 정보로 변경
+		session.setAttribute("siteList", siteList);
+		
+		result.put("siteList", siteList);
+		
+		return result;		
 	}
 }

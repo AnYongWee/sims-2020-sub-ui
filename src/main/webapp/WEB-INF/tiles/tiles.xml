@@ -25,5 +25,12 @@
     <definition name="*/*/*.tiles" extends="layouts-tiles">
         <put-attribute name="content" value="/WEB-INF/view/{1}/{2}/{3}.jsp" />
     </definition>
-   
+    
+    <definition name="*.nav" extends="layouts-tiles">
+        <put-attribute name="site" value="/WEB-INF/view/{1}.jsp"  cascade="true" />
+    </definition>
+    
+   <definition name="*/*.nav" extends="layouts-tiles">
+        <put-attribute name="site" value="/WEB-INF/view/{1}/{2}.jsp"  cascade="true" />
+    </definition>
 </tiles-definitions>

@@ -1,5 +1,6 @@
 package siqosft.com.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.model.GentDaySumInfo;
+import sqisoft.com.model.GentMonthSumInfo;
 import sqisoft.com.model.GentTimeSumInfo;
 import sqisoft.com.service.StatsService;
 
@@ -93,7 +95,36 @@ public class StatsController extends  CommHandlr{
 		List<GentDaySumInfo> genList = statsService.selectGentDaySum(getUserSiteList(session), startDate, endDate);
 		
 		// 최대, 최소 발전량 정보 조회
-		List<GentDaySumInfo> genRanges = statsService.selectGentDayMinMaxSum(genList, getUserSiteList(session), startDate);
+		List<GentDaySumInfo> genRanges = statsService.selectGentDayMinMaxSum(genList, getUserSiteList(session), startDate, endDate, 2);
+		
+		// 일사량 정보 조회 to do..		
+		
+		result.put("genList", genList);
+		result.put("genRanges", genRanges);
+		   
+		return result;		
+	}
+	
+	/**
+	 * 월별 태양광 발전량 그래프 정보 조회
+	 *
+	 * @param startDate - 시작일자
+	 * @param endDate - 종료일자
+	 * @return 
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/stats/getSolarMonthSummary.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> getSolarMonthSummary(HttpSession session, @RequestParam(name="startDate", required = true) String startDate, @RequestParam(name="endDate", required = true) String endDate) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 발전량 정보 조회
+		List<GentMonthSumInfo> genList = statsService.selectGentMonthSum(getUserSiteList(session), startDate, endDate);
+		
+		// 최대, 최소 발전량 정보 조회		
+		List<GentMonthSumInfo> genRanges = statsService.selectGentMonthMinMaxSum(genList, getUserSiteList(session), startDate, endDate, 2);
 		
 		// 일사량 정보 조회 to do..		
 		

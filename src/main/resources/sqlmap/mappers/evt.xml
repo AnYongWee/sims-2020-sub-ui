@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.EvtMapper">
+
+	<resultMap type="sqisoft.com.model.EvtHstInfo" id="evtHstInfoMap">
+		<id column="tgt_date" property="tgtDate" />
+		<id column="tgt_time" property="tgtTime" />
+		<id column="gent_qnt" property="gentQnt" />
+		<id column="min_gent_qnt" property="minGentQnt" />
+		<id column="max_gent_qnt" property="maxGentQnt" />
+		<id column="accum_gent_qnt" property="accumGentQnt" />
+		<id column="std_gent_qnt" property="stdGentQnt" />
+		<id column="gent_effi" property="gentEffi" />		
+		<id column="accum_gent_effi" property="accumGentEffi" />
+		<id column="invrtr_effi" property="invrtrEffi" />
+		<id column="sys_effi" property="sysEffi" />
+		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
+		<id column="rduc_ucost" property="rducUcost" />		
+		<id column="rduc_amt" property="rducAmt" />
+	</resultMap>
+	
+	<!-- 경보이력 리스트 -->
+	<select id="selectEvtHstList" parameterType="map" resultMap="evtHstInfoMap">
+	    SELECT A.EVT_SEQ,
+			       A.OCCU_TOD,
+			       B.SITE_NM,
+				   C.DEV_NM,
+				   A.EVT_CD,
+				   A.EVT_NM,
+				   A.EVT_DESC,
+				   A.EVT_STS_CD,
+				   A.CLR_YN,
+				   A.CLR_TOD
+		FROM REMS.EVT_HST A
+		LEFT OUTER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
+		LEFT OUTER JOIN REMS.DEV_INF C ON C.DEV_SEQ = C.DEV_SEQ;
+		
+		WHERE A.TGT_DATE >= #{startDate} AND A.TGT_DATE >= #{endDate}
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		
+		ORDER BY A.TGT_TIME DESC
+	</select>
+		
+</mapper>

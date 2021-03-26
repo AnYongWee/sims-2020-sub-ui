@@ -35,6 +35,22 @@
 		<id column="rduc_amt" property="rducAmt" />
 	</resultMap>
 	
+	<resultMap type="sqisoft.com.model.GentMonthSumInfo" id="gentMonthSumInfoMap">
+		<id column="tgt_ym" property="tgtYm" />
+		<id column="mon_gent_qnt" property="monGentQnt" />
+		<id column="min_mon_gent_qnt" property="minMonGentQnt" />
+		<id column="max_mon_gent_qnt" property="maxMonGentQnt" />
+		<id column="accum_gent_qnt" property="accumGentQnt" />
+		<id column="std_gent_qnt" property="stdGentCnt" />
+		<id column="gent_effi" property="gentEffi" />		
+		<id column="accum_gent_effi" property="accumGentEffi" />
+		<id column="invrtr_effi" property="invrtrEffi" />
+		<id column="sys_effi" property="sysEffi" />
+		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
+		<id column="rduc_ucost" property="rducUcost" />		
+		<id column="rduc_amt" property="rducAmt" />
+	</resultMap>
+	
 	<!-- 시간별 발전량 통계 -->
 	<select id="selectGentTimeSum" parameterType="map" resultMap="gentTimeSumInfoMap">
 	    SELECT A.TGT_DATE, 
@@ -136,35 +152,97 @@
 	
 	<!-- 일자별 발전량 최대,최소 통계 -->
 	<select id="selectGentDayMinMaxSum" parameterType="map" resultMap="gentDaySumInfoMap">
-		SELECT TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD') AS TGT_DATE,
-				   MIN(TDAY_GENT_QNT) AS MIN_TDAY_GENT_QNT,
-				   MAX(TDAY_GENT_QNT) AS MAX_TDAY_GENT_QNT
-		FROM				   
-		(
-		    SELECT A.TGT_DATE,
-					   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT
-			FROM 
-			REMS.GENT_DAY_SUM A
-			
-			WHERE A.TGT_DATE <![CDATA[<]]> #{startDate} AND TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMMDD') + '-90 days')
-				 
-				<choose>
-					<when test="sites != null and sites.size != 0">
-						AND A.SITE_SEQ IN 
-						<foreach collection="sites" item="item"  open="(" close=")" separator=",">
-							#{item}
-						</foreach>					
-					</when>
-					<otherwise>
-						AND A.SITE_SEQ IN (-99)
-					</otherwise>
-				</choose>
-			     
-			GROUP BY A.TGT_DATE			
-		) Z
+		SELECT A.TGT_DATE,
+				   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT,
+				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(GENT_EFFI) AS GENT_EFFI,
+				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(SYS_EFFI) AS SYS_EFFI,
+				   SUM(RDUC_AMT) AS RDUC_AMT	   
+		FROM 
+		REMS.GENT_DAY_SUM A
 		
-		GROUP BY TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD')
-		ORDER BY TO_CHAR(TO_DATE(TGT_DATE, 'YYYYMMDD'), 'DD')
+		WHERE TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[<]]> (TO_TIMESTAMP(#{endDate}, 'YYYYMMDD') + '2 days') AND TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMMDD') + '-2 days')		
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_DATE
+		ORDER BY A.TGT_DATE
+		
+	</select>
+	
+	<!-- 월별 발전량 통계 -->
+	<select id="selectGentMonthSum" parameterType="map" resultMap="gentMonthSumInfoMap">
+	    SELECT A.TGT_YM,
+				   SUM(MON_GENT_QNT) AS MON_GENT_QNT,
+				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(GENT_EFFI) AS GENT_EFFI,
+				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(SYS_EFFI) AS SYS_EFFI,
+				   SUM(RDUC_AMT) AS RDUC_AMT	   
+		FROM 
+		REMS.GENT_MON_SUM A
+		
+		WHERE A.TGT_YM <![CDATA[>=]]> #{startDate} AND A.TGT_YM <![CDATA[<=]]> #{endDate}
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_YM
+		ORDER BY A.TGT_YM
+	</select>
+	
+	<!-- 월별 발전량 최대,최소 통계 -->
+	<select id="selectGentMonthMinMaxSum" parameterType="map" resultMap="gentMonthSumInfoMap">
+		SELECT A.TGT_YM,
+				   SUM(MON_GENT_QNT) AS MON_GENT_QNT,
+				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   SUM(GENT_EFFI) AS GENT_EFFI,
+				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(SYS_EFFI) AS SYS_EFFI,
+				   SUM(RDUC_AMT) AS RDUC_AMT	   
+		FROM 
+		REMS.GENT_MON_SUM A
+		
+		WHERE TO_TIMESTAMP(A.TGT_YM, 'YYYYMM') <![CDATA[<]]> (TO_TIMESTAMP(#{endDate}, 'YYYYMM') + '2 months') AND TO_TIMESTAMP(A.TGT_YM, 'YYYYMM') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMM') + '-2 months')		
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					AND A.SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		     
+		GROUP BY A.TGT_YM
+		ORDER BY A.TGT_YM
+		
 	</select>
 		
 </mapper>

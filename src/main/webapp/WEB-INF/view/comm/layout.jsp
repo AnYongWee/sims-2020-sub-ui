@@ -178,12 +178,14 @@
 	<!-- BEGIN Page Wrapper -->
         <div class="page-wrapper">
             <div class="page-inner">
-            
+            	
+            	<tiles:insertAttribute name="header"/>
+            	
             	<tiles:insertAttribute name="site"/>
             	
                 <div class="page-content-wrapper">
                 
-                	<tiles:insertAttribute name="header"/>
+                	
                 	 
 					<tiles:insertAttribute name="content"/>
                 		   

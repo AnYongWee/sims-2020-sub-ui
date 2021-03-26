@@ -19,10 +19,10 @@
 <script src="${pageContext.request.contextPath}/resources/js/layerPopup.js"></script>
 <!--===============================================================================================-->
 					
-<header class="page-header" role="banner">
+<header class="page-header bg-fusion-500" role="banner">
 
 	<!-- we need this logo when user switches to nav-function-top -->
-	<div class="page-logo">
+	<div class="page-logo bg-fusion-500">
 		<a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut"> 
 			<img src="${pageContext.request.contextPath}/resources/assets/smart/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo"> 
 			<span class="page-logo-text mr-1">SmartAdmin WebApp</span> 
@@ -79,19 +79,19 @@
 					
 					<c:if test="${row.childCnt > 0 }">
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle fw-700" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="nav-link dropdown-toggle fw-700 text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
+							<div class="dropdown-menu bg-fusion-500" aria-labelledby="navbarDropdown">
 						
 						<c:set var="isChild"	value="1" />
 					</c:if>
 					
 					<c:if test="${not empty row.upperMenuId and isChild eq '1'}">
-						<a class="dropdown-item fw-700" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
+						<a class="dropdown-item fw-700 text-white" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
 					</c:if>
 					
 					<c:if test="${row.childCnt eq 0 and row.lv eq 0}">
 						<li class="nav-item">
-							<a class="nav-link fw-700" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
+							<a class="nav-link fw-700 text-white" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
 						</li>
 					</c:if>
 					
@@ -106,7 +106,7 @@
 		<!-- app settings -->
 		<div class="hidden-md-down">
 			<a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-settings">
-				<i class="fal fa-cog"></i>
+				<i class="fal fa-cog text-white"></i>
 			</a>
 		</div>
                             
@@ -137,7 +137,7 @@
 					<span data-i18n="drpdwn.page-logout">개인정보</span>
 				</a>
 				<div class="dropdown-divider m-0"></div>
-				<a class="dropdown-item fw-500 pt-3 pb-3" href="/logOut.do">
+					<a class="dropdown-item fw-500 pt-3 pb-3" href="/logOut.do">
 					<span data-i18n="drpdwn.page-logout">로그아웃</span>
 				</a>
 			</div>

@@ -7203,7 +7203,7 @@ html:not(.root-text-sm):not(.root-text-lg):not(.root-text-xl) [data-class="root-
           box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
 
 .root-text-sm {
-  font-size: 15px; }
+  font-size: 13px; }
   .root-text-sm [data-class="root-text-sm"] {
     -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
             box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important; }

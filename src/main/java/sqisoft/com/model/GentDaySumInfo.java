@@ -22,7 +22,7 @@ public class GentDaySumInfo {
 	/*최대발전량*/
 	private float maxTdayGentQnt;
 	/*발전시간*/
-	private int tdayGentTime;
+	private float tdayGentTime;
 	/*누적발전량*/
 	private float accumGentQnt;
 	/*표준발전량*/
@@ -41,6 +41,9 @@ public class GentDaySumInfo {
 	private int rducUcost;
 	/*총절감액*/
 	private int rducAmt;
+	/*설비용량*/
+	private int instlCpct;
+	
 	public String getTgtDate() {
 		return tgtDate;
 	}
@@ -64,13 +67,13 @@ public class GentDaySumInfo {
 	}
 	public void setMaxTdayGentQnt(float maxTdayGentQnt) {
 		this.maxTdayGentQnt = maxTdayGentQnt;
-	}
-	public int getTdayGentTime() {
+	}	
+	public float getTdayGentTime() {
 		return tdayGentTime;
 	}
-	public void setTdayGentTime(int tdayGentTime) {
+	public void setTdayGentTime(float tdayGentTime) {
 		this.tdayGentTime = tdayGentTime;
-	}	
+	}
 	public float getAccumGentQnt() {
 		return accumGentQnt;
 	}
@@ -125,4 +128,11 @@ public class GentDaySumInfo {
 	public void setRducAmt(int rducAmt) {
 		this.rducAmt = rducAmt;
 	}
+	public int getInstlCpct() {
+		return instlCpct;
+	}
+	public void setInstlCpct(int instlCpct) {
+		this.instlCpct = instlCpct;
+	}
+	
 }

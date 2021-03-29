@@ -33,6 +33,8 @@
 		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
 		<id column="rduc_ucost" property="rducUcost" />		
 		<id column="rduc_amt" property="rducAmt" />
+		<id column="tday_gent_time" property="tdayGentTime" />
+		<id column="instl_cpct" property="instlCpct" />		
 	</resultMap>
 	
 	<resultMap type="sqisoft.com.model.GentMonthSumInfo" id="gentMonthSumInfoMap">
@@ -122,15 +124,17 @@
 	<!-- 일별 발전량 통계 -->
 	<select id="selectGentDaySum" parameterType="map" resultMap="gentDaySumInfoMap">
 	    SELECT A.TGT_DATE,
-				   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT,
-				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
-				   SUM(GENT_EFFI) AS GENT_EFFI,
-				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
-				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
-				   SUM(SYS_EFFI) AS SYS_EFFI,
-				   SUM(RDUC_AMT) AS RDUC_AMT	   
-		FROM 
-		REMS.GENT_DAY_SUM A
+				   SUM(A.TDAY_GENT_QNT) AS TDAY_GENT_QNT,
+				   SUM(A.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
+				   AVG(A.TDAY_GENT_TIME) AS TDAY_GENT_TIME,
+				   SUM(A.GENT_EFFI) AS GENT_EFFI,
+				   SUM(A.ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
+				   SUM(A.INVRTR_EFFI) AS INVRTR_EFFI,
+				   SUM(A.SYS_EFFI) AS SYS_EFFI,
+				   SUM(A.RDUC_AMT) AS RDUC_AMT,
+				   SUM(B.INSTL_CPCT) AS INSTL_CPCT
+		FROM REMS.GENT_DAY_SUM A
+		INNER JOIN REMS.DEV_INF B ON A.DEV_SEQ = B.DEV_SEQ
 		
 		WHERE A.TGT_DATE <![CDATA[>=]]> #{startDate} AND A.TGT_DATE <![CDATA[<=]]> #{endDate}
 			 
@@ -148,38 +152,6 @@
 		     
 		GROUP BY A.TGT_DATE
 		ORDER BY A.TGT_DATE
-	</select>
-	
-	<!-- 일자별 발전량 최대,최소 통계 -->
-	<select id="selectGentDayMinMaxSum" parameterType="map" resultMap="gentDaySumInfoMap">
-		SELECT A.TGT_DATE,
-				   SUM(TDAY_GENT_QNT) AS TDAY_GENT_QNT,
-				   SUM(ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
-				   SUM(GENT_EFFI) AS GENT_EFFI,
-				   SUM(ACCUM_GENT_EFFI) AS ACCUM_GENT_EFFI,
-				   SUM(INVRTR_EFFI) AS INVRTR_EFFI,
-				   SUM(SYS_EFFI) AS SYS_EFFI,
-				   SUM(RDUC_AMT) AS RDUC_AMT	   
-		FROM 
-		REMS.GENT_DAY_SUM A
-		
-		WHERE TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[<]]> (TO_TIMESTAMP(#{endDate}, 'YYYYMMDD') + '2 days') AND TO_TIMESTAMP(A.TGT_DATE, 'YYYYMMDD') <![CDATA[>=]]> (TO_TIMESTAMP(#{startDate}, 'YYYYMMDD') + '-2 days')		
-			 
-			<choose>
-				<when test="sites != null and sites.size != 0">
-					AND A.SITE_SEQ IN 
-					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
-						#{item}
-					</foreach>					
-				</when>
-				<otherwise>
-					AND A.SITE_SEQ IN (-99)
-				</otherwise>
-			</choose>
-		     
-		GROUP BY A.TGT_DATE
-		ORDER BY A.TGT_DATE
-		
 	</select>
 	
 	<!-- 월별 발전량 통계 -->

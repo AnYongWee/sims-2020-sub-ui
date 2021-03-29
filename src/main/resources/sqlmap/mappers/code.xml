@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.CodeMapper">
+
+	<resultMap type="sqisoft.com.model.CodeInfo" id="codeInfoMap">
+		<id column="DTL_CD" property="dtlCd" />
+		<id column="DTL_CD_NM" property="dtlCdNm" />
+		<id column="DTL_CD_DESC" property="dtlCdDesc" />		
+	</resultMap>
+	
+	<!-- 공통코드 리스트 조회 -->
+	<select id="selectCodeList" parameterType="map" resultMap="codeInfoMap">
+	    SELECT B.DTL_CD,
+			       B.DTL_CD_NM,
+				   B.DTL_CD_DESC
+		FROM REMS.CD_GRP A
+		INNER JOIN REMS.CD_DTL B ON A.GRP_CD = B.GRP_CD
+		WHERE B.LANG_CD = 'KOR' AND B.USE_YN = 'Y' AND A.GRP_CD = #{grpCd}
+		ORDER BY DTL_CD, B.ORD
+	</select>
+		
+</mapper>

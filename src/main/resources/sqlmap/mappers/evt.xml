@@ -3,24 +3,22 @@
 <mapper namespace="sqisoft.com.mapper.EvtMapper">
 
 	<resultMap type="sqisoft.com.model.EvtHstInfo" id="evtHstInfoMap">
-		<id column="tgt_date" property="tgtDate" />
-		<id column="tgt_time" property="tgtTime" />
-		<id column="gent_qnt" property="gentQnt" />
-		<id column="min_gent_qnt" property="minGentQnt" />
-		<id column="max_gent_qnt" property="maxGentQnt" />
-		<id column="accum_gent_qnt" property="accumGentQnt" />
-		<id column="std_gent_qnt" property="stdGentQnt" />
-		<id column="gent_effi" property="gentEffi" />		
-		<id column="accum_gent_effi" property="accumGentEffi" />
-		<id column="invrtr_effi" property="invrtrEffi" />
-		<id column="sys_effi" property="sysEffi" />
-		<id column="tot_gent_proft_amt" property="totGentProftAmt" />
-		<id column="rduc_ucost" property="rducUcost" />		
-		<id column="rduc_amt" property="rducAmt" />
+		<id column="evt_seq" property="evtSeq" />
+		<id column="occu_tod" property="occuTod" />
+		<id column="site_nm" property="siteNm" />
+		<id column="dev_nm" property="devNm" />
+		<id column="evt_cd" property="evtCd" />
+		<id column="evt_nm" property="evtNm" />
+		<id column="evt_desc" property="evtDesc" />
+		<id column="evt_sts_cd" property="evtStsCd" />		
+		<id column="clr_yn" property="clrYn" />
+		<id column="clr_tod" property="crlTod" />
+		<id column="total_cnt" property="totalCnt" />						
 	</resultMap>
 	
 	<!-- 경보이력 리스트 -->
 	<select id="selectEvtHstList" parameterType="map" resultMap="evtHstInfoMap">
+		
 	    SELECT A.EVT_SEQ,
 			       A.OCCU_TOD,
 			       B.SITE_NM,
@@ -30,12 +28,13 @@
 				   A.EVT_DESC,
 				   A.EVT_STS_CD,
 				   A.CLR_YN,
-				   A.CLR_TOD
+				   A.CLR_TOD,
+				   COUNT(*) OVER() AS TOTAL_CNT
 		FROM REMS.EVT_HST A
 		LEFT OUTER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
-		LEFT OUTER JOIN REMS.DEV_INF C ON C.DEV_SEQ = C.DEV_SEQ;
+		LEFT OUTER JOIN REMS.DEV_INF C ON C.DEV_SEQ = C.DEV_SEQ
 		
-		WHERE A.TGT_DATE >= #{startDate} AND A.TGT_DATE >= #{endDate}
+		WHERE A.OCCU_TOD <![CDATA[>=]]> #{startDate} || '000000' AND A.OCCU_TOD <![CDATA[<=]]> #{endDate} || '000000'
 			 
 			<choose>
 				<when test="sites != null and sites.size != 0">
@@ -49,7 +48,19 @@
 				</otherwise>
 			</choose>
 		
-		ORDER BY A.TGT_TIME DESC
+		<if test="ordNo == 0 "> ORDER BY A.OCCU_TOD ${sort} </if>
+		<if test="ordNo == 1 "> ORDER BY A.OCCU_TOD ${sort} </if>
+		<if test="ordNo == 2 "> ORDER BY B.SITE_NM ${sort} </if>
+		<if test="ordNo == 3 "> ORDER BY C.DEV_NM ${sort} </if>
+		<if test="ordNo == 4 "> ORDER BY A.EVT_CD ${sort} </if>
+		<if test="ordNo == 5 "> ORDER BY A.EVT_NM ${sort} </if>
+		<if test="ordNo == 6 "> ORDER BY A.EVT_DESC ${sort} </if>
+		<if test="ordNo == 7 "> ORDER BY A.EVT_STS_CD ${sort} </if>
+		<if test="ordNo == 8 "> ORDER BY A.CLR_TOD ${sort} </if>
+				
+		
+		LIMIT #{length} offset #{start}
+		
 	</select>
 		
 </mapper>

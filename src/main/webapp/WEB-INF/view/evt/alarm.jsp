@@ -91,17 +91,18 @@
 		<div class="row">
 			<div id="datatable" class="col-xl-12">
 				<!-- datatable start -->
-				<table class="table table-bordered table-hover table-striped w-100" id="hour-list">
+				<table class="table table-bordered table-hover table-striped w-100" id="evt-list">
 					<thead>							
 						<tr class="bg-fusion-300">
-							<th class="text-center align-middle font-weight-bold">시간(시)</th> 
-							<th class="text-center align-middle font-weight-bold">발전량(kWh)</th>
-							<th class="text-center align-middle font-weight-bold">누적발전량(kWh)</th>
-							<th class="text-center align-middle font-weight-bold">발전효율(%)</th>
-							<th class="text-center align-middle font-weight-bold">누적발전효율(%)</th>
-							<th class="text-center align-middle font-weight-bold">인버터효율(%)</th>
-							<th class="text-center align-middle font-weight-bold">시스템효율(%)</th>								
-							<th class="text-center align-middle font-weight-bold">총절감액(원)</th>
+							<th class="text-center align-middle font-weight-bold">고유번호</th>
+							<th class="text-center align-middle font-weight-bold">발생시간</th> 
+							<th class="text-center align-middle font-weight-bold">사이트명</th>
+							<th class="text-center align-middle font-weight-bold">인버터</th>
+							<th class="text-center align-middle font-weight-bold">이벤트코드</th>
+							<th class="text-center align-middle font-weight-bold">이벤트명</th>
+							<th class="text-center align-middle font-weight-bold">이벤트내용</th>
+							<th class="text-center align-middle font-weight-bold">상태</th>								
+							<th class="text-center align-middle font-weight-bold">처리시간</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -119,8 +120,86 @@
 
 <script>
 	$(document).ready(function(){
+		//날짜 선택 input 
+		$('.date-picker').datepicker({
+			format: "yyyy-mm-dd",		    
+		    orientation: "bottom",
+		    language: "kr",
+		    keyboardNavigation: false,		    
+		    autoclose: true,
+		    changeYear: true,
+            changeMonth: true            
+        });	
 		
+		$('#start-date-day').datepicker('setDate', 'today');
+		$('#end-date-day').datepicker('setDate', 'today');	
+		
+		//조회버튼 클릭
+		$("#btnSearch").click(function(){
+			search();
+		});		
+		
+		search();
 	});
 	
+	//데이터 조회
+	function search(){		
+		datatableInitialization();
+	}
 	
+	//데이터 테이블 설정
+	function datatableInitialization() {
+		
+		var startDate = $("#start-date-day").val();
+		startDate = startDate.replace(/-/gi, "");
+		
+		var endDate = $("#end-date-day").val();
+		endDate = endDate.replace(/-/gi, "");
+		
+        var myTable = $('#evt-list').dataTable(
+        {       
+            fixedHeader: true,
+            destroy: true,
+            language: lang_kor,            
+            select: 'single',            
+            bFilter : false,
+            responsive: true,
+            searching: false,            
+            scrollCollapse: true,
+            paging : true,
+            serverSide : true,
+            
+            ajax : {
+				url : '/ajax/getEvtHstList.do',
+				type : 'POST',				
+				data : {
+					startDate : startDate,
+					endDate : endDate
+				},						
+				dataSrc: function ( data ) {	                
+	                return data.list;
+	            }     
+			},
+			
+            columns: [
+            	{ id: "evtSeq", data: "evtSeq", "visible": false, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
+            	{ id: "occuTod", data: "occuTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            		render: function(data, type) {            			
+            			return data.substr(0,4) + "-" + data.substr(4,2) + "-" + data.substr(6,2) + " " + data.substr(8,2) + ":" + data.substr(10,2) + ":" + data.substr(12,2);
+            		}
+            	},
+            	{ id: "siteNm", data: "siteNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
+            	{ id: "devNm", data: "devNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
+            	{ id: "evtCd", data: "evtCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
+            	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
+            	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
+            	{ id: "evtStsCd", data: "evtStsCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
+            	{ id: "crlTod", data: "crlTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            		render: function(data, type) {            			
+            			return data.substr(0,4) + "-" + data.substr(4,2) + "-" + data.substr(6,2) + " " + data.substr(8,2) + ":" + data.substr(10,2) + ":" + data.substr(12,2);
+            		}
+            	}
+            ]
+        });
+	}
 </script>

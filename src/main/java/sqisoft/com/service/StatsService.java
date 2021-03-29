@@ -155,57 +155,13 @@ public class StatsService {
 				item = new GentDaySumInfo();
 				item.setTgtDate(date);
 				item.setTdayGentQnt(0);
+				item.setTdayGentTime(0);
+				item.setInstlCpct(0);
 			}
 			
 			result.add(item);
 			
 			cal.add(Calendar.DATE, 1);
-		}
-		
-		return result;
-	}
-	
-	/*일자별 발전량 최대,최소 통계*/
-	public List<GentDaySumInfo> selectGentDayMinMaxSum(List<GentDaySumInfo> targetList, List<Integer> sites, String startDate, String endDate, int areaDay) throws Exception{
-		
-		List<GentDaySumInfo> result = new ArrayList<GentDaySumInfo>();
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("sites", sites);
-		param.put("startDate", startDate);
-		param.put("endDate", endDate);		
-		param.put("areaDay", endDate);		
-		
-		List<GentDaySumInfo> rows = statsMapper.selectGentDayMinMaxSum(param);
-				
-		for (GentDaySumInfo target : targetList) {
-			GentDaySumInfo item = new GentDaySumInfo();
-			item.setTgtDate(item.getTgtDate());
-			
-			Date date = DateUtil.stringToDate(target.getTgtDate(), "yyyyMMdd");
-			
-			float minGentQnt = rows.get(0).getTdayGentQnt();
-			float maxGentQnt = rows.get(0).getTdayGentQnt();
-			
-			for(GentDaySumInfo row : rows) {
-				Date SecondDate = DateUtil.stringToDate(row.getTgtDate(), "yyyyMMdd");
-				long diffDay = DateUtil.dateBetweenDay(date, SecondDate);
-				diffDay = Math.abs(diffDay);
-		        
-				if (diffDay != 0 && diffDay < areaDay) {
-					if (minGentQnt > row.getTdayGentQnt()) {
-						minGentQnt = row.getTdayGentQnt(); 
-					}
-					if (maxGentQnt < row.getTdayGentQnt()) {
-						maxGentQnt = row.getTdayGentQnt(); 
-					}
-				}				
-			}
-			
-			item.setMinTdayGentQnt(minGentQnt);
-			item.setMaxTdayGentQnt(maxGentQnt);
-			
-			result.add(item);
 		}
 		
 		return result;

@@ -94,13 +94,9 @@ public class StatsController extends  CommHandlr{
 		// 발전량 정보 조회
 		List<GentDaySumInfo> genList = statsService.selectGentDaySum(getUserSiteList(session), startDate, endDate);
 		
-		// 최대, 최소 발전량 정보 조회
-		List<GentDaySumInfo> genRanges = statsService.selectGentDayMinMaxSum(genList, getUserSiteList(session), startDate, endDate, 2);
-		
 		// 일사량 정보 조회 to do..		
 		
-		result.put("genList", genList);
-		result.put("genRanges", genRanges);
+		result.put("genList", genList);		
 		   
 		return result;		
 	}

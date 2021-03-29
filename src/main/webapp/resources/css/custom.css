@@ -76,3 +76,7 @@ transparent
     color: #ffffff;
 }
 
+.dropdown-item:hover{
+	background: #5882FA;
+}
+

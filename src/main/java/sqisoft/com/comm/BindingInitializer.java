@@ -39,5 +39,6 @@ public class BindingInitializer implements WebBindingInitializer{
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(false));
+		
 	}
 }

@@ -33,6 +33,9 @@ public class EvtHstInfo {
 	private String clrYn;
 	/*처리시간*/
 	private String crlTod;
+	/*전체 레코드 수*/
+	private int totalCnt;
+	
 	public String getEvtSeq() {
 		return evtSeq;
 	}
@@ -93,4 +96,11 @@ public class EvtHstInfo {
 	public void setCrlTod(String crlTod) {
 		this.crlTod = crlTod;
 	}
+	public int getTotalCnt() {
+		return totalCnt;
+	}
+	public void setTotalCnt(int totalCnt) {
+		this.totalCnt = totalCnt;
+	}
+	
 }

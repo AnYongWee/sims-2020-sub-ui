@@ -115,6 +115,8 @@
 					<thead>							
 						<tr class="bg-fusion-300">
 							<th class="text-center align-middle font-weight-bold">일자</th>
+							<th class="text-center align-middle font-weight-bold">설비용량(kW)</th>
+							<th class="text-center align-middle font-weight-bold">발전시간(h)</th>
 							<th class="text-center align-middle font-weight-bold">발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">누적발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">발전효율(%)</th>

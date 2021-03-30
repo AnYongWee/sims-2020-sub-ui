@@ -66,50 +66,6 @@ public class StatsService {
 		return result;
 	}
 	
-	/*시간별 발전량 최대,최소 통계*/
-	public List<GentTimeSumInfo> selectGentTimeMinMaxSum(List<Integer> sites, String startDate) throws Exception{
-		
-		List<GentTimeSumInfo> result = new ArrayList<GentTimeSumInfo>();
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("sites", sites);
-		param.put("startDate", startDate);
-		
-		List<GentTimeSumInfo> list = statsMapper.selectGentTimeMinMaxSum(param);
-		
-		//비어 있는 시간 정보 생성
-		for(int i = 0; i < 24; i++) {
-			
-			String  hour = StringUtils.leftPad(String.valueOf(i), 2, "0") ;
-			
-			GentTimeSumInfo item = null;
-			
-			for(GentTimeSumInfo gentTimeSumInfo : list) {
-				
-				String targetHour = StringUtils.leftPad(gentTimeSumInfo.getTgtTime(), 2, "0");
-				gentTimeSumInfo.setTgtTime(targetHour);
-				
-				if (targetHour.equals(hour)) {
-					item = gentTimeSumInfo;
-					break;
-				}
-			}
-			
-			if (item == null) {
-					
-				item = new GentTimeSumInfo();
-				item.setTgtTime(hour);
-				item.setGentQnt(0);
-				item.setMinGentQnt(0);
-				item.setMaxGentQnt(0);
-			}
-			
-			result.add(item);
-		}
-		
-		return result;
-	}
-	
 	/*일자별 발전량 통계*/
 	public List<GentDaySumInfo> selectGentDaySum(List<Integer> sites, String startDate, String endDate) throws Exception{
 		
@@ -220,53 +176,7 @@ public class StatsService {
 		}
 		
 		return result;
-	}
-	
-	/*월별 발전량 최대,최소 통계*/
-	public List<GentMonthSumInfo> selectGentMonthMinMaxSum(List<GentMonthSumInfo> targetList, List<Integer> sites, String startDate, String endDate, int areaMonth) throws Exception{
-		
-		List<GentMonthSumInfo> result = new ArrayList<GentMonthSumInfo>();
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("sites", sites);
-		param.put("startDate", startDate);
-		param.put("endDate", endDate);		
-		param.put("areaDay", endDate);		
-		
-		List<GentMonthSumInfo> rows = statsMapper.selectGentMonthMinMaxSum(param);
-				
-		for (GentMonthSumInfo target : targetList) {
-			GentMonthSumInfo item = new GentMonthSumInfo();
-			item.setTgtYm(item.getTgtYm());
-			
-			Date date = DateUtil.stringToDate(target.getTgtYm(), "yyyyMM");
-			
-			float minGentQnt = rows.get(0).getMonGentQnt();
-			float maxGentQnt = rows.get(0).getMonGentQnt();
-			
-			for(GentMonthSumInfo row : rows) {
-				Date SecondDate = DateUtil.stringToDate(row.getTgtYm(), "yyyyMM");
-				long diffMonth = DateUtil.getMonthsDifference(date, SecondDate);
-				diffMonth = Math.abs(diffMonth);
-		        
-				if (diffMonth != 0 && diffMonth < areaMonth) {
-					if (minGentQnt > row.getMonGentQnt()) {
-						minGentQnt = row.getMonGentQnt(); 
-					}
-					if (maxGentQnt < row.getMonGentQnt()) {
-						maxGentQnt = row.getMonGentQnt(); 
-					}
-				}				
-			}
-			
-			item.setMinMonGentQnt(minGentQnt);
-			item.setMaxMonGentQnt(maxGentQnt);
-			
-			result.add(item);
-		}
-		
-		return result;
-	}
+	}	
 }
 
 

@@ -1817,11 +1817,11 @@ var layouts = (function(setlayout) {
 			layouts.errorMessage(layout);
 		}
 	};
-	setlayout.fixedFooter = function(layout) {
+	setlayout.fixedFooter = function(layout) {		
 		if (layout === 'on') {
 			initApp.pushSettings('footer-function-fixed')
 		} else if (layout === 'off') {
-			initApp.removeSettings('footer-function-fixed')
+			//initApp.removeSettings('footer-function-fixed')
 		} else {
 			layouts.errorMessage(layout);
 		}

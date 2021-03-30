@@ -22,7 +22,7 @@ public class GentMonthSumInfo {
 	/*최대발전량*/
 	private float maxMonGentQnt;
 	/*발전시간*/
-	private int monGentTime;
+	private float monGentTime;
 	/*누적발전량*/
 	private float accumGentQnt;
 	/*표준발전량*/
@@ -41,6 +41,9 @@ public class GentMonthSumInfo {
 	private int rducUcost;
 	/*총절감액*/
 	private int rducAmt;
+	/*설비용량*/
+	private float instlCpct;
+	
 	public String getTgtYm() {
 		return tgtYm;
 	}
@@ -64,11 +67,11 @@ public class GentMonthSumInfo {
 	}
 	public void setMaxMonGentQnt(float maxMonGentQnt) {
 		this.maxMonGentQnt = maxMonGentQnt;
-	}
-	public int getMonGentTime() {
+	}	
+	public float getMonGentTime() {
 		return monGentTime;
 	}
-	public void setMonGentTime(int monGentTime) {
+	public void setMonGentTime(float monGentTime) {
 		this.monGentTime = monGentTime;
 	}
 	public float getAccumGentQnt() {
@@ -125,4 +128,11 @@ public class GentMonthSumInfo {
 	public void setRducAmt(int rducAmt) {
 		this.rducAmt = rducAmt;
 	}
+	public float getInstlCpct() {
+		return instlCpct;
+	}
+	public void setInstlCpct(float instlCpct) {
+		this.instlCpct = instlCpct;
+	}
+	
 }

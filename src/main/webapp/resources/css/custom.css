@@ -29,7 +29,7 @@ transparent
 }
 
 .nav-function-top .page-content-wrapper {  			 	
-	margin-top: 4.195rem;
+	margin-top: 3.425rem;
 }
 
 .nav-function-top .page-header {    
@@ -38,10 +38,6 @@ transparent
 
 .breadcrumb {    
     padding: 0.5rem 0.5rem;
-}
-
-.search-lable {
-	width: 130px;
 }
 
 .input-group-text {
@@ -80,3 +76,19 @@ transparent
 	background: #5882FA;
 }
 
+.nav-footer {
+	background: #ffffff4a;
+    height: 3.2125rem;
+}
+
+.nav-function-fixed .nav-footer {
+   border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.search-lable {
+    width: 130px;    
+}
+
+.search-lable-sm {
+    width: 80px;    
+}

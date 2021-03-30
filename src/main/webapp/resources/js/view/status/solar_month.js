@@ -30,20 +30,17 @@
 				dataSrc: function ( data ) {
 	                
 					//그래프 생성
-					var genList = [], genRanges = [], prnmtrList = [], categories = [];
+					var genList = [], genTimeList = [], prnmtrList = [], categories = [];
 					
-					for (var i = 0; i < data.genList.length; i++){
-						categories[i] = [data.genList[i].tgtYm];
-						genList[i] = [data.genList[i].tgtYm, data.genList[i].monGentQnt];	
+					for (var i = 0; i < data.list.length; i++){
+						categories[i] = [data.list[i].tgtYm];
+						genList[i] = [data.list[i].tgtYm, data.list[i].monGentQnt];
+						genTimeList[i] = [data.list[i].tgtYm, data.list[i].monGentTime];
 					}
 					
-					for (var i = 0; i < data.genRanges.length; i++){
-						genRanges[i] = [data.genRanges[i].tgtYm, data.genRanges[i].minMonGentQnt, data.genRanges[i].maxMonGentQnt];	
-					}
+					drawHighChart_month(categories, genList, genTimeList, prnmtrList);
 					
-					drawHighChart_month(categories, genList, genRanges, prnmtrList);
-					
-	                return data.genList;
+	                return data.list;
 	            }     
 			},
 			
@@ -53,6 +50,8 @@
             			return data.substr(0,4) + "-" + data.substr(4,2);
             		}
             	},
+            	{ id: "instlCpct", data: "instlCpct", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
+            	{ id: "monGentTime", data: "monGentTime", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "monGentQnt", data: "monGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "accumGentQnt", data: "accumGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
             	{ id: "gentEffi", data: "gentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
@@ -65,7 +64,7 @@
 	}
 	
 	//시간별 그래프 그리기
-	function drawHighChart_month(categories, genList, genRanges, prnmtrList){
+	function drawHighChart_month(categories, genList, genTimeList, prnmtrList){
 		
 		Highcharts.chart('container', {
 
@@ -102,27 +101,26 @@
 		                color: Highcharts.getOptions().colors[2]
 		            }
 		        },
-		        opposite: false
+		        opposite: false	        
 
-		    }
-		    /* , { 
-		    	// 일사량  Y축 설정
-		        gridLineWidth: 0,
+		    },
+		    { 
+		    	// 발전시간 Y축 설정
+		        labels: {
+		            format: '{value} h',
+		            style: {
+		                color: Highcharts.getOptions().colors[1]
+		            }
+		        },
 		        title: {
 		            text: '',
 		            style: {
-		                color: Highcharts.getOptions().colors[0]
+		                color: Highcharts.getOptions().colors[2]
 		            }
 		        },
-		        labels: {
-		            format: '{value} w/㎡',
-		            style: {
-		                color: Highcharts.getOptions().colors[0]
-		            }
-		        }
+		        opposite: true
 
-		    } */
-		    ],
+		    }],
 
 		    tooltip: {
 		        crosshairs: true,
@@ -141,64 +139,15 @@
 		            		valueSuffix: ' kWh'
 		        		}
 		    		}
-		    		//최고, 최저 발전량 데이터 설정
-		    		,{name: '최저, 최고 발전량', data: genRanges, type: 'arearange', lineWidth: 0, linkedTo: ':previous', color: "#FFBDBD", fillOpacity: 0.3, zIndex: 1,
-		        		marker: {
-		        			fillColor: '#FFBDBD',
-		            		enabled: false
+		    		,{name: '발전시간', data: genTimeList, yAxis: 1, zIndex: 1, color: "#BDBDBD", type: 'column', 
+		    			marker: {
+		            		fillColor: 'white',
+		            		lineWidth: 2,
+		            		lineColor: Highcharts.getOptions().colors[0]
 		        		},
 		        		tooltip: {
-		            		valueSuffix: ' kWh'
+		            		valueSuffix: ' h'
 		        		}
-		    		}
-		    		//일사량 데이터 설정
-		    		/* ,{name: '일사량', data: prnmtrList, type: "line", yAxis: 1, zIndex: 0, color: "#BDBDBD",
-		        		marker: {
-		            		fillColor: '#BDBDBD',
-		            		lineWidth: 1,
-		            		lineColor: "#BDBDBD"
-		        		},
-		        		tooltip: {
-		            		valueSuffix: ' w/㎡'
-		            	}
-		     		} */
-		    		],	    
-		     		
-		    responsive: {
-		        rules: [{
-		            condition: {
-		                maxWidth: 500
-		            },
-		            chartOptions: {
-		                legend: {
-		                    floating: false,
-		                    layout: 'horizontal',
-		                    align: 'center',
-		                    //verticalAlign: 'bottom',
-		                    x: 0,
-		                    y: 0
-		                },
-		                yAxis: [{
-		                    labels: {
-		                        align: 'left',
-		                        x: 0,
-		                        y: -6
-		                    },
-		                    showLastLabel: false
-		                }
-		                /* , {
-		                    labels: {
-		                        align: 'right',
-		                        x: 0,
-		                        y: -6
-		                    },
-		                    showLastLabel: false
-		                } */
-		                , {
-		                    visible: false
-		                }]
-		            }
-		        }]
-		    }
+		    }]
 		});
 	}

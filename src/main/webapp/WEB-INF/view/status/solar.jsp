@@ -11,10 +11,12 @@
 <script src="${pageContext.request.contextPath}/resources/js/view/status/solar_month.js"></script>
 
 <main id="js-page-content" role="main" class="page-content">
-                             
-<ol class="breadcrumb bg-fusion-300 border border-primary">
-	<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 통계</a></li>	
-</ol>
+        
+<div>                             
+	<ol class="breadcrumb bg-fusion-300 border border-primary">
+		<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 통계</a></li>	
+	</ol>
+</div>
 
 <div class="card border mb-4 mb-xl-0">
 	<div class="card-header  py-2 pr-2 d-flex align-items-center flex-wrap">
@@ -94,6 +96,7 @@
 					<thead>							
 						<tr class="bg-fusion-300">
 							<th class="text-center align-middle font-weight-bold">시간(시)</th> 
+							<th class="text-center align-middle font-weight-bold">설비용량(kW)</th>							
 							<th class="text-center align-middle font-weight-bold">발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">누적발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">발전효율(%)</th>
@@ -138,6 +141,8 @@
 					<thead>							
 						<tr class="bg-fusion-300">
 							<th class="text-center align-middle font-weight-bold">일자</th>
+							<th class="text-center align-middle font-weight-bold">설비용량(kW)</th>
+							<th class="text-center align-middle font-weight-bold">발전시간(h)</th>
 							<th class="text-center align-middle font-weight-bold">발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">누적발전량(kWh)</th>
 							<th class="text-center align-middle font-weight-bold">발전효율(%)</th>

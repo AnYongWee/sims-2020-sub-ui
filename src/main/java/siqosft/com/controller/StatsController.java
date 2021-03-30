@@ -63,15 +63,11 @@ public class StatsController extends  CommHandlr{
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		// 발전량 정보 조회
-		List<GentTimeSumInfo> genList = statsService.selectGentTimeSum(getUserSiteList(session), startDate);
-		
-		// 최대, 최소 발전량 정보 조회
-		List<GentTimeSumInfo> genRanges = statsService.selectGentTimeMinMaxSum(getUserSiteList(session), startDate);
+		List<GentTimeSumInfo> list = statsService.selectGentTimeSum(getUserSiteList(session), startDate);
 		
 		// 일사량 정보 조회 to do..		
 		
-		result.put("genList", genList);
-		result.put("genRanges", genRanges);
+		result.put("list", list);		
 		   
 		return result;		
 	}
@@ -92,11 +88,11 @@ public class StatsController extends  CommHandlr{
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		// 발전량 정보 조회
-		List<GentDaySumInfo> genList = statsService.selectGentDaySum(getUserSiteList(session), startDate, endDate);
+		List<GentDaySumInfo> list = statsService.selectGentDaySum(getUserSiteList(session), startDate, endDate);
 		
 		// 일사량 정보 조회 to do..		
 		
-		result.put("genList", genList);		
+		result.put("list", list);		
 		   
 		return result;		
 	}
@@ -117,15 +113,11 @@ public class StatsController extends  CommHandlr{
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		// 발전량 정보 조회
-		List<GentMonthSumInfo> genList = statsService.selectGentMonthSum(getUserSiteList(session), startDate, endDate);
-		
-		// 최대, 최소 발전량 정보 조회		
-		List<GentMonthSumInfo> genRanges = statsService.selectGentMonthMinMaxSum(genList, getUserSiteList(session), startDate, endDate, 2);
+		List<GentMonthSumInfo> list = statsService.selectGentMonthSum(getUserSiteList(session), startDate, endDate);
 		
 		// 일사량 정보 조회 to do..		
 		
-		result.put("genList", genList);
-		result.put("genRanges", genRanges);
+		result.put("list", list);
 		   
 		return result;		
 	}

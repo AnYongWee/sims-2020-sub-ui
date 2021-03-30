@@ -28,6 +28,7 @@
 
 $(document).ready(function(){
 	prograssInitialization();
+	initApp.pushSettings('footer-function-fixed');
 });
 
 //사이트 보기 체크박스 변경 이벤트 처리

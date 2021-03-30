@@ -10,4 +10,8 @@ import sqisoft.com.model.EvtHstInfo;
 public interface EvtMapper {
 	/*경보이력 리스트*/
 	List<EvtHstInfo> selectEvtHstList(Map<String, Object> param) throws Exception;
+	
+	/*경보이력 이벤트코드 리스트*/
+	List<EvtHstInfo> selectEvtCdList(Map<String, Object> param) throws Exception;
+	
 }

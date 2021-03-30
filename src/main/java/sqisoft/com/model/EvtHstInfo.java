@@ -27,15 +27,20 @@ public class EvtHstInfo {
 	private String evtNm;
 	/*이벤트내용*/
 	private String evtDesc;
-	/*이벤트상태*/
+	/*이벤트상태코드*/
 	private String evtStsCd;
+	/*이벤트상태*/
+	private String evtStsVal;
+	/*이벤트등급코드*/
+	private String evtGdCd;
+	/*이벤트등급*/
+	private String evtGdVal;
 	/*처리여부*/
 	private String clrYn;
 	/*처리시간*/
 	private String crlTod;
 	/*전체 레코드 수*/
 	private int totalCnt;
-	
 	public String getEvtSeq() {
 		return evtSeq;
 	}
@@ -84,6 +89,24 @@ public class EvtHstInfo {
 	public void setEvtStsCd(String evtStsCd) {
 		this.evtStsCd = evtStsCd;
 	}
+	public String getEvtStsVal() {
+		return evtStsVal;
+	}
+	public void setEvtStsVal(String evtStsVal) {
+		this.evtStsVal = evtStsVal;
+	}
+	public String getEvtGdCd() {
+		return evtGdCd;
+	}
+	public void setEvtGdCd(String evtGdCd) {
+		this.evtGdCd = evtGdCd;
+	}
+	public String getEvtGdVal() {
+		return evtGdVal;
+	}
+	public void setEvtGdVal(String evtGdVal) {
+		this.evtGdVal = evtGdVal;
+	}
 	public String getClrYn() {
 		return clrYn;
 	}
@@ -102,5 +125,4 @@ public class EvtHstInfo {
 	public void setTotalCnt(int totalCnt) {
 		this.totalCnt = totalCnt;
 	}
-	
 }

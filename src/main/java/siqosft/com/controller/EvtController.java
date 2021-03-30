@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sqisoft.com.comm.CommHandlr;
+import sqisoft.com.model.CodeInfo;
 import sqisoft.com.model.EvtHstInfo;
 import sqisoft.com.model.GentTimeSumInfo;
 import sqisoft.com.service.AuthService;
 import sqisoft.com.service.CodeService;
+import sqisoft.com.service.DevService;
 import sqisoft.com.service.EvtService;
 
 /**
@@ -40,6 +42,9 @@ public class EvtController extends  CommHandlr{
 	@Resource(name = "codeService")
 	private CodeService codeService;
 	
+	@Resource(name = "devService")
+	private DevService devService;
+	
 	/**
 	 * 경보이력 화면 이동
 	 * @param model
@@ -47,19 +52,27 @@ public class EvtController extends  CommHandlr{
 	 * @exception Exception
 	 */
 	@RequestMapping(value = "/alarm.do", method = RequestMethod.GET)
-	public String solarView(Model model) throws Exception {		
+	public String solarView(HttpSession session, Model model) throws Exception {		
 		
-		//이벤트 등급 코드 조회
-		model.addAttribute("evtDivCodes", codeService.selectCodeList("EVT_DIV_CD"));
+		//인버터 종류 조회
+		model.addAttribute("devCodes", devService.selectDevList(getUserSiteList(session)));
+		//이벤트 등급 코드 조회		 
+		model.addAttribute("evtDivCodes", codeService.selectCodeList("EVT_GD_CD"));
 		//이벤트 상태 코드 조회
 		model.addAttribute("evtStsCodes", codeService.selectCodeList("EVT_STS_CD"));		
-		
+		//이벤트 코드 리스트 조회
+		model.addAttribute("evtCds", evtService.selectEvtCdList(getUserSiteList(session)));
+				
 		return "evt/alarm.tiles";
 	}
 	
 	/**
 	 * 경보이력 데이터 조회
 	 *
+	 * @param searchDevSeq - 인버터
+	 * @param searchEvtCd - 이벤트
+	 * @param searchGdCd - 등급
+	 * @param searchStsCd - 상태
 	 * @param startDate - 시작일자
 	 * @param endDate - 종료일자
 	 * @return 
@@ -72,14 +85,18 @@ public class EvtController extends  CommHandlr{
 															@RequestParam(name="start", required = false) String start,
 															@RequestParam(name="length", required = false) String length,
 															@RequestParam(name="order[0][column]", required = false) String ordNo,
-															@RequestParam(name="order[0][dir]", required = false) String sort,						
+															@RequestParam(name="order[0][dir]", required = false) String sort,
+															@RequestParam(name="searchDevSeq", required = true) String devSeq,
+															@RequestParam(name="searchEvtCd", required = true) String evtCd,
+															@RequestParam(name="searchGdCd", required = true) String gdCd,
+															@RequestParam(name="searchStsCd", required = true) String stsCd,
 															@RequestParam(name="startDate", required = true) String startDate,
 															@RequestParam(name="endDate", required = true) String endDate) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		// 경보이력 데이터 조회
-		List<EvtHstInfo> list = evtService.selectEvtHstList(getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort,  startDate, endDate);
+		List<EvtHstInfo> list = evtService.selectEvtHstList(getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort, devSeq, evtCd, gdCd, stsCd, startDate, endDate);
 		
 		// 전체 레코드 수		
 		long totalCnt = 0;

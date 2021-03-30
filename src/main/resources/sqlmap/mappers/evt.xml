@@ -11,6 +11,9 @@
 		<id column="evt_nm" property="evtNm" />
 		<id column="evt_desc" property="evtDesc" />
 		<id column="evt_sts_cd" property="evtStsCd" />		
+		<id column="evt_sts_val" property="evtStsVal" />
+		<id column="evt_gd_cd" property="evtGdCd" />		
+		<id column="evt_gd_val" property="evtGdVal" />
 		<id column="clr_yn" property="clrYn" />
 		<id column="clr_tod" property="crlTod" />
 		<id column="total_cnt" property="totalCnt" />						
@@ -27,14 +30,35 @@
 				   A.EVT_NM,
 				   A.EVT_DESC,
 				   A.EVT_STS_CD,
+				   A.EVT_GD_CD,
 				   A.CLR_YN,
 				   A.CLR_TOD,
+				   D.DTL_CD_NM AS EVT_STS_VAL,
+				   E.DTL_CD_NM AS EVT_GD_VAL,
 				   COUNT(*) OVER() AS TOTAL_CNT
 		FROM REMS.EVT_HST A
 		LEFT OUTER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
 		LEFT OUTER JOIN REMS.DEV_INF C ON C.DEV_SEQ = C.DEV_SEQ
+		LEFT OUTER JOIN REMS.CD_DTL D ON A.EVT_STS_CD = D.DTL_CD AND D.GRP_CD = 'EVT_STS_CD'
+		LEFT OUTER JOIN REMS.CD_DTL E ON A.EVT_GD_CD = E.DTL_CD AND E.GRP_CD = 'EVT_GD_CD'
 		
 		WHERE A.OCCU_TOD <![CDATA[>=]]> #{startDate} || '000000' AND A.OCCU_TOD <![CDATA[<=]]> #{endDate} || '000000'
+			 
+			 <if test="devSeq  != null and devSeq != '' "> 
+			 	AND A.DEV_SEQ = ${devSeq} 
+			 </if>
+			 
+			 <if test="evtCd  != null and evtCd != '' "> 
+			 	AND A.EVT_CD = #{evtCd} 
+			 </if>
+			 
+			 <if test="gdCd  != null and gdCd != '' "> 
+			 	AND A.EVT_GD_CD = #{gdCd} 
+			 </if>
+			 
+			 <if test="stsCd  != null and stsCd != '' "> 
+			 	AND A.EVT_STS_CD = #{stsCd} 
+			 </if>
 			 
 			<choose>
 				<when test="sites != null and sites.size != 0">
@@ -60,6 +84,28 @@
 				
 		
 		LIMIT #{length} offset #{start}
+		
+	</select>
+	
+	<!-- 경보이력 이벤트 코드 리스트 -->
+	<select id="selectEvtCdList" parameterType="map" resultMap="evtHstInfoMap">
+		
+	    SELECT EVT_CD, EVT_NM FROM REMS.EVT_HST
+	    
+	    WHERE
+	    	<choose>
+				<when test="sites != null and sites.size != 0">
+					SITE_SEQ IN 
+					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+						#{item}
+					</foreach>					
+				</when>
+				<otherwise>
+					SITE_SEQ IN (-99)
+				</otherwise>
+			</choose>
+			
+		GROUP BY EVT_CD, EVT_NM
 		
 	</select>
 		

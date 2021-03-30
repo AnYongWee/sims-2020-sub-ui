@@ -44,7 +44,7 @@
 						
     </head>
     <!-- BEGIN Body -->
-    <body class="mod-bg-1 mod-skin-light header-function-fixed nav-function-fixed">
+    <body class="mod-bg-1 mod-skin-light header-function-fixed nav-function-fixed footer-function-fixed">
 
 		<!-- BEGIN Color profile -->
 		<!-- this area is hidden and will not be seen on screens or screen readers -->
@@ -184,8 +184,6 @@
             	<tiles:insertAttribute name="site"/>
             	
                 <div class="page-content-wrapper">
-                
-                	
                 	 
 					<tiles:insertAttribute name="content"/>
                 		   

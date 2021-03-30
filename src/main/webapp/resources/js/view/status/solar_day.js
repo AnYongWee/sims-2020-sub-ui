@@ -32,15 +32,15 @@
 					//그래프 생성
 					var genList = [], genTimeList = [], prnmtrList = [], categories = [];
 					
-					for (var i = 0; i < data.genList.length; i++){
-						categories[i] = [data.genList[i].tgtDate];
-						genList[i] = [data.genList[i].tgtDate, data.genList[i].tdayGentQnt];
-						genTimeList[i] = [data.genList[i].tgtDate, data.genList[i].tdayGentTime];
+					for (var i = 0; i < data.list.length; i++){
+						categories[i] = [data.list[i].tgtDate];
+						genList[i] = [data.list[i].tgtDate, data.list[i].tdayGentQnt];
+						genTimeList[i] = [data.list[i].tgtDate, data.list[i].tdayGentTime];
 					}
 					
 					drawHighChart_day(categories, genList, genTimeList, prnmtrList);
 					
-	                return data.genList;
+	                return data.list;
 	            }     
 			},
 			
@@ -101,7 +101,7 @@
 		                color: Highcharts.getOptions().colors[2]
 		            }
 		        },
-		        opposite: false
+		        opposite: false	        
 
 		    },
 		    { 

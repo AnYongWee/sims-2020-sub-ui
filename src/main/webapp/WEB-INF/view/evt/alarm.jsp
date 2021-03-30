@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <main id="js-page-content" role="main" class="page-content">
                              
@@ -12,12 +13,13 @@
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text search-lable">인버터</span>
+						<span class="input-group-text search-lable-sm">인버터</span>
 					</div>
-					<select class="custom-select form-control" id="search-type">
-						<option value="hour">시간별</option>
-						<option value="day">일별</option>
-						<option value="month">월별</option>						
+					<select class="custom-select form-control" id="searchDevSeq">					
+						<option value="" selected>전체</option>
+						<c:forEach items="${devCodes}" var="row" varStatus="i">
+							<option value="${row.devSeq}">${row.devNm}</option>
+						</c:forEach>							
 					</select>
 				</div>
 			</div>
@@ -25,12 +27,13 @@
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text search-lable">이벤트</span>
+						<span class="input-group-text search-lable-sm">이벤트</span>
 					</div>
-					<select class="custom-select form-control" id="search-type">
-						<option value="hour">시간별</option>
-						<option value="day">일별</option>
-						<option value="month">월별</option>						
+					<select class="custom-select form-control" id="searchEvtCd">
+						<option value="" selected>전체</option>
+						<c:forEach items="${evtCds}" var="row" varStatus="i">
+							<option value="${row.evtCd}">${row.evtNm}</option>
+						</c:forEach>	
 					</select>
 				</div>
 			</div>
@@ -38,12 +41,13 @@
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text search-lable">등급</span>
+						<span class="input-group-text search-lable-sm">등급</span>
 					</div>
-					<select class="custom-select form-control" id="search-type">
-						<option value="hour">시간별</option>
-						<option value="day">일별</option>
-						<option value="month">월별</option>						
+					<select class="custom-select form-control" id="searchGdCd">
+						<option value="" selected>전체</option>
+						<c:forEach items="${evtDivCodes}" var="row" varStatus="i">
+							<option value="${row.dtlCd}">${row.dtlCdNm}</option>
+						</c:forEach>						
 					</select>
 				</div>
 			</div>
@@ -51,12 +55,13 @@
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text search-lable">상태</span>
+						<span class="input-group-text search-lable-sm">상태</span>
 					</div>
-					<select class="custom-select form-control" id="search-type">
-						<option value="hour">시간별</option>
-						<option value="day">일별</option>
-						<option value="month">월별</option>						
+					<select class="custom-select form-control" id="searchStsCd">
+						<option value="" selected>전체</option>
+						<c:forEach items="${evtStsCodes}" var="row" varStatus="i">
+							<option value="${row.dtlCd}">${row.dtlCdNm}</option>
+						</c:forEach>						
 					</select>
 				</div>
 			</div>
@@ -65,7 +70,7 @@
 				
 				<div class="input-group" id="date-picker-day">
 					<div class="input-group-prepend">
-						<span class="input-group-text search-lable">발생일시</span>
+						<span class="input-group-text search-lable-sm">발생일시</span>
 					</div>
 					                                                       
 					<input class="form-control date-picker" id="start-date-day" name="start-date-day" value="" type="text" readonly>
@@ -101,6 +106,7 @@
 							<th class="text-center align-middle font-weight-bold">이벤트코드</th>
 							<th class="text-center align-middle font-weight-bold">이벤트명</th>
 							<th class="text-center align-middle font-weight-bold">이벤트내용</th>
+							<th class="text-center align-middle font-weight-bold">등급</th>
 							<th class="text-center align-middle font-weight-bold">상태</th>								
 							<th class="text-center align-middle font-weight-bold">처리시간</th>
 						</tr>
@@ -172,7 +178,11 @@
             ajax : {
 				url : '/ajax/getEvtHstList.do',
 				type : 'POST',				
-				data : {
+				data : {					
+					searchDevSeq : $("#searchDevSeq").val(),
+					searchEvtCd : $("#searchEvtCd").val(),
+					searchGdCd : $("#searchGdCd").val(),
+					searchStsCd : $("#searchStsCd").val(),
 					startDate : startDate,
 					endDate : endDate
 				},						
@@ -193,7 +203,19 @@
             	{ id: "evtCd", data: "evtCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
             	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
             	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
-            	{ id: "evtStsCd", data: "evtStsCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
+            	{ id: "evtGdVal", data: "evtGdVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            		render: function(data, type) {   
+            			if (data == "경계"){
+            				return '<h4><span class="badge badge-danger badge-pill">' + data + '</span></h4>';	
+            			}else if(data == "주의"){
+            				return '<h4><span class="badge badge-warning badge-pill">' + data + '</span></h4>';
+            			}else{
+            				return '<h4><span class="badge badge-success badge-pill">' + data + '</span></h4>';
+            			}
+            		}
+            		
+            	},
+            	{ id: "evtStsVal", data: "evtStsVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
             	{ id: "crlTod", data: "crlTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
             		render: function(data, type) {            			
             			return data.substr(0,4) + "-" + data.substr(4,2) + "-" + data.substr(6,2) + " " + data.substr(8,2) + ":" + data.substr(10,2) + ":" + data.substr(12,2);

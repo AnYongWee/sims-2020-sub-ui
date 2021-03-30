@@ -41,6 +41,9 @@ public class GentTimeSumInfo {
 	private int rducUcost;
 	/*총절감액*/
 	private int rducAmt;
+	/*설비용량*/
+	private float instlCpct;
+	
 	public String getTgtDate() {
 		return tgtDate;
 	}
@@ -125,4 +128,11 @@ public class GentTimeSumInfo {
 	public void setRducAmt(int rducAmt) {
 		this.rducAmt = rducAmt;
 	}
+	public float getInstlCpct() {
+		return instlCpct;
+	}
+	public void setInstlCpct(float instlCpct) {
+		this.instlCpct = instlCpct;
+	}
+	
 }

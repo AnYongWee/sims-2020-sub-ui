@@ -1,4 +1,9 @@
 @charset "UTF-8";
+
+body{
+	font-family: 'NanumSquare', sans-serif;
+}
+
 transparent
 .dropdown-menu {
     -webkit-box-shadow: 0 0 15px 1px rgb(90 80 105 / 20%);
@@ -91,4 +96,16 @@ transparent
 
 .search-lable-sm {
     width: 80px;    
+}
+
+.gauge-bottom-lable {
+	margin-top: -30px;
+}
+
+.mod-skin-dark:not(.mod-skin-light) body, .mod-skin-dark:not(.mod-skin-light) .chart-font {
+    color: #d6d9dc;
+}
+
+.list-group-item {  
+    padding: 0.45rem 1.25rem;    
 }

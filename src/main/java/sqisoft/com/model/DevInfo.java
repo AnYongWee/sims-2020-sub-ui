@@ -33,6 +33,8 @@ public class DevInfo {
 	private int upDevSeq;
 	/*장비명*/
 	private String devNm;
+	/*사이트명*/
+	private String siteNm;
 	
 	public int getDevSeq() {
 		return devSeq;
@@ -93,6 +95,12 @@ public class DevInfo {
 	}
 	public void setDevNm(String devNm) {
 		this.devNm = devNm;
+	}
+	public String getSiteNm() {
+		return siteNm;
+	}
+	public void setSiteNm(String siteNm) {
+		this.siteNm = siteNm;
 	}
 	
 }

@@ -36,7 +36,7 @@
 		<a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Hide Navigation"> 
 			<i class="ni ni-menu"></i>
 		</a>
-		<ul>
+		<!-- <ul>
 			<li>
 				<a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minify Navigation"> 
 					<i class="ni ni-minify-nav"></i>
@@ -47,7 +47,7 @@
 					<i class="ni ni-lock-nav"></i>
 				</a>
 			</li>
-		</ul>
+		</ul> -->
 	</div>
 
 	<!-- DOC: mobile button appears during mobile width -->

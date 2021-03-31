@@ -26,7 +26,8 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
         <!--===============================================================================================-->
-        
+        <link rel="stylesheet" media="screen, print" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">        
+
         <!-- Place favicon.ico in the root directory -->
         <!--===============================================================================================-->
         <link rel="apple-touch-icon" sizes="180x180" href="${pageContext.request.contextPath}/resources/assets/smart/favicon/apple-touch-icon.png">

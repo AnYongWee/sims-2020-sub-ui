@@ -1,6 +1,5 @@
 package siqosft.com.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,7 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.comm.SecurityUtil;
-import sqisoft.com.model.GentTimeSumInfo;
 import sqisoft.com.model.MenuInfo;
-import sqisoft.com.model.PublicKeyInfo;
 import sqisoft.com.model.SiteInfo;
 import sqisoft.com.model.UsrInfo;
 import sqisoft.com.service.AuthService;

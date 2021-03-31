@@ -18,7 +18,7 @@
 					<select class="custom-select form-control" id="searchDevSeq">					
 						<option value="" selected>전체</option>
 						<c:forEach items="${devCodes}" var="row" varStatus="i">
-							<option value="${row.devSeq}">${row.devNm}</option>
+							<option value="${row.devSeq}">${row.siteNm} / ${row.devNm}</option>
 						</c:forEach>							
 					</select>
 				</div>

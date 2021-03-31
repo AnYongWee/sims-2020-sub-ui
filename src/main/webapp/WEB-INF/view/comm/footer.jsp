@@ -45,7 +45,9 @@ function siteChange(obj, siteSeq){
 			console.log("site seq update success!");
 			
 			//각화면에서 필요한 데이터를 조회 하는 공통 합수 호출 ( 암묵적으로 화면에서 데이터를 조회 하는 function 명을 search 로 정한다. )
-			search();			
+			try {
+				search();	
+			} catch (e) {}		
 		},
 		error: function(e){
 			alert("요청에 실패 하였습니다.");

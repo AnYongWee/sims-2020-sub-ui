@@ -13,35 +13,38 @@
 		<id column="MODEL_SEQ" property="modelSeq" />
 		<id column="UP_DEV_SEQ" property="upDevSeq" />
 		<id column="DEV_NM" property="devNm" />		
+		<id column="SITE_NM" property="siteNm" />
 	</resultMap>
 	
-	<!-- 공통코드 리스트 조회 -->
+	<!-- 장비 리스트 조회 -->
 	<select id="selectDevList" parameterType="map" resultMap="devInfoMap">
-	    SELECT DEV_SEQ,
-				   SVC_CD,
-				   SITE_SEQ,
-				   INSTL_AREA,
-				   INSTL_CNT,
-				   INSTL_TOD,
-				   INSTL_PLAC,
-				   MODEL_SEQ,
-				   UP_DEV_SEQ,
-				   DEV_NM
-			FROM REMS.DEV_INF
+	    SELECT A.DEV_SEQ,
+				   A.SVC_CD,
+				   A.SITE_SEQ,
+				   A.INSTL_AREA,
+				   A.INSTL_CNT,
+				   A.INSTL_TOD,
+				   A.INSTL_PLAC,
+				   A.MODEL_SEQ,
+				   A.UP_DEV_SEQ,
+				   A.DEV_NM,
+				   B.SITE_NM
+			FROM REMS.DEV_INF A
+			INNER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
 			WHERE 1=1 
 			<choose>
 				<when test="sites != null and sites.size != 0">
-					AND SITE_SEQ IN 
+					AND A.SITE_SEQ IN 
 					<foreach collection="sites" item="item"  open="(" close=")" separator=",">
 						#{item}
 					</foreach>					
 				</when>
 				<otherwise>
-					AND SITE_SEQ IN (-99)
+					AND A.SITE_SEQ IN (-99)
 				</otherwise>
 			</choose>
 			
-			ORDER BY SITE_SEQ, DEV_SEQ
+			ORDER BY A.SITE_SEQ, A.DEV_SEQ
 	</select>
 		
 </mapper>

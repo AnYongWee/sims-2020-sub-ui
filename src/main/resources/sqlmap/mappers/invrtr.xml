@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.InvrtrMapper">
+
+	<resultMap type="sqisoft.com.model.InvrtrInfo" id="invrtrInfoMap">
+		<id column="DEV_SEQ" property="devSeq" />
+		<id column="SITE_SEQ" property="siteSeq" />
+		<id column="SITE_NM" property="siteNm" />
+		<id column="DEV_NM" property="devNm" />
+		<id column="INSTL_CPCT" property="instlCpct" />
+		<id column="BEFORE_GENT_QNT" property="beforeGentQnt" />
+		<id column="MSR_TOD" property="msrTod" />
+		<id column="GENT_QNT" property="gentQnt" />		
+		<id column="TDAY_GENT_QNT" property="tdayGentQnt" />
+		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />		
+		<id column="DC_POWR" property="dcPowr" />
+		<id column="DC_VOLT" property="dcVolt" />
+		<id column="DC_CURR" property="dcCurr" />
+		<id column="AC_POWR" property="acPowr" />						
+		<id column="AC_VOLT" property="acVlot" />
+		<id column="AC_CURR" property="acCurr" />
+	</resultMap>
+	
+	<!-- 인버터 현황 리스트 -->
+	<select id="selectInvrtrOprtList" parameterType="map" resultMap="invrtrInfoMap">
+	    
+		SELECT A.SITE_SEQ,
+			   B.SITE_NM,
+		       A.DEV_SEQ,
+			   A.DEV_NM,
+			   A.INSTL_CPCT,
+			   C.TDAY_GENT_QNT AS BEFORE_GENT_QNT,
+			   TO_CHAR(TO_TIMESTAMP(D.MSR_TOD, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MSR_TOD,
+			   D.GENT_QNT,
+			   D.TDAY_GENT_QNT,
+			   D.ACCUM_GENT_QNT,			   
+			   D.DC_POWR,
+			   D.DC_VOLT,
+			   D.DC_CURR,			   
+			   D.AC_POWR,
+			   D.AC_VOLT,
+			   D.AC_CURR			   
+		FROM REMS.DEV_INF A
+		INNER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
+		LEFT OUTER JOIN REMS.GENT_DAY_SUM C ON A.DEV_SEQ = C.DEV_SEQ AND C.TGT_DATE = '20210323'
+		LEFT OUTER JOIN REMS.INVRTR_OPRT_MIN_HST D ON A.DEV_SEQ = D.DEV_SEQ 
+		AND D.MSR_TOD = (SELECT MAX(MSR_TOD) FROM REMS.INVRTR_OPRT_MIN_HST WHERE DEV_SEQ = A.DEV_SEQ AND TO_CHAR(TO_TIMESTAMP(MSR_TOD, 'YYYYMMDDHH24MISS'), 'YYYYMMDD') = '20210324')
+		WHERE A.SVC_CD = 'PV_POW'
+		
+		<choose>
+			<when test="sites != null and sites.size != 0">
+				AND A.SITE_SEQ IN 
+				<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+					#{item}
+				</foreach>					
+			</when>
+			<otherwise>
+				AND A.SITE_SEQ IN (-99)
+			</otherwise>
+		</choose>
+			
+		ORDER BY A.SITE_SEQ, A.DEV_SEQ
+		
+	</select>
+		
+</mapper>

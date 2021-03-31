@@ -52,7 +52,7 @@ var gaugeOptions = {
 	        minorTickInterval: null,
 	        tickAmount: 2,
 	        title: {
-	            y: -25
+	            y: -15
 	        },
 	        labels: {
 	            y: 16
@@ -62,7 +62,7 @@ var gaugeOptions = {
 	    plotOptions: {
 	        solidgauge: {
 	            dataLabels: {
-	                y: -50,
+	                y: 30,
 	                borderWidth: 0,
 	                useHTML: true
 	            }

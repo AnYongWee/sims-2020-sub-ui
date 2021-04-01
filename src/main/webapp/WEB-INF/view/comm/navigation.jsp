@@ -25,10 +25,10 @@
 						
 						<c:choose>
 							<c:when test="${row.checked}">
-								<input id="site-switch-${row.siteSeq}" onchange="siteChange(this, ${row.siteSeq})" type="checkbox" class="custom-control-input" checked="checked">
+								<input id="site-switch-${row.siteSeq}" data-siteSeq="${row.siteSeq}" type="checkbox" class="custom-control-input site-switch" checked="checked">
 							</c:when>
 							<c:otherwise>
-							 	<input id="site-switch-${row.siteSeq}" onchange="siteChange(this, ${row.siteSeq})" type="checkbox" class="custom-control-input">
+							 	<input id="site-switch-${row.siteSeq}" data-siteSeq="${row.siteSeq}" type="checkbox" class="custom-control-input site-switch">
 							</c:otherwise>
 						</c:choose>
 						
@@ -90,10 +90,19 @@
 	
 	<!-- NAV FOOTER -->
 	<div class="nav-footer shadow-top justify-content-end ">
-
+		
 		<div class="custom-control custom-switch align-self-center float-right mr-3">
-			<input type="checkbox" class="custom-control-input" id="customSwitch2" checked="">
-			<label class="custom-control-label" for="customSwitch2">전체</label>
+		
+			<c:choose>
+				<c:when test="${siteSeqAllChecked}">
+					<input type="checkbox" class="custom-control-input" id="site-switch-all" checked="checked">					
+				</c:when>
+				<c:otherwise>
+					<input type="checkbox" class="custom-control-input" id="site-switch-all">				 	
+				</c:otherwise>
+			</c:choose>
+						
+			<label class="custom-control-label" for="site-switch-all">전체</label>
 		</div>
         		
 	</div>

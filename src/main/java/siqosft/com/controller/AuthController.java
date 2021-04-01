@@ -118,6 +118,9 @@ public class AuthController extends  CommHandlr{
 	 				siteInfo.setChecked(true);
 	 			}
 	 			session.setAttribute("siteList", siteList);
+	 			
+	 			//사이트 전체 체크 상태 true 초기 설정
+	 			session.setAttribute("siteSeqAllChecked", true);
 	 		}
 	     }catch(Exception err) {
 	    	 err.printStackTrace();	    	 
@@ -166,14 +169,12 @@ public class AuthController extends  CommHandlr{
 	/**
 	 * 사용 사이트 seq 변경
 	 *
-	 * @param startDate - 시작일자
-	 * @return 
 	 * @return Map
 	 * @exception Exception
 	 */	
 	@RequestMapping(value = "/ajax/updateSiteSeq.do",  method = RequestMethod.POST)
 	@ResponseBody
-	public  Map<String, Object> getUserList(HttpSession session, @RequestParam(name="siteSeq", required = false) int siteSeq, @RequestParam(name="checked", required = false) boolean checked) throws Exception {
+	public  Map<String, Object> updateSiteSeq(HttpSession session, @RequestParam(name="siteSeq", required = false) int siteSeq, @RequestParam(name="checked", required = false) boolean checked) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -187,6 +188,31 @@ public class AuthController extends  CommHandlr{
 				break;
 			}
 		}   
+		
+		return resultMap(result, CommConst.COMM_SUCCESS, "");		
+	}
+	
+	/**
+	 * 사용 사이트 seq 변경
+	 * 
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/updateAllSiteSeq.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> updateAllSiteSeq(HttpSession session, @RequestParam(name="checked", required = false) boolean checked) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		//관리 사이트 정보 조회
+		@SuppressWarnings("unchecked")
+		List<SiteInfo> siteList = (List<SiteInfo>)session.getAttribute("siteList");
+			
+		for(SiteInfo site : siteList) {
+			site.setChecked(checked);
+		}   
+		
+		session.setAttribute("siteSeqAllChecked", checked);
 		
 		return resultMap(result, CommConst.COMM_SUCCESS, "");		
 	}

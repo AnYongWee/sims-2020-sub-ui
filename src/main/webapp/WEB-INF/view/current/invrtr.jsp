@@ -43,13 +43,13 @@ var gaugeOptions = {
 	    // the value axis
 	    yAxis: {
 	        stops: [
-	            [0.1, '#41dc5473'], // green
-	            [0.5, '#dead2187'], // yellow
-	            [0.9, '#da0e0e82'] // red
+	            [0.1, 'rgba(0,102,0,0.5)'], // green
+	            [0.5, 'rgba(204,204,0,0.5)'], // yellow
+	            [0.9, 'rgba(204,0,0,0.5)'] // red
 	        ],
 	        lineWidth: 0,
 	        tickWidth: 0,
-	        minorTickInterval: null,
+	        //minorTickInterval: null,
 	        tickAmount: 2,
 	        title: {
 	            y: -15
@@ -258,7 +258,7 @@ var gaugeOptions = {
 			}
 		});
 		
-		}, 1000 * 60); 
+		}, 1000 * 2); 
 		
 	});
 	

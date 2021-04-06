@@ -18,8 +18,9 @@
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/resources/js/layerPopup.js"></script>
 <!--===============================================================================================-->
+
 					
-<header class="page-header bg-fusion-500" role="banner">
+<header class="page-header bg-fusion-500" id="page-header" role="banner">
 
 	<!-- we need this logo when user switches to nav-function-top -->
 	<div class="page-logo bg-fusion-500">
@@ -136,6 +137,12 @@
 				<a class="dropdown-item fw-500 pt-3 pb-3" href="page_login.html">
 					<span data-i18n="drpdwn.page-logout">개인정보</span>
 				</a>
+				
+				<a href="#" class="dropdown-item" data-action="app-fullscreen">
+					<span data-i18n="drpdwn.fullscreen">전체화면</span>
+					<i class="float-right text-muted fw-n">F11</i>
+				</a>
+                                    
 				<div class="dropdown-divider m-0"></div>
 					<a class="dropdown-item fw-500 pt-3 pb-3" href="/logOut.do">
 					<span data-i18n="drpdwn.page-logout">로그아웃</span>

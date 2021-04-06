@@ -137,7 +137,7 @@
             changeMonth: true            
         });	
 		
-		$('#start-date-day').datepicker('setDate', 'today');
+		$('#start-date-day').datepicker('setDate', '-1W');
 		$('#end-date-day').datepicker('setDate', 'today');	
 		
 		//조회버튼 클릭

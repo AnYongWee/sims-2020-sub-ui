@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqisoft.com.mapper.CompanyMapper">
+
+	<resultMap type="sqisoft.com.model.CompanyInfo" id="companyInfoMap">
+		<id column="CUST_SEQ" property="custSeq" />
+		<id column="CUST_NM" property="custNm" />
+		<id column="BIZNO" property="bizNo" />
+		<id column="CUST_TYPE_CD" property="custTypeCd" />
+		<id column="CUST_TYPE" property="custType" />
+		<id column="TLNO" property="telNo" />
+		<id column="FXNO" property="faxNo" />
+		<id column="CNT_PSN_NM" property="cntPsnNm" />		
+		<id column="CNT_PSN_POS" property="cntPsnPos" />
+		<id column="CNT_PSN_HPNO" property="cntPsnHpno" />		
+		<id column="CNT_PSN_EML" property="cntPsnEml" />
+		<id column="CRETR" property="cretr" />
+		<id column="CRET_DT" property="cretDt" />
+		<id column="UPDTR" property="updtr" />
+		<id column="UPDT_DT" property="updtDt" />
+		<id column="total_cnt" property="totalCnt" />						
+	</resultMap>
+	
+	<!-- 경보이력 리스트 -->
+	<select id="selectCompanyList" parameterType="map" resultMap="companyInfoMap">
+		
+	    SELECT A.CUST_SEQ,
+				   A.CUST_NM,
+				   A.BIZNO,
+				   A.CUST_TYPE_CD,
+				   B.DTL_CD_NM AS CUST_TYPE,
+				   A.TLNO,
+				   A.FXNO,
+				   A.CNT_PSN_NM,
+				   A.CNT_PSN_POS,
+				   A.CNT_PSN_HPNO,
+				   A.CNT_PSN_EML,
+				   A.CRETR,
+				   A.CRET_DT,
+				   A.UPDTR,
+				   A.UPDT_DT
+		FROM REMS.CUST_INF A
+		LEFT OUTER JOIN REMS.CD_DTL B ON A.CUST_TYPE_CD = B.DTL_CD AND B.GRP_CD = 'CUST_TYPE_CD'
+		WHERE A.DEL_YN <![CDATA[<>]]> 'Y'
+			 
+			 <if test="custNm  != null and custNm != '' "> 
+			 	AND A.CUST_NM like '%' || #{custNm} || '%' 
+			 </if>
+			 
+			 <if test="bizNo  != null and bizNo != '' "> 
+			 	AND A.BIZNO like '%' || #{bizNo} || '%' 
+			 </if>
+			 
+			 <if test="cntPsnNm  != null and cntPsnNm != '' "> 
+			 	AND A.CNT_PSN_NM like '%' || #{cntPsnNm} || '%' 
+			 </if>
+			 
+			 <if test="custTypeCd  != null and custTypeCd != '' "> 
+			 	AND A.CUST_TYPE_CD = #{custTypeCd} 
+			 </if>
+			 
+			<choose>
+				<when test="sites != null and sites.size != 0">
+					AND A.CUST_SEQ IN
+					(
+						SELECT CUST_SEQ FROM REMS.SITE_INF WHERE SITE_SEQ IN  
+							<foreach collection="sites" item="item"  open="(" close=")" separator=",">
+								#{item}
+							</foreach>					
+					)
+				</when>
+				<otherwise>
+					AND A.CUST_SEQ IN (-99)
+				</otherwise>
+			</choose>
+		
+		<if test="ordNo == 0 "> ORDER BY A.CUST_NM ${sort} </if>
+		<if test="ordNo == 1 "> ORDER BY A.BIZNO ${sort} </if>
+		<if test="ordNo == 2 "> ORDER BY B.CUST_TYPE_CD ${sort} </if>
+		<if test="ordNo == 3 "> ORDER BY C.TLNO ${sort} </if>
+		<if test="ordNo == 4 "> ORDER BY A.CNT_PSN_NM ${sort} </if>
+		<if test="ordNo == 5 "> ORDER BY A.CNT_PSN_HPNO ${sort} </if>		
+		
+		LIMIT #{length} offset #{start}
+		
+	</select>		
+</mapper>

@@ -41,6 +41,7 @@ public class EvtHstInfo {
 	private String crlTod;
 	/*전체 레코드 수*/
 	private int totalCnt;
+	
 	public String getEvtSeq() {
 		return evtSeq;
 	}

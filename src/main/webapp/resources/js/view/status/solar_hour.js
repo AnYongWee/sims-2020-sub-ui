@@ -72,9 +72,8 @@
 		    xAxis: {
 		    	categories: categories,
 		    	labels: {
-		            formatter: function() {
-		            	var data = String(this.value);		            	
-		            	return data.substr(2,2) + "/" + data.substr(4,2);
+		            formatter: function() {		            			            	
+		            	return this.value + " 시";
 		            }
 		          }
 		    },
@@ -130,7 +129,7 @@
 		            		valueSuffix: ' kWh'
 		        		}
 		    		}
-		    		,{name: '발전효율', data: genEffi, yAxis: 1, zIndex: 1, color: "#BDBDBD", type: 'column', 
+		    		/*,{name: '발전효율', data: genEffi, yAxis: 1, zIndex: 1, color: "#BDBDBD", type: 'column', 
 		    			marker: {
 		            		fillColor: 'white',
 		            		lineWidth: 2,
@@ -139,6 +138,7 @@
 		        		tooltip: {
 		            		valueSuffix: ' %'
 		        		}
-		    }]
+		    		}*/
+		    ]
 		});
 	}

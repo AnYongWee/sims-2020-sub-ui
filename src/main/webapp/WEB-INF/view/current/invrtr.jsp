@@ -43,9 +43,9 @@ var gaugeOptions = {
 	    // the value axis
 	    yAxis: {
 	        stops: [
-	            [0.1, 'rgba(0,102,0,0.5)'], // green
-	            [0.5, 'rgba(204,204,0,0.5)'], // yellow
-	            [0.9, 'rgba(204,0,0,0.5)'] // red
+	            [0.1, 'rgba(204,0,0,0.5)'], 		// red
+	            [0.5, 'rgba(204,204,0,0.5)'], 	// yellow
+	            [0.9, 'rgba(0,102,0,0.5)'] 		// green
 	        ],
 	        lineWidth: 0,
 	        tickWidth: 0,
@@ -222,7 +222,7 @@ var gaugeOptions = {
 								if (obj){
 									
 									//테스트를 위해 랜덤 함수 추가
-									gentQnt = Math.floor(Math.random( )*2 + 1)
+									gentQnt = Math.floor(Math.random( )*3 + 1)
 									
 									obj.chart.series[0].points[0].update(gentQnt);
 									

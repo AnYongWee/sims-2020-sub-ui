@@ -184,7 +184,7 @@
             	
             	<tiles:insertAttribute name="site"/>
             	
-                <div class="page-content-wrapper">
+                <div class="page-content-wrapper" id="page-content-wrapper">
                 	 
 					<tiles:insertAttribute name="content"/>
                 		   

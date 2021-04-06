@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
 <footer class="page-footer" role="contentinfo">
-	<div class="d-flex align-items-center flex-1 text-muted">
+	<div class="d-flex align-items-center flex-1 text-muted" id="page-footer">
 		<span class="hidden-md-down fw-700">2021 © Sqisoft by&nbsp;
 			<a href='http://www.sqisoft.com' class='text-primary fw-500' title='sqisoft.com' target='_blank'>sqisoft.com</a>
 		</span>

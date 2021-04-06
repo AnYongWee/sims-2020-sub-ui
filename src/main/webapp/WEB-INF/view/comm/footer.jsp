@@ -49,7 +49,7 @@ $(document).ready(function(){
 			error: function(e){
 				alert("요청에 실패 하였습니다.");
 			}
-		});	
+		});
 	});
 	
 	$( '#site-switch-all' ).click( function() {
@@ -74,6 +74,11 @@ $(document).ready(function(){
 		});
 	});
 	
+	//모달 종료시 초기화	
+	$('.modal').on('hidden.bs.modal', function (e) {
+	    console.log('modal close');
+	  $(this).find('form')[0].reset()
+	});
 });
 
 //사이트 정보 갱신

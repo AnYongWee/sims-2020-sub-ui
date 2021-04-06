@@ -98,6 +98,10 @@ transparent
     width: 80px;    
 }
 
+.lable-md {
+    width: 120px;    
+}
+
 .gauge-bottom-lable {
 	margin-top: -30px;
 }

@@ -231,7 +231,7 @@ public class AuthController extends  CommHandlr{
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		//관리 사이트 정보 조회		
+		//사용자 정보 조회	
 		UsrInfo usrInfo = (UsrInfo)session.getAttribute("usrInfo");	
 		
 		//기존 사이트 정보 조회

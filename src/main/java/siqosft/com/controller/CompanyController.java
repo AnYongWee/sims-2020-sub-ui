@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.model.CompanyInfo;
 import sqisoft.com.model.EvtHstInfo;
@@ -59,7 +60,7 @@ public class CompanyController extends CommHandlr{
 	}
 	
 	/**
-	 * 경보이력 데이터 조회
+	 * 고객사 데이터 조회
 	 *
 	 * @param searchCustNm - 고객사명
 	 * @param searchBizNo - 사업자번호
@@ -88,7 +89,7 @@ public class CompanyController extends CommHandlr{
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		// 고객사 리스트
-		List<CompanyInfo> list = companyService.selectCompanyList(getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort, custNm, bizNo, cntPsnNm, custTypeCd, startDate, endDate);
+		List<CompanyInfo> list = companyService.selectCompanyList(getUserId(session).getUsrId(), getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort, custNm, bizNo, cntPsnNm, custTypeCd, startDate, endDate);
 		
 		// 전체 레코드 수		
 		long totalCnt = 0;
@@ -100,6 +101,50 @@ public class CompanyController extends CommHandlr{
 		result.put("iTotalRecords", totalCnt);
 		result.put("iTotalDisplayRecords", totalCnt);
 		   
+		return result;		
+	}
+	
+	/**
+	 * 고객사 정보 추가
+	 *
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/newCompanyInfo.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> newCompanyInfo(HttpSession session,
+															@RequestParam(name="info_custNm", required = true) String info_custNm,
+															@RequestParam(name="info_bizNo", required = false) String info_bizNo,
+															@RequestParam(name="info_custTypeCd", required = false) String info_custTypeCd,
+															@RequestParam(name="info_tlNo", required = false) String info_tlNo,
+															@RequestParam(name="info_fax", required = false) String info_fax,
+															@RequestParam(name="info_cntPsnNm", required = false) String info_cntPsnNm,
+															@RequestParam(name="info_cntPsnPos", required = false) String info_cntPsnPos,
+															@RequestParam(name="info_cntPsnHpNo", required = false) String info_cntPsnHpNo,
+															@RequestParam(name="info_cntPsnEml", required = false) String info_cntPsnEml) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		CompanyInfo companyInfo = new CompanyInfo();
+		companyInfo.setCustNm(info_custNm);
+		companyInfo.setBizNo(info_bizNo);
+		companyInfo.setCustTypeCd(info_custTypeCd);
+		companyInfo.setTelNo(info_tlNo);
+		companyInfo.setFaxNo(info_fax);
+		companyInfo.setCntPsnNm(info_cntPsnNm);
+		companyInfo.setCntPsnPos(info_cntPsnPos);
+		companyInfo.setCntPsnHpno(info_cntPsnHpNo);
+		companyInfo.setCntPsnEml(info_cntPsnEml);
+		companyInfo.setCretr(getUserId(session).getUsrId());
+		
+		int row = companyService.insertCompanyInfo(companyInfo);
+		   
+		if (row > 0) {
+			result = resultMap(result, CommConst.COMM_SUCCESS, "");
+		}else {
+			result = resultMap(result, CommConst.COMM_ERROR_DATABASE, "고객사 데이터 추가에 실패 했습니다.");
+		}
+		
 		return result;		
 	}
 }

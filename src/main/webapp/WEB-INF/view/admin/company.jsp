@@ -86,14 +86,14 @@
 				<table class="table table-bordered table-hover table-striped w-100" id="company-list">
 						<thead>							
 							<tr class="bg-fusion-300">
-								<th>일련번호</th>
-								<th>고객사명</th>
-								<th>사업자등록번호</th>
-								<th>고객유형</th>
-								<th>전화번호</th>
-								<th>담당자명</th>
-								<th>담당자연락처</th>
-								<th>등록일시</th>										
+								<th class="text-center align-middle font-weight-bold">일련번호</th>
+								<th class="text-center align-middle font-weight-bold">고객사명</th>
+								<th class="text-center align-middle font-weight-bold">사업자등록번호</th>
+								<th class="text-center align-middle font-weight-bold">고객유형</th>
+								<th class="text-center align-middle font-weight-bold">전화번호</th>
+								<th class="text-center align-middle font-weight-bold">담당자명</th>
+								<th class="text-center align-middle font-weight-bold">담당자연락처</th>
+								<th class="text-center align-middle font-weight-bold">등록일시</th>										
 							</tr>
 						</thead>
 						<tbody>
@@ -266,8 +266,7 @@
 		datatableInitialization();
 	}
 
-	//데이터 테이블 설정
-	var myTable;
+	//데이터 테이블 설정	
 	function datatableInitialization() {
 
 		var startDate = $("#start-date-day").val();
@@ -276,7 +275,7 @@
 		var endDate = $("#end-date-day").val();
 		endDate = endDate.replace(/-/gi, "");
 
-		myTable = $('#company-list')
+		var myTable = $('#company-list')
 				.dataTable(
 						{
 							fixedHeader : true,
@@ -288,8 +287,7 @@
 							searching : false,
 							scrollCollapse : true,
 							paging : true,
-							serverSide : true,
-							altEditor : true,
+							serverSide : true,							
 							dom : "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>"
 									+ "<'row'<'col-sm-12'tr>>"
 									+ "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

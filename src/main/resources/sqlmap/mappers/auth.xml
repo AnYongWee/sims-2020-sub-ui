@@ -22,6 +22,12 @@
 		<id column="CHILD_CNT" property="childCnt" />
 	</resultMap>
 	
+	<resultMap type="sqisoft.com.model.RolesInfo" id="rolesInfoMap">
+		<id column="AUTHORITY" property="authority" />
+		<id column="ROLE_NAME" property="roleName" />
+		<id column="DESCRIPTION" property="description" />		
+	</resultMap>
+	
 	<!-- 사용자 정보 조회 -->
 	<select id="selectUsrInfo" parameterType="sqisoft.com.model.UsrInfo" resultMap="userInfoMap">
 		 SELECT USR_ID
@@ -59,6 +65,14 @@
 				     A.DESCRIPTION,
 				     A.TAG
 			ORDER BY A.SORT_ORDER			
+	</select>
+	
+	<!-- 사용자 권한 리스트 조회 -->
+	<select id="selectRoles" parameterType="sqisoft.com.model.RolesInfo" resultMap="rolesInfoMap">
+		SELECT A.AUTHORITY, A.ROLE_NAME, A.DESCRIPTION	  
+		FROM REMS.ROLES A
+		INNER JOIN REMS.AUTHORITIES B ON A.AUTHORITY = B.AUTHORITY
+		WHERE B.USR_ID = #{usrId}		
 	</select>
 		
 </mapper>

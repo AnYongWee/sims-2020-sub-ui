@@ -18,7 +18,8 @@
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/resources/js/layerPopup.js"></script>
 <!--===============================================================================================-->
-
+<script src="${pageContext.request.contextPath}/resources/js/smart/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+<!--===============================================================================================-->
 					
 <header class="page-header bg-fusion-500" id="page-header" role="banner">
 

@@ -5,7 +5,7 @@
 
 <div>                             
 	<ol class="breadcrumb bg-fusion-300 border border-primary">
-		<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 관리</a></li>
+		<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 관리</a></li>
 		<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-user-tie mr-1 fs-md"></i> 고객사관리</a></li>	
 	</ol>
 </div>
@@ -93,7 +93,8 @@
 								<th class="text-center align-middle font-weight-bold">전화번호</th>
 								<th class="text-center align-middle font-weight-bold">담당자명</th>
 								<th class="text-center align-middle font-weight-bold">담당자연락처</th>
-								<th class="text-center align-middle font-weight-bold">등록일시</th>										
+								<th class="text-center align-middle font-weight-bold">등록일시</th>		
+								<th class="text-center align-middle font-weight-bold">관리</th>								
 							</tr>
 						</thead>
 						<tbody>
@@ -114,7 +115,7 @@
 			<form id="frm-cust-info" name="frm-cust-info" role="form" data-toggle="validator"> 
 			
 				<div class="modal-header">
-					<h4 class="modal-title">고객사 정보 추가</h4>
+					<h4 class="modal-title">고객사 정보</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
 					</button>
@@ -122,7 +123,7 @@
 				<div class="modal-body">			
 					<div class="panel-content">
 						 
-							<input type="hidden" id="info-custSeq" name="info-custSeq" >
+							<input type="hidden" id="info_custSeq" name="info_custSeq" >
 							                                        
 							<div class="form-group">						
 								<div class="input-group">
@@ -197,7 +198,7 @@
 </main>
 
 <script>
-	var actionUrl = "";
+	var actionUrl, myTable;
 	
 	$(document).ready(function() {
 		//날짜 선택 input 
@@ -232,33 +233,36 @@
 					success : function(data) {
 						
 						if (data.resultCode == 0){
-							alert("저장 되었습니다.");						
-							
+							Swal.fire("저장 되었습니다.");						
+									                    
 							//등록 모달 숨기기
 							$('#info-modal').modal("hide");
 							
 							//데이터테이블 초기화
 							datatableInitialization();
 						}else{
-							alert(data.resultMessage);
+							Swal.fire({
+								title: "고객사 정보 저장 실패",
+								text: data.resultMessage,
+								type: "warning",				                        
+								confirmButtonText: "확인"
+							});							
 						}
 					},
 					error: function(e){
-						alert("요청에 실패 하였습니다.");
+						Swal.fire("요청에 실패 하였습니다.");						
 					}
 				});
 		    }
 		    $('#frm-cust-info').addClass('was-validated');
 		});
 		
-		
 		//조회버튼 클릭
 		$("#btnSearch").click(function() {
 			search();
 		});
 
-		search();
-		
+		search();		
 	});
 
 	//데이터 조회
@@ -275,13 +279,13 @@
 		var endDate = $("#end-date-day").val();
 		endDate = endDate.replace(/-/gi, "");
 
-		var myTable = $('#company-list')
+		myTable = $('#company-list')
 				.dataTable(
 						{
 							fixedHeader : true,
 							destroy : true,
 							language : lang_kor,
-							select : 'single',
+							//select : 'single',
 							bFilter : false,
 							responsive : true,
 							searching : false,
@@ -298,23 +302,7 @@
 									$('#info-modal').modal("show");
 								},
 								className : 'btn-success btn-sm mr-1'
-							}, {
-								extend : 'selected',
-								text : '<i class="fal fa-edit mr-1"></i> 수정',
-								action : function(e, dt, node, config) {
-									
-									var custSeq = dt.rows( { selected: true }).data()[0].custSeq;
-                                    
-									actionUrl = "/ajax/updateCompanyInfo.do";
-									$('#info-modal').modal("show");
-								},
-								className : 'btn-primary btn-sm mr-1'
-							}, {
-								extend : 'selected',
-								text : '<i class="fal fa-times mr-1"></i> 삭제',
-								name : 'delete',
-								className : 'btn-primary btn-sm mr-1'
-							} ],
+							}],
 							ajax : {
 								url : '/ajax/getCompanyList.do',
 								type : 'POST',
@@ -388,8 +376,113 @@
 								"searchable" : false,
 								type : "readonly",
 								className : 'text-center font-weight-bold'
-							} 
+							}, {
+								data : 'custSeq',		
+								className : 'text-center font-weight-bold',
+								render : function(data, type, row, meta) {
+									if (type === 'display') {
+										
+										data = '<a href="javascript:loadInfo(\''
+											+ row.custSeq
+											+ '\');" class="btn btn-outline-primary btn-sm btn-icon rounded-circle waves-effect waves-themed mr-2">';
+										data += '<i class="fal fa-edit"></i>';
+										data += '</a>';
+										
+										data += '<a href="javascript:delInfo(\''
+											+ row.custSeq
+											+ '\');" class="btn btn-outline-danger btn-sm btn-icon rounded-circle waves-effect waves-themed">';
+										data += '<i class="fal fa-trash-alt"></i>';
+										data += '</a>';
+									}
+									return data;
+								}
+							}
 						]
 					});
+	}
+	
+	
+
+	//고객사 정보 조회
+	function loadInfo(seq){
+		
+		$.ajax({
+			type: "POST",
+			url: "/ajax/getCompanyInfo.do",		
+			dataType: 'json',
+			data: {
+				custSeq: seq
+			},
+			success : function(data) {
+				
+				if (data.resultCode == 0){
+					$('#frm-cust-info [name="info_custSeq"]').val(data.info.custSeq);
+					$('#frm-cust-info [name="info_custNm"]').val(data.info.custNm);
+					$('#frm-cust-info [name="info_bizNo"]').val(data.info.bizNo);
+					$('#frm-cust-info [name="info_custTypeCd"]').val(data.info.custTypeCd);
+					$('#frm-cust-info [name="info_tlNo"]').val(data.info.telNo);
+					$('#frm-cust-info [name="info_fax"]').val(data.info.faxNo);
+					$('#frm-cust-info [name="info_cntPsnNm"]').val(data.info.cntPsnNm);
+					$('#frm-cust-info [name="info_cntPsnPos"]').val(data.info.cntPsnPos);
+					$('#frm-cust-info [name="info_cntPsnHpNo"]').val(data.info.cntPsnHpno);
+					$('#frm-cust-info [name="info_cntPsnEml"]').val(data.info.cntPsnEml);
+				}else{
+					Swal.fire({
+						title: "고객사 정보 조회 실패",
+						text: data.resultMessage,
+						type: "error",				                        
+						confirmButtonText: "확인"
+					});							
+				}
+			},
+			error: function(e){
+				Swal.fire("요청에 실패 하였습니다.");						
+			}
+		});
+		
+		actionUrl = "/ajax/updateCompanyInfo.do";
+		$('#info-modal').modal("show");		
+	}
+	
+	function delInfo(seq){
+		
+		Swal.fire({
+			title : "고객사 정보 삭제",
+			text : "고객사 정보를 사제 합니다. 계속 진행 하시겠습니까?",
+			type : "warning",
+			showCancelButton : true,
+			confirmButtonText : "확인",
+			cancelButtonText : "취소"
+		}).then(
+			function(result) {
+				if (result.value) {
+					$.ajax({
+						type : "POST",
+						url : "/ajax/delCompanyInfo.do",
+						dataType : 'json',
+						data : {
+							custSeq : seq
+						},
+						success : function(data) {
+							if (data.resultCode == 0) {
+								Swal.fire("삭제 되었습니다.");
+								//데이터테이블 초기화
+								datatableInitialization();
+							} else {
+								Swal.fire({
+									title : "고객사 정보 삭제 실패",
+									text : data.resultMessage,
+									type : "error",
+									confirmButtonText : "확인"
+								});
+							}
+						},
+						error : function(e) {
+							Swal.fire("요청에 실패 하였습니다.");
+						}
+					});
+				}
+			}
+		);
 	}
 </script>

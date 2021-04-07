@@ -73,7 +73,7 @@
 							</foreach>					
 						) 
 						
-						<if test="cretr == 'admin' "> 
+						<if test="isAdmin.equals(true) "> 
 							OR  ( SELECT COUNT(*) FROM REMS.SITE_INF WHERE CUST_SEQ = A.CUST_SEQ ) = 0
 						</if>
 					)
@@ -91,6 +91,41 @@
 		<if test="ordNo == 5 "> ORDER BY A.CNT_PSN_HPNO ${sort} </if>		
 		
 		LIMIT #{length} offset #{start}
+		
+	</select>
+	
+	<!-- 고객사 정보 -->
+	<select id="selectCompanyInfo" parameterType="map" resultMap="companyInfoMap">
+		
+	    SELECT A.CUST_SEQ,
+				   A.CUST_NM,
+				   A.BIZNO,
+				   A.CUST_TYPE_CD,
+				   B.DTL_CD_NM AS CUST_TYPE,
+				   A.TLNO,
+				   A.FXNO,
+				   A.CNT_PSN_NM,
+				   A.CNT_PSN_POS,
+				   A.CNT_PSN_HPNO,
+				   A.CNT_PSN_EML,
+				   A.CRETR,
+				   A.CRET_DT,
+				   A.UPDTR,
+				   A.UPDT_DT,
+				   COUNT(*) OVER() AS TOTAL_CNT
+		FROM REMS.CUST_INF A
+		LEFT OUTER JOIN REMS.CD_DTL B ON A.CUST_TYPE_CD = B.DTL_CD AND B.GRP_CD = 'CUST_TYPE_CD'
+		<where>
+			<if test="custSeq  != null and custSeq != '' "> 
+			 	AND A.CUST_SEQ = ${custSeq} 
+			 </if>
+			 <if test="custNm  != null and custNm != '' "> 
+			 	AND A.CUST_NM = #{custNm} 
+			 </if>
+			 <if test="bizNo  != null and bizNo != '' "> 
+			 	AND A.BIZNO = #{bizNo} 
+			 </if>
+		</where>
 		
 	</select>
 
@@ -123,5 +158,27 @@
 								 			,#{cretr}
 								 			,current_timestamp)				
 	</insert>	
+	
+	<!-- 고객사 정보 수정 -->
+	<update id="updateCompanyInfo" parameterType="sqisoft.com.model.CompanyInfo">
+		UPDATE REMS.CUST_INF SET cust_nm = #{custNm},
+												  bizno = #{bizNo},
+												  cust_type_cd = #{custTypeCd},
+												  tlno = #{telNo},
+												  fxno = #{faxNo},
+												  cnt_psn_nm = #{cntPsnNm},
+												  cnt_psn_pos = #{cntPsnPos},
+												  cnt_psn_hpno = #{cntPsnHpno},
+												  cnt_psn_eml = #{cntPsnEml},
+												  updtr = #{updtr},
+												  updt_dt = current_timestamp
+		WHERE cust_seq = ${custSeq}
+	</update>	
+	
+	<!-- 고객사 정보 삭제 -->
+	<update id="deleteCompanyInfo" parameterType="map">
+		UPDATE REMS.CUST_INF SET del_yn = 'Y'
+		WHERE cust_seq = ${custSeq}
+	</update>	
 	
 </mapper>

@@ -116,7 +116,7 @@ var gaugeOptions = {
 
 	<div>                             
 		<ol class="breadcrumb bg-fusion-300 border border-primary">
-			<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-plug mr-1 fs-md"></i> 인버터 현황</a></li>	
+			<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-plug mr-1 fs-md"></i> 인버터 현황</a></li>	
 		</ol>
 	</div>
 	

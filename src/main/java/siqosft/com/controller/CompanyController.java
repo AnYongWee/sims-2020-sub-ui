@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
+import sqisoft.com.comm.StringUtil;
 import sqisoft.com.model.CompanyInfo;
-import sqisoft.com.model.EvtHstInfo;
 import sqisoft.com.service.CodeService;
 import sqisoft.com.service.CompanyService;
-import sqisoft.com.service.EvtService;
 
 /**
  * @Class Name : CompanyController
@@ -50,7 +49,7 @@ public class CompanyController extends CommHandlr{
 	 * @return String
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/admin/company.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/company.do", method = RequestMethod.GET)
 	public String companyView(Model model) throws Exception {
 		
 		//고객유형 코드 조회
@@ -60,7 +59,7 @@ public class CompanyController extends CommHandlr{
 	}
 	
 	/**
-	 * 고객사 데이터 조회
+	 * 고객사 리스트 조회
 	 *
 	 * @param searchCustNm - 고객사명
 	 * @param searchBizNo - 사업자번호
@@ -87,9 +86,9 @@ public class CompanyController extends CommHandlr{
 															@RequestParam(name="endDate", required = true) String endDate) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+
 		// 고객사 리스트
-		List<CompanyInfo> list = companyService.selectCompanyList(getUserId(session).getUsrId(), getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort, custNm, bizNo, cntPsnNm, custTypeCd, startDate, endDate);
+		List<CompanyInfo> list = companyService.selectCompanyList(isAdmin(session), getUserSiteList(session), Integer.valueOf(start), Integer.valueOf(length), ordNo, sort, custNm, bizNo, cntPsnNm, custTypeCd, startDate, endDate);
 		
 		// 전체 레코드 수		
 		long totalCnt = 0;
@@ -102,6 +101,26 @@ public class CompanyController extends CommHandlr{
 		result.put("iTotalDisplayRecords", totalCnt);
 		   
 		return result;		
+	}
+	
+	/**
+	 * 고객사 정보 조회
+	 *
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/getCompanyInfo.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> getCompanyInfo(HttpSession session, @RequestParam(name="custSeq", required = true) String custSeq) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 고객사 정보 조회
+		CompanyInfo info = companyService.selectCompanyInfo(custSeq, null, null).get(0);
+						
+		result.put("info", info);
+		   
+		return resultMap(result, CommConst.COMM_SUCCESS, "");		
 	}
 	
 	/**
@@ -124,8 +143,24 @@ public class CompanyController extends CommHandlr{
 															@RequestParam(name="info_cntPsnEml", required = false) String info_cntPsnEml) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+				
 		CompanyInfo companyInfo = new CompanyInfo();
+		
+		//고객사명 중복 확인
+		List<CompanyInfo> infos = companyService.selectCompanyInfo(null, info_custNm, null);
+		if (!StringUtil.isEmpty(info_custNm) && infos != null) {
+			if (infos.size() > 0) {
+				return resultMap(result, CommConst.COMM_ERROR_VALIDATION, "이미 사용중인 고객사명이 있습니다.");	
+			}
+		}
+		//사업자번호 중복 확인		
+		infos = companyService.selectCompanyInfo(null, null, info_bizNo);
+		if (!StringUtil.isEmpty(info_bizNo) && infos != null) {
+			if (infos.size() > 0) {
+				return resultMap(result, CommConst.COMM_ERROR_VALIDATION, "이미 사용중인 사업자번호가 있습니다.");	
+			}	
+		}
+		
 		companyInfo.setCustNm(info_custNm);
 		companyInfo.setBizNo(info_bizNo);
 		companyInfo.setCustTypeCd(info_custTypeCd);
@@ -139,12 +174,95 @@ public class CompanyController extends CommHandlr{
 		
 		int row = companyService.insertCompanyInfo(companyInfo);
 		   
-		if (row > 0) {
-			result = resultMap(result, CommConst.COMM_SUCCESS, "");
-		}else {
-			result = resultMap(result, CommConst.COMM_ERROR_DATABASE, "고객사 데이터 추가에 실패 했습니다.");
+		if (row <= 0) {
+			return resultMap(result, CommConst.COMM_ERROR_DATABASE, "고객사 정보 추가에 실패 했습니다.");
 		}
 		
-		return result;		
+		return resultMap(result, CommConst.COMM_SUCCESS, "");
+	}
+	
+	/**
+	 * 고객사 정보 수정
+	 *
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/updateCompanyInfo.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> editCompanyInfo(HttpSession session,
+															@RequestParam(name="info_custSeq", required = true) String info_custSeq,
+															@RequestParam(name="info_custNm", required = true) String info_custNm,
+															@RequestParam(name="info_bizNo", required = false) String info_bizNo,
+															@RequestParam(name="info_custTypeCd", required = false) String info_custTypeCd,
+															@RequestParam(name="info_tlNo", required = false) String info_tlNo,
+															@RequestParam(name="info_fax", required = false) String info_fax,
+															@RequestParam(name="info_cntPsnNm", required = false) String info_cntPsnNm,
+															@RequestParam(name="info_cntPsnPos", required = false) String info_cntPsnPos,
+															@RequestParam(name="info_cntPsnHpNo", required = false) String info_cntPsnHpNo,
+															@RequestParam(name="info_cntPsnEml", required = false) String info_cntPsnEml) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+				
+		CompanyInfo companyInfo = new CompanyInfo();
+		
+		//고객사명 중복 확인		
+		List<CompanyInfo> infos = companyService.selectCompanyInfo(null, info_custNm, null);
+		if (!StringUtil.isEmpty(info_custNm) && infos != null) {
+			for (CompanyInfo info : infos ) {
+				if(info.getCustSeq() != Integer.parseInt(info_custSeq)) {
+					return resultMap(result, CommConst.COMM_ERROR_VALIDATION, "이미 사용중인 고객사명이 있습니다.");	
+				}	
+			}
+		}
+		//사업자번호 중복 확인		
+		infos = companyService.selectCompanyInfo(null, null, info_bizNo);
+		if (!StringUtil.isEmpty(info_bizNo) && infos != null) {
+			for (CompanyInfo info : infos ) {
+				if(info.getCustSeq() != Integer.parseInt(info_custSeq)) {
+					return resultMap(result, CommConst.COMM_ERROR_VALIDATION, "이미 사용중인 사업자번호가 있습니다.");
+				}	
+			}
+		}
+		
+		companyInfo.setCustSeq(Integer.parseInt(info_custSeq));
+		companyInfo.setCustNm(info_custNm);
+		companyInfo.setBizNo(info_bizNo);
+		companyInfo.setCustTypeCd(info_custTypeCd);
+		companyInfo.setTelNo(info_tlNo);
+		companyInfo.setFaxNo(info_fax);
+		companyInfo.setCntPsnNm(info_cntPsnNm);
+		companyInfo.setCntPsnPos(info_cntPsnPos);
+		companyInfo.setCntPsnHpno(info_cntPsnHpNo);
+		companyInfo.setCntPsnEml(info_cntPsnEml);
+		companyInfo.setUpdtr(getUserId(session).getUsrId());
+		
+		int row = companyService.updateCompanyInfo(companyInfo);
+		   
+		if (row <= 0) {
+			return resultMap(result, CommConst.COMM_ERROR_DATABASE, "고객사 정보 수정에 실패 했습니다.");
+		}
+		
+		return resultMap(result, CommConst.COMM_SUCCESS, "");
+	}
+	
+	/**
+	 * 고객사 정보 삭제
+	 *
+	 * @return Map
+	 * @exception Exception
+	 */	
+	@RequestMapping(value = "/ajax/delCompanyInfo.do",  method = RequestMethod.POST)
+	@ResponseBody
+	public  Map<String, Object> delCompanyInfo(HttpSession session, @RequestParam(name="custSeq", required = true) String custSeq) throws Exception {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		int row = companyService.deleteCompanyInfo(custSeq);
+		   
+		if (row <= 0) {
+			return resultMap(result, CommConst.COMM_ERROR_DATABASE, "고객사 정보 삭제에 실패 했습니다.");
+		}
+		
+		return resultMap(result, CommConst.COMM_SUCCESS, "");
 	}
 }

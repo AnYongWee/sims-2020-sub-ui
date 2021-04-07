@@ -11,8 +11,7 @@
         {       
             fixedHeader: true,
             destroy: true,
-            language: lang_kor,            
-            select: 'single',            
+            language: lang_kor,
             altEditor: true,
             responsive: true,
             searching: false,
@@ -21,7 +20,7 @@
             paging : false,
             
             ajax : {
-				url : '/ajax/stats/getSolarMonthSummary.do',
+				url : '/ajax/getSolarMonthSummary.do',
 				type : 'POST',
 				data : {
 					startDate : startDate,

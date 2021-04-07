@@ -43,7 +43,7 @@ public class StatsController extends  CommHandlr{
 	 * @return String
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/stats/solar.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/solar.do", method = RequestMethod.GET)
 	public String solarView(Model model) throws Exception {
 		return "status/solar.tiles";
 	}
@@ -56,7 +56,7 @@ public class StatsController extends  CommHandlr{
 	 * @return Map
 	 * @exception Exception
 	 */	
-	@RequestMapping(value = "/ajax/stats/getSolarHourSummary.do",  method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/getSolarHourSummary.do",  method = RequestMethod.POST)
 	@ResponseBody
 	public  Map<String, Object> getSolarHourSummary(HttpSession session, @RequestParam(name="startDate", required = true) String startDate) throws Exception {
 		
@@ -81,7 +81,7 @@ public class StatsController extends  CommHandlr{
 	 * @return Map
 	 * @exception Exception
 	 */	
-	@RequestMapping(value = "/ajax/stats/getSolarDaySummary.do",  method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/getSolarDaySummary.do",  method = RequestMethod.POST)
 	@ResponseBody
 	public  Map<String, Object> getSolarDaySummary(HttpSession session, @RequestParam(name="startDate", required = true) String startDate, @RequestParam(name="endDate", required = true) String endDate) throws Exception {
 		
@@ -106,7 +106,7 @@ public class StatsController extends  CommHandlr{
 	 * @return Map
 	 * @exception Exception
 	 */	
-	@RequestMapping(value = "/ajax/stats/getSolarMonthSummary.do",  method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/getSolarMonthSummary.do",  method = RequestMethod.POST)
 	@ResponseBody
 	public  Map<String, Object> getSolarMonthSummary(HttpSession session, @RequestParam(name="startDate", required = true) String startDate, @RequestParam(name="endDate", required = true) String endDate) throws Exception {
 		

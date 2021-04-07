@@ -14,7 +14,7 @@
         
 <div>                             
 	<ol class="breadcrumb bg-fusion-300 border border-primary">
-		<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 통계</a></li>	
+		<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 통계</a></li>	
 	</ol>
 </div>
 

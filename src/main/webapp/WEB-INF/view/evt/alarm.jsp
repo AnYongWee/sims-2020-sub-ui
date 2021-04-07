@@ -4,7 +4,7 @@
 <main id="js-page-content" role="main" class="page-content">
                              
 <ol class="breadcrumb bg-fusion-300 border border-primary">
-	<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-bell-exclamation mr-1 fs-md"></i> 경보이력</a></li>	
+	<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-bell-exclamation mr-1 fs-md"></i> 경보이력</a></li>	
 </ol>
 
 <div class="card border mb-4 mb-xl-0">
@@ -137,7 +137,7 @@
             changeMonth: true            
         });	
 		
-		$('#start-date-day').datepicker('setDate', '-1W');
+		$('#start-date-day').datepicker('setDate', '-1M');
 		$('#end-date-day').datepicker('setDate', 'today');	
 		
 		//조회버튼 클릭
@@ -166,8 +166,7 @@
         {       
             fixedHeader: true,
             destroy: true,
-            language: lang_kor,            
-            select: 'single',            
+            language: lang_kor,
             bFilter : false,
             responsive: true,
             searching: false,            

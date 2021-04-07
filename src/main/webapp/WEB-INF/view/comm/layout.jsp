@@ -38,6 +38,8 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/datagrid/datatables/datatables.bundle.css">        
         <!--===============================================================================================-->
+        <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/notifications/sweetalert2/sweetalert2.bundle.css">
+        <!--===============================================================================================-->
         
 		<!--===============================================================================================-->
 		<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/custom.css" />  

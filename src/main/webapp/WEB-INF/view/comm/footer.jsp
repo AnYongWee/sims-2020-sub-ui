@@ -75,9 +75,9 @@ $(document).ready(function(){
 	});
 	
 	//모달 종료시 초기화	
-	$('.modal').on('hidden.bs.modal', function (e) {
-	    console.log('modal close');
-	  $(this).find('form')[0].reset()
+	$('.modal').on('hidden.bs.modal', function (e) {	    
+	  	$(this).find('form')[0].reset();
+	  	$(this).find('form').removeClass('was-validated');
 	});
 });
 

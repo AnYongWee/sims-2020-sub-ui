@@ -15,6 +15,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import sqisoft.com.model.RolesInfo;
 import sqisoft.com.model.SiteInfo;
 import sqisoft.com.model.UsrInfo;
 
@@ -78,6 +79,24 @@ public class CommHandlr {
 		return result;
 	}
 	
+	//로그인 사용자 권한 리스트 반환
+	public List<RolesInfo> getRoles(HttpSession session) {
+		@SuppressWarnings("unchecked")
+		List<RolesInfo> rolesInfo = (List<RolesInfo>)session.getAttribute("roles");
+		return rolesInfo;
+	}
+	
+	public boolean isAdmin(HttpSession session) {
+		
+		List<RolesInfo> roles = (List<RolesInfo>)session.getAttribute("roles");
+		for(RolesInfo role : roles) {
+			if (role.getAuthority().equals("R000001")) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	public boolean isSessionTimeOut(HttpSession session) {
 		// 세션 로그인 정보 확인		
 		if (session.getAttribute("user") == null) {			

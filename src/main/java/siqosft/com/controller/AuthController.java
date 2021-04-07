@@ -21,6 +21,7 @@ import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.comm.SecurityUtil;
 import sqisoft.com.model.MenuInfo;
+import sqisoft.com.model.RolesInfo;
 import sqisoft.com.model.SiteInfo;
 import sqisoft.com.model.UsrInfo;
 import sqisoft.com.service.AuthService;
@@ -107,11 +108,17 @@ public class AuthController extends  CommHandlr{
 	 			//메뉴 정보 조회
 	 			List<MenuInfo> menuList = authService.selectUsrMenuList(rslt);
 	 			
+	 			//권한 조회
+	 			List<RolesInfo> roles = authService.selectRoles(rslt);
+	 			
 	 			//사이트 정보 조회
 	 			List<SiteInfo> siteList = siteService.selectUsrMenuList(rslt);
 	 			
 	 			//메뉴 정보 세션 저장
 	 			session.setAttribute("menuList", menuList);
+	 			
+	 			//권한 정보 세션 저장
+	 			session.setAttribute("roles", roles);
 	 			
 	 			//사이트 정보 세션 저장
 	 			for (SiteInfo siteInfo : siteList) {

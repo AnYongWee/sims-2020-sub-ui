@@ -4,7 +4,7 @@
 	
 	<div>                             
 		<ol class="breadcrumb bg-fusion-300 border border-primary">
-			<li class="breadcrumb-item text-white"><a class="text-white" href="#"> <i class="fal fa-home mr-1 fs-md"></i> 메인</a></li>			
+			<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-home mr-1 fs-md"></i> 메인</a></li>			
 		</ol>
 	</div>
 	
@@ -39,12 +39,12 @@
 	var pid;
 	
 	//태양광 패널 화살표 y 좌표
-	var arrow_panel_0_y = 520;	
-	var arrow_panel_1_y = 520;
-	var arrow_panel_2_y = 520;
-	var arrow_panel_3_y = 520;
-	var arrow_panel_4_y = 520;
-	var arrow_panel_5_y = 520;
+	var arrow_panel_0_y = 530;	
+	var arrow_panel_1_y = 530;
+	var arrow_panel_2_y = 530;
+	var arrow_panel_3_y = 530;
+	var arrow_panel_4_y = 530;
+	var arrow_panel_5_y = 530;
 	
 	//인버터 화살표 x,y 좌표
 	var arrow_invtr_0_x = 840;
@@ -146,20 +146,20 @@
 			// 태양광 패널 에서 인버터 에너지 이동 화살표 에니메이션 그리기 시작
 		    context.drawImage(arrow_1, 650, arrow_panel_0_y, 20, 20);
 		    
-		    if (arrow_panel_0_y >= 550 || arrow_panel_1_y > 520){ context.drawImage(arrow_1, 650, arrow_panel_1_y, 20, 20); arrow_panel_1_y += 2; }
-		    if (arrow_panel_1_y >= 550 || arrow_panel_2_y > 520){ context.drawImage(arrow_1, 650, arrow_panel_2_y, 20, 20); arrow_panel_2_y += 2; }
-		    if (arrow_panel_2_y >= 550 || arrow_panel_3_y > 520){ context.drawImage(arrow_1, 650, arrow_panel_3_y, 20, 20); arrow_panel_3_y += 2; }
-		    if (arrow_panel_3_y >= 550 || arrow_panel_4_y > 520){ context.drawImage(arrow_1, 650, arrow_panel_4_y, 20, 20); arrow_panel_4_y += 2; }
-		    if (arrow_panel_4_y >= 550 || arrow_panel_5_y > 520){ context.drawImage(arrow_1, 650, arrow_panel_5_y, 20, 20); arrow_panel_5_y += 2; }
+		    if (arrow_panel_0_y >= 570 || arrow_panel_1_y > 530){ context.drawImage(arrow_1, 650, arrow_panel_1_y, 20, 20); arrow_panel_1_y += 2; }
+		    if (arrow_panel_1_y >= 570 || arrow_panel_2_y > 530){ context.drawImage(arrow_1, 650, arrow_panel_2_y, 20, 20); arrow_panel_2_y += 2; }
+		    if (arrow_panel_2_y >= 570 || arrow_panel_3_y > 530){ context.drawImage(arrow_1, 650, arrow_panel_3_y, 20, 20); arrow_panel_3_y += 2; }
+		    if (arrow_panel_3_y >= 570 || arrow_panel_4_y > 530){ context.drawImage(arrow_1, 650, arrow_panel_4_y, 20, 20); arrow_panel_4_y += 2; }
+		    if (arrow_panel_4_y >= 570 || arrow_panel_5_y > 530){ context.drawImage(arrow_1, 650, arrow_panel_5_y, 20, 20); arrow_panel_5_y += 2; }
 		    
 		    arrow_panel_0_y += 2;		    
 		    
-		    if (arrow_panel_0_y > 680){ arrow_panel_0_y = 520; }
-		    if (arrow_panel_1_y > 680){ arrow_panel_1_y = 520; }
-		    if (arrow_panel_2_y > 680){ arrow_panel_2_y = 520; }
-		    if (arrow_panel_3_y > 680){ arrow_panel_3_y = 520; }
-		    if (arrow_panel_4_y > 680){ arrow_panel_4_y = 520; }
-		    if (arrow_panel_5_y > 680){ arrow_panel_5_y = 520; }
+		    if (arrow_panel_0_y > 680){ arrow_panel_0_y = 530; }
+		    if (arrow_panel_1_y > 680){ arrow_panel_1_y = 530; }
+		    if (arrow_panel_2_y > 680){ arrow_panel_2_y = 530; }
+		    if (arrow_panel_3_y > 680){ arrow_panel_3_y = 530; }
+		    if (arrow_panel_4_y > 680){ arrow_panel_4_y = 530; }
+		    if (arrow_panel_5_y > 680){ arrow_panel_5_y = 530; }
 		    
 		    // 인버터에서 건물내부 에너지 이동 화살표 에니메이션 그리기 시작
 		    if (arrow_door_0_y == 730 && arrow_invtr_0_x <= 860){

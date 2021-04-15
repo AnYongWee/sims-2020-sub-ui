@@ -26,7 +26,10 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" media="screen, print" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">        
+        <link rel='stylesheet' href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css'  type='text/css'>
+        <!--===============================================================================================-->
+        <link rel="stylesheet" media="screen, print" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+        <!--===============================================================================================-->        
 
         <!-- Place favicon.ico in the root directory -->
         <!--===============================================================================================-->
@@ -39,6 +42,8 @@
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/datagrid/datatables/datatables.bundle.css">        
         <!--===============================================================================================-->
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/notifications/sweetalert2/sweetalert2.bundle.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/formplugins/select2/select2.bundle.css">
         <!--===============================================================================================-->
         
 		<!--===============================================================================================-->

@@ -14,6 +14,13 @@
 		<id column="CNT_PSN_POS" property="cntPsnPos" />
 		<id column="CNT_PSN_HPNO" property="cntPsnHpno" />		
 		<id column="CNT_PSN_EML" property="cntPsnEml" />
+		
+		<id column="TOTAL_CPCT" property="totalCpct" />
+		<id column="MONTH_GENT_QNT" property="monthGentQnt" />
+		<id column="MONTH_GENT_TIME" property="monthGentTime" />
+		<id column="MONTH_CHANGE_RATE" property="monthChangeRate" />
+		<id column="TOTAL_GENT_PROFT_AMT" property="totalGentProftAmt" />
+		
 		<id column="CRETR" property="cretr" />
 		<id column="CRET_DT" property="cretDt" />
 		<id column="UPDTR" property="updtr" />
@@ -83,12 +90,14 @@
 				</otherwise>
 			</choose>
 		
-		<if test="ordNo == 0 "> ORDER BY A.CUST_NM ${sort} </if>
-		<if test="ordNo == 1 "> ORDER BY A.BIZNO ${sort} </if>
-		<if test="ordNo == 2 "> ORDER BY B.CUST_TYPE_CD ${sort} </if>
-		<if test="ordNo == 3 "> ORDER BY C.TLNO ${sort} </if>
-		<if test="ordNo == 4 "> ORDER BY A.CNT_PSN_NM ${sort} </if>
-		<if test="ordNo == 5 "> ORDER BY A.CNT_PSN_HPNO ${sort} </if>		
+		<if test="ordNo == 0 "> ORDER BY A.CUST_SEQ ${sort} </if>
+		<if test="ordNo == 1 "> ORDER BY A.CUST_NM ${sort} </if>
+		<if test="ordNo == 2 "> ORDER BY A.BIZNO ${sort} </if>
+		<if test="ordNo == 3 "> ORDER BY A.CUST_TYPE_CD ${sort} </if>
+		<if test="ordNo == 4 "> ORDER BY A.TLNO ${sort} </if>
+		<if test="ordNo == 5 "> ORDER BY A.CNT_PSN_NM ${sort} </if>
+		<if test="ordNo == 6 "> ORDER BY A.CNT_PSN_HPNO ${sort} </if>		
+		<if test="ordNo == 7 "> ORDER BY A.CRET_DT ${sort} </if>
 		
 		LIMIT #{length} offset #{start}
 		
@@ -107,7 +116,13 @@
 				   A.CNT_PSN_NM,
 				   A.CNT_PSN_POS,
 				   A.CNT_PSN_HPNO,
-				   A.CNT_PSN_EML,
+				   A.CNT_PSN_EML,				   
+				   COALESCE(DEV_SUM.TOTAL_CPCT, 0) AS TOTAL_CPCT,				   
+				   COALESCE(NOW_MON_SUM.MONTH_GENT_QNT, 0) AS MONTH_GENT_QNT,
+				   COALESCE(AF_MON_SUM.MONTH_GENT_QNT, 0) AS AF_MONTH_GENT_QNT,
+				   COALESCE(NOW_MON_SUM.MONTH_GENT_TIME, 0) AS MONTH_GENT_TIME,
+				   COALESCE(NOW_MON_SUM.TOTAL_GENT_PROFT_AMT, 0) AS TOTAL_GENT_PROFT_AMT,				   
+				   trunc(COALESCE((NOW_MON_SUM.MONTH_GENT_QNT - AF_MON_SUM.MONTH_GENT_QNT) / AF_MON_SUM.MONTH_GENT_QNT * 100, 0), 2) AS MONTH_CHANGE_RATE,				   
 				   A.CRETR,
 				   A.CRET_DT,
 				   A.UPDTR,
@@ -115,6 +130,40 @@
 				   COUNT(*) OVER() AS TOTAL_CNT
 		FROM REMS.CUST_INF A
 		LEFT OUTER JOIN REMS.CD_DTL B ON A.CUST_TYPE_CD = B.DTL_CD AND B.GRP_CD = 'CUST_TYPE_CD'
+		
+		LEFT OUTER JOIN
+		(
+			SELECT SI.CUST_SEQ, 
+				   SUM(COALESCE(GD.TDAY_GENT_QNT, 0)) AS MONTH_GENT_QNT,
+			 	   SUM(COALESCE(GD.TDAY_GENT_TIME, 0)) AS MONTH_GENT_TIME,
+				   SUM(COALESCE(GD.RDUC_AMT, 0)) AS TOTAL_GENT_PROFT_AMT
+			FROM REMS.GENT_DAY_SUM GD 
+			INNER JOIN REMS.SITE_INF SI ON GD.SITE_SEQ = SI.SITE_SEQ
+			WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMM') = to_char(now(), 'YYYYMM') 
+			GROUP BY SI.CUST_SEQ
+		) AS NOW_MON_SUM ON A.CUST_SEQ = NOW_MON_SUM.CUST_SEQ
+		
+		LEFT OUTER JOIN
+		(
+			SELECT SI.CUST_SEQ, 
+				   SUM(COALESCE(GD.TDAY_GENT_QNT, 0)) AS MONTH_GENT_QNT,
+			 	   SUM(COALESCE(GD.TDAY_GENT_TIME, 0)) AS MONTH_GENT_TIME,
+				   SUM(COALESCE(GD.RDUC_AMT, 0)) AS TOTAL_GENT_PROFT_AMT
+			FROM REMS.GENT_DAY_SUM GD 
+			INNER JOIN REMS.SITE_INF SI ON GD.SITE_SEQ = SI.SITE_SEQ
+			WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMM') = to_char(now(), 'YYYYMM') 
+			GROUP BY SI.CUST_SEQ
+		) AS AF_MON_SUM ON A.CUST_SEQ = AF_MON_SUM.CUST_SEQ
+		
+		LEFT OUTER JOIN
+		(
+			SELECT SI.CUST_SEQ, SUM(COALESCE(DI.INSTL_CPCT, 0)) AS TOTAL_CPCT
+			FROM REMS.DEV_INF DI 
+			INNER JOIN REMS.SITE_INF SI ON DI.SITE_SEQ = SI.SITE_SEQ
+			WHERE DI.SVC_CD = 'PV_POW'
+			GROUP BY SI.CUST_SEQ
+		) AS DEV_SUM ON A.CUST_SEQ = DEV_SUM.CUST_SEQ
+		
 		<where>
 			<if test="custSeq  != null and custSeq != '' "> 
 			 	AND A.CUST_SEQ = ${custSeq} 
@@ -126,7 +175,7 @@
 			 	AND A.BIZNO = #{bizNo} 
 			 </if>
 		</where>
-		
+						   
 	</select>
 
 	<!-- 고객사 정보 추가 -->

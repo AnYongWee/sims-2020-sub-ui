@@ -10,4 +10,10 @@ public class CommConst {
 	public static int COMM_ERROR_NOT_USER = -3;				//사용자 정보 없음
 	public static int COMM_ERROR_NOT_ENCRY_KEY = -4;		//암호화 키 없음
 	public static int COMM_ERROR_TIME_OUT = -5;				//세션 타임아웃
+	
+	public static int minStart = 0;
+	public static int maxEnd = 9999;
+	
+	public static String minDate = "19000101";
+	public static String maxDate = "299900101";
 }

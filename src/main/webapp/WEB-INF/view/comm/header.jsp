@@ -81,19 +81,19 @@
 					
 					<c:if test="${row.childCnt > 0 }">
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle fw-700 text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
+							<a class="nav-link dropdown-toggle fw-700 text-white mr-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="fal fa-cogs mr-1"></span> ${row.menuName} </a>
 							<div class="dropdown-menu bg-fusion-500" aria-labelledby="navbarDropdown">
 						
 						<c:set var="isChild"	value="1" />
 					</c:if>
 					
 					<c:if test="${not empty row.upperMenuId and isChild eq '1'}">
-						<a class="dropdown-item fw-700 text-white" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
+						<a class="dropdown-item fw-700 text-white mr-2" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>						 
 					</c:if>
 					
 					<c:if test="${row.childCnt eq 0 and row.lv eq 0}">
 						<li class="nav-item">
-							<a class="nav-link fw-700 text-white" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
+							<a class="nav-link fw-700 text-white mr-2" href="${row.url}"><span class="fal ${row.tag} mr-1"></span>${row.menuName}</a>
 						</li>
 					</c:if>
 					

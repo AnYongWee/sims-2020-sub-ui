@@ -1,18 +1,78 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
-<main id="js-page-content" role="main" class="page-content">                   
+
+
+<main id="js-page-content" role="main" class="page-content">
+			
+		<div id="canvas-container col-12" class="panel panel-sortable" role="widget">
+			<div class="panel-hdr bg-danger-900 bg-info-gradient" role="heading">
+				<h2>태양광 통합 모니터링 시스템</h2>
+			</div>
+			<div class="panel-container show">
+				<canvas id="canvas" width="1920" height="1080"></canvas>
+			</div>	
+		</div>               
 	
-	<div>                             
-		<ol class="breadcrumb bg-fusion-300 border border-primary">
-			<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-home mr-1 fs-md"></i> 메인</a></li>			
-		</ol>
-	</div>
 	
-	<div id="canvas-container" class="panel">
-		<div class="panel-container show">
-			<canvas id="canvas" width="1920" height="1080"></canvas>
-		</div>	
-	</div>               
+	
+		<div id="invrtr-container col-8" class="panel panel-sortable" role="widget">
+			<div class="panel-hdr " role="heading">
+				<h2>인버터 현황</h2>
+			</div>
+			<div class="panel-container p-2 show">
+			<!-- datatable start -->			
+				<table class="table table-bordered table-hover table-striped w-100 display responsive nowrap" id="invrtr-list">
+				
+					<thead>						
+						<tr class="">
+							<th class="text-center" colspan="3">태양광 모듈</th>
+							<th class="text-center" colspan="5">인버터</th>
+						</tr>
+						<tr class="">
+							<th class="text-center align-middle font-weight-bold">전력(Kw)</th> 
+							<th class="text-center align-middle font-weight-bold">전압(V)</th>							
+							<th class="text-center align-middle font-weight-bold">전류(A)</th>
+							<th class="text-center align-middle font-weight-bold">전력(kW)</th>
+							<th class="text-center align-middle font-weight-bold">전압(V)</th>
+							<th class="text-center align-middle font-weight-bold">전류(A)</th>
+							<th class="text-center align-middle font-weight-bold">벼환효율(%)</th>
+							<th class="text-center align-middle font-weight-bold">상태</th>
+						</tr>
+					</thead>
+					<tbody>
+					<!-- 내용 -->
+					</tbody>
+				</table>				
+				<!-- datatable end -->	
+			</div>			
+		</div>
+		<div id="stats-container col-4" class="panel">
+			<div class="panel-hdr " role="heading">
+				<h2>경보 이벤트</h2>
+			</div>
+			<div class="panel-container p-2 show">
+			<!-- datatable start -->
+				<table class="table table-bordered table-hover table-striped w-100" id="alarm-list">
+					<thead>
+						<tr class="">
+							<th class="text-center align-middle font-weight-bold">전력(Kw)</th> 
+							<th class="text-center align-middle font-weight-bold">전압(V)</th>							
+							<th class="text-center align-middle font-weight-bold">전류(A)</th>
+							<th class="text-center align-middle font-weight-bold">전력(kW)</th>
+							<th class="text-center align-middle font-weight-bold">전압(V)</th>
+							<th class="text-center align-middle font-weight-bold">전류(A)</th>
+							<th class="text-center align-middle font-weight-bold">벼환효율(%)</th>
+							<th class="text-center align-middle font-weight-bold">상태</th>
+						</tr>
+					</thead>
+					<tbody>
+					<!-- 내용 -->
+					</tbody>
+				</table>				
+				<!-- datatable end -->	
+			</div>	
+		</div>
+</div>
 
 </main>
 
@@ -24,7 +84,7 @@
 	$(document).ready(function(){
 		
 		//body 스크롤 삭제
-		$('html, body').css('overflow', 'hidden');
+		//$('html, body').css('overflow', 'hidden');
 		
 		$(window).resize(search);
 
@@ -34,6 +94,10 @@
         });
         
         search();
+        
+      //datatable
+		datatable_invrtr();
+		datatable_alarm();
 	});
 	
 	var pid;
@@ -102,10 +166,10 @@
     var _maxFrame = 11;
 	var horseTime = 0;
 	
+	var tree_frame = 0;
+	var treeTime = 0;
+	
 	function search(){
-		
-		//그리기 처리 중지
-		cancelAnimationFrame(pid);
 		
 		//font 설정
 		context.font = "20px malgun gothic"; 		//폰트의 크기, 글꼴체 지정      
@@ -113,9 +177,14 @@
 		
 		//그리기
 		draw();
+		
+		
 	}
 
 	function draw(){
+		
+		//그리기 처리 중지
+		cancelAnimationFrame(pid);
 		
 		var arrow_1 = new Image();
 		arrow_1.src = '../../resources/assets/img/arrow_1.png';
@@ -129,13 +198,10 @@
 		var horse = new Image();
 		horse.src = '../../resources/assets/img/2D_sprite_horse.png';
 		
-		var bird = new Image();
-		bird.src = '../../resources/assets/img/bird.png';
-		
 		var image = new Image();
 		image.src = '../../resources/assets/img/main.jpg';
 		
-		$("#canvas").width(window.innerWidth - 350).height(window.innerHeight - 200);
+		$("#canvas").width(window.innerWidth - 650).height(window.innerHeight - 500);
 		
 		image.addEventListener('load', function(){
 			
@@ -230,4 +296,32 @@
 		},false);
 	}
 	
+	
+	//인버터 현황 데이터 테이블 설정
+	function datatable_invrtr() {		
+		
+		$('#invrtr-list').dataTable({
+			fixedHeader: true,
+			language: lang_kor,
+			destroy: true,
+			searching: false,
+			paging : false
+		});
+	}
+	
+	function datatable_alarm(){
+		
+		$('#alarm-list').dataTable({
+			fixedHeader: true,
+            destroy: true,
+            language: lang_kor,
+            bFilter : false,
+            responsive: true,
+            searching: false,            
+            scrollCollapse: true,
+            paging : true,
+            serverSide : false
+		});
+		
+	}
 </script>

@@ -88,6 +88,7 @@ public class CommHandlr {
 	
 	public boolean isAdmin(HttpSession session) {
 		
+		@SuppressWarnings("unchecked")
 		List<RolesInfo> roles = (List<RolesInfo>)session.getAttribute("roles");
 		for(RolesInfo role : roles) {
 			if (role.getAuthority().equals("R000001")) {

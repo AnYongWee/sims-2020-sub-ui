@@ -1,6 +1,11 @@
 package siqosft.com.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
+import sqisoft.com.comm.StringUtil;
+import sqisoft.com.model.CompanyInfo;
 import sqisoft.com.service.MainService;
+import sqisoft.com.service.SiteService;
 
 /**
  * @Class Name : MainController
@@ -30,6 +41,9 @@ public class MainController extends CommHandlr{
 	@Resource(name = "mainService")
 	private MainService mainService;
 		
+	@Resource(name = "siteService")
+	private SiteService siteService;
+	
 	/**
 	 * 메인 화면 이동
 	 * @param model
@@ -37,7 +51,8 @@ public class MainController extends CommHandlr{
 	 * @exception Exception
 	 */
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
-	public String loginView(Model model) throws Exception {
-		return "main/main.tiles";
+	public String loginView(HttpSession session, Model model) throws Exception {
+		
+		return "main/dashboard.tiles";
 	}
 }

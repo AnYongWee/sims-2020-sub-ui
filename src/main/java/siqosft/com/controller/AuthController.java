@@ -20,11 +20,14 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.comm.SecurityUtil;
+import sqisoft.com.model.CompanyInfo;
+import sqisoft.com.model.CustInfo;
 import sqisoft.com.model.MenuInfo;
 import sqisoft.com.model.RolesInfo;
 import sqisoft.com.model.SiteInfo;
 import sqisoft.com.model.UsrInfo;
 import sqisoft.com.service.AuthService;
+import sqisoft.com.service.CompanyService;
 import sqisoft.com.service.SiteService;
 import sqisoft.com.service.UserService;
 
@@ -49,6 +52,9 @@ public class AuthController extends  CommHandlr{
 	
 	@Resource(name = "siteService")
 	private SiteService siteService;
+	
+	@Resource(name = "companyService")
+	private CompanyService companyService;
 	
 	/** Validator */
 	@Resource(name = "beanValidator")
@@ -111,20 +117,26 @@ public class AuthController extends  CommHandlr{
 	 			//권한 조회
 	 			List<RolesInfo> roles = authService.selectRoles(rslt);
 	 			
-	 			//사이트 정보 조회
-	 			List<SiteInfo> siteList = siteService.selectUsrMenuList(rslt);
-	 			
 	 			//메뉴 정보 세션 저장
 	 			session.setAttribute("menuList", menuList);
 	 			
 	 			//권한 정보 세션 저장
 	 			session.setAttribute("roles", roles);
 	 			
+	 			//사이트 정보 조회
+	 			List<SiteInfo> siteList = siteService.selectUsrMenuList(rslt, isAdmin(session));
+	 			
+	 			//고객 정보 조회
+	 			CompanyInfo companyInfo = companyService.selectCompanyInfo(String.valueOf(rslt.getCustSeq()), null, null).get(0);
+	 			
 	 			//사이트 정보 세션 저장
 	 			for (SiteInfo siteInfo : siteList) {
 	 				siteInfo.setChecked(true);
 	 			}
 	 			session.setAttribute("siteList", siteList);
+	 			
+	 			//고객사 정보 세션 저장
+	 			session.setAttribute("companyInfo", companyInfo);
 	 			
 	 			//사이트 전체 체크 상태 true 초기 설정
 	 			session.setAttribute("siteSeqAllChecked", true);
@@ -246,7 +258,7 @@ public class AuthController extends  CommHandlr{
 		List<SiteInfo> oldSiteList = (List<SiteInfo>)session.getAttribute("siteList");
 				
 		//사이트 정보 조회
-		List<SiteInfo> siteList = siteService.selectUsrMenuList(usrInfo);
+		List<SiteInfo> siteList = siteService.selectUsrMenuList(usrInfo, isAdmin(session));
 		
 		for(SiteInfo site : siteList) {
 			

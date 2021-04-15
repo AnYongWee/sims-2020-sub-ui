@@ -9,7 +9,7 @@
 			<img src="${pageContext.request.contextPath}/resources/assets/smart/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo"> 
 			<span class="page-logo-text mr-2">태양광모니터링시스템</span> 
 			<span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
-			<i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
+			<i class="fal d-inline-block ml-1 fs-lg color-primary-300"></i>
 		</a>
 	</div>
 	<!-- BEGIN PRIMARY NAVIGATION -->

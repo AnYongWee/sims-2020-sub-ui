@@ -52,7 +52,10 @@ public class MainController extends CommHandlr{
 	 */
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String loginView(HttpSession session, Model model) throws Exception {
+		String page = "main/dashboard.tiles";
+		//시연용
+		page = "main/main.tiles";
 		
-		return "main/dashboard.tiles";
+		return page;
 	}
 }

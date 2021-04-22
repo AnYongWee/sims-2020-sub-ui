@@ -61,8 +61,8 @@ var gaugeOptions = {
 
 	    plotOptions: {
 	        solidgauge: {
-	            dataLabels: {
-	                y: 30,
+	            dataLabels: {	            	
+	                y:80,
 	                borderWidth: 0,
 	                useHTML: true
 	            }
@@ -261,8 +261,8 @@ var gaugeOptions = {
 		}, 1000 * 2); 
 		
 	});
-	
-	function search(){
+		
+	function search(){		
 		location.reload();
 	}
 	

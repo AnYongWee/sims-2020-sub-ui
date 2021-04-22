@@ -19,6 +19,8 @@
 		<id column="AC_POWR" property="acPowr" />						
 		<id column="AC_VOLT" property="acVlot" />
 		<id column="AC_CURR" property="acCurr" />
+		<id column="INVRTR_EFFI" property="invrtrEffi" />
+		
 	</resultMap>
 	
 	<!-- 인버터 현황 리스트 -->
@@ -39,12 +41,13 @@
 			   D.DC_CURR,			   
 			   D.AC_POWR,
 			   D.AC_VOLT,
-			   D.AC_CURR			   
+			   D.AC_CURR,
+			   D.INVRTR_EFFI * 100 AS INVRTR_EFFI		   
 		FROM REMS.DEV_INF A
 		INNER JOIN REMS.SITE_INF B ON A.SITE_SEQ = B.SITE_SEQ
-		LEFT OUTER JOIN REMS.GENT_DAY_SUM C ON A.DEV_SEQ = C.DEV_SEQ AND C.TGT_DATE = '20210323'
+		LEFT OUTER JOIN REMS.GENT_DAY_SUM C ON A.DEV_SEQ = C.DEV_SEQ AND C.TGT_DATE = TO_CHAR((now()::timestamp - '1 days'::interval), 'YYYYMMDD')
 		LEFT OUTER JOIN REMS.INVRTR_OPRT_MIN_HST D ON A.DEV_SEQ = D.DEV_SEQ 
-		AND D.MSR_TOD = (SELECT MAX(MSR_TOD) FROM REMS.INVRTR_OPRT_MIN_HST WHERE DEV_SEQ = A.DEV_SEQ AND TO_CHAR(TO_TIMESTAMP(MSR_TOD, 'YYYYMMDDHH24MISS'), 'YYYYMMDD') = '20210324')
+		AND D.MSR_TOD = (SELECT MAX(MSR_TOD) FROM REMS.INVRTR_OPRT_MIN_HST WHERE DEV_SEQ = A.DEV_SEQ AND TO_TIMESTAMP(MSR_TOD, 'YYYYMMDDHH24MISS') >= (now()::timestamp - '5 minutes'::interval))
 		WHERE A.SVC_CD = 'PV_POW'
 		
 		<choose>

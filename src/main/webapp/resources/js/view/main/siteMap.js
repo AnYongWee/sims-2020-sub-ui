@@ -108,6 +108,7 @@ function getSiteList(){
 			siteIndex = 0;
 			maxSiteIndex = data.list.length;
 			
+			siteLoop(data.list);
 			mapPid = setInterval(function(){
 				siteLoop(data.list);
 		    }, 4000);
@@ -135,7 +136,9 @@ function siteLoop(sites){
 }
 
 function mapReplace(){
-	map.relayout();
+	if (map != null){
+		map.relayout();
+	}
 }
 
 //마커 HTML 생성

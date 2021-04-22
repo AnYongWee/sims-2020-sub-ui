@@ -1,15 +1,14 @@
 @charset "UTF-8";
 
 /* 스포카한산스네오 폰트 */
-/* body{
-	font-family: 'Spoqa Han Sans Neo', sans-serif;
-} */
-
-/* 나눔스케어 폰트 */
 body{
-	font-family: 'NanumSquare', sans-serif;
+	font-family: 'Spoqa Han Sans Neo', sans-serif;
 }
 
+/* 나눔스케어 폰트 */
+/* body{
+	font-family: 'NanumSquare', sans-serif;
+} */
 
 transparent
 .dropdown-menu {
@@ -174,7 +173,7 @@ transparent
 
 
 
-.overlaybox {position:relative;width:390px;height:280px;background:url('/resources/assets/img/box_movie.png') no-repeat; background-size:100% 100%; padding:15px 10px;}
+.overlaybox {position:relative;width:390px;height:260px;background:url('/resources/assets/img/box_movie.png') no-repeat; background-size:100% 100%; padding:15px 10px;}
 
 .overlaybox ul {overflow:hidden;margin:0;padding:0;}
 
@@ -185,7 +184,7 @@ transparent
 .first .triangle {position:absolute;width:48px;height:48px;top:0;left:0;padding:6px;font-size:18px;}
 .first .movietitle {position:absolute;width:100%;bottom:0;background:rgba(0,0,0,0.4);padding:7px 15px;font-size:14px;}
 .overlaybox ul {width:247px;}
-.overlaybox li {position:relative;margin-bottom:8px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;}
+.overlaybox li {position:relative;margin-bottom:8px;background:#2b2d36;padding:3px 5px;color:#aaabaf;line-height: 1;}
 .overlaybox li span {display:inline-block;}
 .overlaybox li .number {font-size:16px;font-weight:bold;}
 .overlaybox li .title {font-size:13px;}
@@ -197,7 +196,36 @@ transparent
 .overlaybox li:hover .up {background-position:0 0px;}
 .overlaybox li:hover .down {background-position:0 -20px;}   
 
+.border-gray {
+    border-color: #cec7c7c9 !important;
+}
+
+.panel-hdr-sm {
+	display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;    
+    min-height: 2rem;
+    border-bottom: 1px solid rgb(226,226,222);
+    border-radius: 4px 4px 0 0;
+	height:2rem;
+}
+
+.page-logo img {
+    width: 144px;
+    height: 46px;
+}
+
+.company-log {
+	height: 50px;
+	text-align: center !important;
+	margin-top: 20px;
+}
 
 
+/* IE9,10 */
+@media screen and (min-width:0\0){
+	/* .sitemap {height: 40% !important} */
+} 
 
- */
+ 

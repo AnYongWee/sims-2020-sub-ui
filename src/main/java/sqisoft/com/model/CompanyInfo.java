@@ -36,17 +36,6 @@ public class CompanyInfo {
 	/*담당자이메일*/
 	private String cntPsnEml;
 	
-	/*설비용량*/
-	private double totalCpct;	
-	/*당월 발전량*/
-	private double monthGentQnt;
-	/*당월 발전시간*/
-	private double monthGentTime;
-	/*전월대비 발전변동율*/
-	private double monthChangeRate;
-	/*예상수익*/
-	private double totalGentProftAmt;
-	
 	/*생성자*/
 	private String cretr;
 	/*생성일시*/
@@ -153,37 +142,5 @@ public class CompanyInfo {
 	}
 	public void setTotalCnt(int totalCnt) {
 		this.totalCnt = totalCnt;
-	}
-	public double getTotalCpct() {
-		return totalCpct;
-	}
-	public void setTotalCpct(double totalCpct) {
-		this.totalCpct = totalCpct;
-	}
-	public double getMonthGentQnt() {
-		return monthGentQnt;
-	}
-	public void setMonthGentQnt(double monthGentQnt) {
-		this.monthGentQnt = monthGentQnt;
-	}
-	public double getMonthGentTime() {
-		return monthGentTime;
-	}
-	public void setMonthGentTime(double monthGentTime) {
-		this.monthGentTime = monthGentTime;
-	}
-	public double getMonthChangeRate() {
-		return monthChangeRate;
-	}
-	public void setMonthChangeRate(double monthChangeRate) {
-		this.monthChangeRate = monthChangeRate;
-	}
-	public double getTotalGentProftAmt() {
-		return totalGentProftAmt;
-	}
-	public void setTotalGentProftAmt(double totalGentProftAmt) {
-		this.totalGentProftAmt = totalGentProftAmt;
-	}
-	
-	
+	}	
 }

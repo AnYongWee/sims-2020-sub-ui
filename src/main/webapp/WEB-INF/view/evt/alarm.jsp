@@ -43,7 +43,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text search-lable-sm">등급</span>
 					</div>
-					<select class="custom-select form-control" id="searchGdCd">
+					<select class="custom-select form-control input-sm" id="searchGdCd" style="width:80px;">
 						<option value="" selected>전체</option>
 						<c:forEach items="${evtDivCodes}" var="row" varStatus="i">
 							<option value="${row.dtlCd}">${row.dtlCdNm}</option>
@@ -57,7 +57,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text search-lable-sm">상태</span>
 					</div>
-					<select class="custom-select form-control" id="searchStsCd">
+					<select class="custom-select form-control" id="searchStsCd" style="width:80px;">
 						<option value="" selected>전체</option>
 						<c:forEach items="${evtStsCodes}" var="row" varStatus="i">
 							<option value="${row.dtlCd}">${row.dtlCdNm}</option>
@@ -73,12 +73,12 @@
 						<span class="input-group-text search-lable-sm">발생일시</span>
 					</div>
 					                                                       
-					<input class="form-control date-picker" id="start-date-day" name="start-date-day" value="" type="text" readonly>
+					<input class="form-control date-picker" id="start-date-day" name="start-date-day" value="" type="text" style="width:110px;" readonly>
 					<div class="input-group-append"><span class="input-group-text fs-xl"> <i class="fal fa-calendar"></i></span></div>
 					
 					<span class="align-self-center ml-1 mr-1">~</span> 
 					
-					<input class="form-control date-picker" id="end-date-day" name="end-date-day" value="" type="text" readonly>
+					<input class="form-control date-picker" id="end-date-day" name="end-date-day" value="" type="text" style="width:110px;" readonly>
 					<div class="input-group-append"><span class="input-group-text fs-xl"> <i class="fal fa-calendar"></i></span></div>
 				</div>
 			
@@ -191,18 +191,18 @@
 			},
 			
             columns: [
-            	{ id: "evtSeq", data: "evtSeq", "visible": false, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "occuTod", data: "occuTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            	{ id: "evtSeq", data: "evtSeq", "visible": false, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "occuTod", data: "occuTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
             		render: function(data, type) {            			
             			return data.substr(0,4) + "-" + data.substr(4,2) + "-" + data.substr(6,2) + " " + data.substr(8,2) + ":" + data.substr(10,2) + ":" + data.substr(12,2);
             		}
             	},
-            	{ id: "siteNm", data: "siteNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "devNm", data: "devNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "evtCd", data: "evtCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
-            	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-left font-weight-bold' },
-            	{ id: "evtGdVal", data: "evtGdVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            	{ id: "siteNm", data: "siteNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "devNm", data: "devNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "evtCd", data: "evtCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-left' },
+            	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-left' },
+            	{ id: "evtGdVal", data: "evtGdVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
             		render: function(data, type) {   
             			if (data == "경계"){
             				return '<h4><span class="badge badge-danger badge-pill">' + data + '</span></h4>';	
@@ -214,8 +214,8 @@
             		}
             		
             	},
-            	{ id: "evtStsVal", data: "evtStsVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "crlTod", data: "crlTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold', 
+            	{ id: "evtStsVal", data: "evtStsVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "crlTod", data: "crlTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
             		render: function(data, type) {            			
             			return data.substr(0,4) + "-" + data.substr(4,2) + "-" + data.substr(6,2) + " " + data.substr(8,2) + ":" + data.substr(10,2) + ":" + data.substr(12,2);
             		}

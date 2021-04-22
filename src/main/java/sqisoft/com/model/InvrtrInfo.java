@@ -45,6 +45,8 @@ public class InvrtrInfo {
 	private float acVlot;
 	/*AC전류*/
 	private float acCurr;
+	/*인버터변환효율*/	
+	private float invrtrEffi;
 	
 	public int getDevSeq() {
 		return devSeq;
@@ -141,5 +143,11 @@ public class InvrtrInfo {
 	}
 	public void setAcCurr(float acCurr) {
 		this.acCurr = acCurr;
+	}
+	public float getInvrtrEffi() {
+		return invrtrEffi;
+	}
+	public void setInvrtrEffi(float invrtrEffi) {
+		this.invrtrEffi = invrtrEffi;
 	}	
 }

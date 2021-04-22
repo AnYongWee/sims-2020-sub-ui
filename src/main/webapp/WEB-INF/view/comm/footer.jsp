@@ -27,52 +27,12 @@
 <script>
 
 $(document).ready(function(){
+	
 	prograssInitialization();
+	
 	initApp.pushSettings('footer-function-fixed');
 	
-	$( '.site-switch' ).click( function() {		
-		$.ajax({
-			type: "POST",
-			url: "/ajax/updateSiteSeq.do",		
-			dataType: 'json',
-			data: {
-				siteSeq : $(this).attr("data-siteSeq"),
-				checked : this.checked
-			},
-			success : function(data) {
-				try {
-					//각화면에서 필요한 데이터를 조회 하는 공통 합수 호출 
-					//암묵적으로 화면에서 데이터를 조회 하는 function 명을 search 로 정한다.
-					search();	
-				} catch (e) {}		
-			},
-			error: function(e){
-				alert("요청에 실패 하였습니다.");
-			}
-		});
-	});
-	
-	$( '#site-switch-all' ).click( function() {
-		
-		$( '.site-switch' ).prop( 'checked', this.checked );
-		
-		$.ajax({
-			type: "POST",
-			url: "/ajax/updateAllSiteSeq.do",		
-			dataType: 'json',
-			data: {				
-				checked : this.checked
-			},
-			success : function(data) {								
-				try {				
-					search();	
-				} catch (e) {}		
-			},
-			error: function(e){
-				alert("요청에 실패 하였습니다.");
-			}
-		});
-	});
+	dateInputInitialization();
 	
 	//모달 종료시 초기화	
 	$('.modal').on('hidden.bs.modal', function (e) {	    
@@ -102,5 +62,6 @@ function prograssInitialization(){
 		   }
 	});
 }
+
 
 </script>

@@ -173,3 +173,30 @@ function getMonthDate(month){
 	
 	return year + "-" + month + "-" + day;
 }
+
+function dateInputInitialization(){
+	
+	//날짜 선택 input 
+	$('.date-picker').datepicker({
+		format : "yyyy-mm-dd",
+		orientation : "bottom",
+		language : "kr",
+		keyboardNavigation : false,
+		autoclose : true,
+		changeYear : true,
+		changeMonth : true
+	});
+	
+	//월 선택 input 
+	$('.date-picker-month').datepicker({
+		format: "yyyy-mm",		    
+	    orientation: "bottom",
+	    startView: "months", 
+	    minViewMode: "months",
+	    language: "kr",
+	    keyboardNavigation: false,		    
+	    autoclose: true,
+	    changeYear: true,
+        changeMonth: true            
+    });	
+}

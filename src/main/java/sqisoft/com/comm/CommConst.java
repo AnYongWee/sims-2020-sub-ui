@@ -16,4 +16,6 @@ public class CommConst {
 	
 	public static String minDate = "19000101";
 	public static String maxDate = "299900101";
+	
+	public static String adminCustNm = "SQISOFT(주)";			//관리자 고객사 명
 }

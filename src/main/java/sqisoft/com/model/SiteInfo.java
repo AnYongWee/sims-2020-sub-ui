@@ -94,6 +94,16 @@ public class SiteInfo implements Serializable{
 	private double instlCpct;
 	/*체크여부*/
 	private boolean checked;
+		
+	/*당월 발전량*/
+	private double monthGentQnt;
+	/*당월 발전시간*/
+	private double monthGentTime;
+	/*전월대비 발전변동율*/
+	private double monthChangeRate;
+	/*예상수익*/
+	private double totalGentProftAmt;
+	
 	/*전체 레코드 수*/
 	private int totalCnt;
 	public int getSiteSeq() {
@@ -369,6 +379,28 @@ public class SiteInfo implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
+	public double getMonthGentQnt() {
+		return monthGentQnt;
+	}
+	public void setMonthGentQnt(double monthGentQnt) {
+		this.monthGentQnt = monthGentQnt;
+	}
+	public double getMonthGentTime() {
+		return monthGentTime;
+	}
+	public void setMonthGentTime(double monthGentTime) {
+		this.monthGentTime = monthGentTime;
+	}
+	public double getMonthChangeRate() {
+		return monthChangeRate;
+	}
+	public void setMonthChangeRate(double monthChangeRate) {
+		this.monthChangeRate = monthChangeRate;
+	}
+	public double getTotalGentProftAmt() {
+		return totalGentProftAmt;
+	}
+	public void setTotalGentProftAmt(double totalGentProftAmt) {
+		this.totalGentProftAmt = totalGentProftAmt;
+	}
 }

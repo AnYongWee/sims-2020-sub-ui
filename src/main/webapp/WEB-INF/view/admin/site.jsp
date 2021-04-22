@@ -13,11 +13,9 @@
 <div class="card border mb-4 mb-xl-0">
 	<div class="card-header  py-2 pr-2 d-flex align-items-center flex-wrap">
 		<div class="row">
-			<div class="col-xs-3 p-1">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm">고객사</span>
-					</div>
+			<div class="col-lg-2 p-1">
+				<div class="form-group">
+					<label class="form-label" for="validationServer01">고객사</label>					
 					<select class="custom-select form-control" id="searchCustSeq">
 						<option value="" selected>전체</option>		
 						<c:forEach items="${custCodes}" var="row" varStatus="i">
@@ -27,19 +25,15 @@
 				</div>
 			</div>
 
-			<div class="col-xs-3 p-1">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm m-0 p-0 pl-2">사이트명</span>
-					</div>
+			<div class="col-lg-2 p-1">
+				<div class="form-group">
+					<label class="form-label" for="validationServer01">사이트명</label>					
 					<input type="text" id="searchSiteNm" class="form-control" placeholder="" >
 				</div>
 			</div>
-			<div class="col-xs-3 p-1">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm">연동상태</span>
-					</div>
+			<div class="col-lg-2 p-1">
+				<div class="form-group">
+					<label class="form-label" for="validationServer01">연동상태</label>					
 					<select class="custom-select form-control" id="searchConnStsCd">
 						<option value="" selected>전체</option>
 						<c:forEach items="${connStsCodes}" var="row" varStatus="i">
@@ -48,11 +42,9 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-xs-3 p-1">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm">연동유형</span>
-					</div>
+			<div class="col-lg-2 p-1">
+				<div class="form-group">
+					<label class="form-label" for="validationServer01">연동유형</label>					
 					<select class="custom-select form-control" id="searchConnTypeCd">
 						<option value="" selected>전체</option>		
 						<c:forEach items="${connTypeCodes}" var="row" varStatus="i">
@@ -60,12 +52,10 @@
 						</c:forEach>						
 					</select>
 				</div>
-			</div>
-			<div class="col-xs-3 p-1">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm">사업유형</span>
-					</div>
+			</div>		
+			<div class="col-lg-2 p-1">
+				<div class="form-group">
+					<label class="form-label" for="validationServer01">사업유형</label>					
 					<select class="custom-select form-control" id="searchBizTypeCd">
 						<option value="" selected>전체</option>		
 						<c:forEach items="${bizTypeCodes}" var="row" varStatus="i">
@@ -75,25 +65,7 @@
 				</div>
 			</div>
 			
-			<div class="col-xs-3 p-1">
-				
-				<div class="input-group" id="date-picker-day">
-					<div class="input-group-prepend">
-						<span class="input-group-text search-lable-sm">등록일시</span>
-					</div>
-					                                                       
-					<input class="form-control date-picker" id="start-date-day" name="start-date-day" value="" type="text" readonly>
-					<div class="input-group-append"><span class="input-group-text fs-xl"> <i class="fal fa-calendar"></i></span></div>
-					
-					<span class="align-self-center ml-1 mr-1">~</span> 
-					
-					<input class="form-control date-picker" id="end-date-day" name="end-date-day" value="" type="text" readonly>
-					<div class="input-group-append"><span class="input-group-text fs-xl"> <i class="fal fa-calendar"></i></span></div>
-				</div>
-			
-			</div>
-			
-			<div class="col-xs-3 p-1">
+			<div class="col-lg-2 p-1">
 				<button type="button" id="btnSearch"
 					class="btn btn-success btn-pills waves-effect waves-themed ml-2">
 					<i class="fal fa-search mr-1"></i>검색

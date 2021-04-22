@@ -20,6 +20,7 @@ import sqisoft.com.comm.CommConst;
 import sqisoft.com.comm.CommHandlr;
 import sqisoft.com.comm.StringUtil;
 import sqisoft.com.model.CompanyInfo;
+import sqisoft.com.model.UsrInfo;
 import sqisoft.com.service.CodeService;
 import sqisoft.com.service.CompanyService;
 
@@ -111,12 +112,24 @@ public class CompanyController extends CommHandlr{
 	 */	
 	@RequestMapping(value = "/ajax/getCompanyInfo.do",  method = RequestMethod.POST)
 	@ResponseBody
-	public  Map<String, Object> getCompanyInfo(HttpSession session, @RequestParam(name="custSeq", required = true) String custSeq) throws Exception {
+	public  Map<String, Object> getCompanyInfo(HttpSession session) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		// 고객사 정보 조회
-		CompanyInfo info = companyService.selectCompanyInfo(custSeq, null, null).get(0);
+		CompanyInfo info = new CompanyInfo();
+		
+		//관리자 계정의 경우 고객사 정보가 없으므로 사전 정의된 고객사 정보 반환.
+		if (!isAdmin(session)) {
+			
+			UsrInfo usrInfo = getUserId(session);
+			
+			// 고객사 정보 조회
+			info = companyService.selectCompanyInfo(String.valueOf(usrInfo.getCustSeq()), null, null).get(0);
+			
+		}else {
+			
+			info.setCustNm(CommConst.adminCustNm);
+		}
 						
 		result.put("info", info);
 		   

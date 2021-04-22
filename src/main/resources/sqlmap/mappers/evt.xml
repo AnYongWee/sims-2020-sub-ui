@@ -42,7 +42,7 @@
 		LEFT OUTER JOIN REMS.CD_DTL D ON A.EVT_STS_CD = D.DTL_CD AND D.GRP_CD = 'EVT_STS_CD'
 		LEFT OUTER JOIN REMS.CD_DTL E ON A.EVT_GD_CD = E.DTL_CD AND E.GRP_CD = 'EVT_GD_CD'
 		
-		WHERE A.OCCU_TOD <![CDATA[>=]]> #{startDate} || '000000' AND A.OCCU_TOD <![CDATA[<=]]> #{endDate} || '000000'
+		WHERE TO_CHAR(TO_DATE(A.OCCU_TOD, 'YYYYMMDDHH24MISS'), 'YYYYMMDD') <![CDATA[>=]]> #{startDate} AND TO_CHAR(TO_DATE(A.OCCU_TOD, 'YYYYMMDDHH24MISS'), 'YYYYMMDD') <![CDATA[<=]]> #{endDate} 
 			 
 			 <if test="devSeq  != null and devSeq != '' "> 
 			 	AND A.DEV_SEQ = ${devSeq} 

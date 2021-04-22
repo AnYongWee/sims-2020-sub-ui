@@ -126,20 +126,22 @@ public class AuthController extends  CommHandlr{
 	 			//사이트 정보 조회
 	 			List<SiteInfo> siteList = siteService.selectUsrMenuList(rslt, isAdmin(session));
 	 			
-	 			//고객 정보 조회
-	 			CompanyInfo companyInfo = companyService.selectCompanyInfo(String.valueOf(rslt.getCustSeq()), null, null).get(0);
-	 			
 	 			//사이트 정보 세션 저장
 	 			for (SiteInfo siteInfo : siteList) {
 	 				siteInfo.setChecked(true);
 	 			}
-	 			session.setAttribute("siteList", siteList);
 	 			
-	 			//고객사 정보 세션 저장
-	 			session.setAttribute("companyInfo", companyInfo);
+	 			session.setAttribute("siteList", siteList);
 	 			
 	 			//사이트 전체 체크 상태 true 초기 설정
 	 			session.setAttribute("siteSeqAllChecked", true);
+	 			
+	 			//고객 정보 조회 (관리자 계정이 아닌 경우만 고객사 정보를 조회 처리 한다.)
+	 			if (!isAdmin(session)) {
+	 				CompanyInfo companyInfo = companyService.selectCompanyInfo(String.valueOf(rslt.getCustSeq()), null, null).get(0);
+	 				//고객사 정보 세션 저장
+		 			session.setAttribute("companyInfo", companyInfo);
+	 			}
 	 		}
 	     }catch(Exception err) {
 	    	 err.printStackTrace();	    	 
@@ -202,11 +204,16 @@ public class AuthController extends  CommHandlr{
 		List<SiteInfo> siteList = (List<SiteInfo>)session.getAttribute("siteList");
 			
 		for(SiteInfo site : siteList) {
+			site.setChecked(false);
 			if(site.getSiteSeq() == siteSeq) {
-				site.setChecked(checked);
-				break;
+				site.setChecked(checked);		
 			}
-		}   
+		}
+		
+		//새로운 정보로 변경
+		session.setAttribute("siteList", siteList);
+				
+		session.setAttribute("siteSeqAllChecked", false);
 		
 		return resultMap(result, CommConst.COMM_SUCCESS, "");		
 	}
@@ -231,6 +238,9 @@ public class AuthController extends  CommHandlr{
 			site.setChecked(checked);
 		}   
 		
+		//새로운 정보로 변경
+		session.setAttribute("siteList", siteList);
+				
 		session.setAttribute("siteSeqAllChecked", checked);
 		
 		return resultMap(result, CommConst.COMM_SUCCESS, "");		

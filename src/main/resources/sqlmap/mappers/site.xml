@@ -28,9 +28,15 @@
 		<id column="ADDR_DONGRI" property="addrDongri" />
 		<id column="GENT_QNT" property="gentQnt" />
 		<id column="TDAY_GENT_QNT" property="tdayGentQnt" />		
-		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />
-		<id column="INSTL_CPCT" property="instlCpct" />
+		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />		
 		<id column="total_cnt" property="totalCnt" />
+		
+		<id column="INSTL_CPCT" property="instlCpct" />
+		<id column="MONTH_GENT_QNT" property="monthGentQnt" />
+		<id column="MONTH_GENT_TIME" property="monthGentTime" />
+		<id column="MONTH_CHANGE_RATE" property="monthChangeRate" />
+		<id column="TOTAL_GENT_PROFT_AMT" property="totalGentProftAmt" />
+		
 	</resultMap>
 	
 	<!-- 전체 사이트 리스트 조회 -->
@@ -163,8 +169,8 @@
 				   A.TLNO,
 				   A.CRET_DT,	
 				   F.GENT_QNT,
-				   F.TDAY_GENT_QNT,
-				   F.ACCUM_GENT_QNT,		
+				   G.TDAY_GENT_QNT,
+				   H.ACCUM_GENT_QNT,		
 				   DEV_SUM.TOTAL_CPCT AS INSTL_CPCT,
 				   COUNT(*) OVER() AS TOTAL_CNT
 		FROM REMS.SITE_INF A
@@ -181,17 +187,35 @@
 			GROUP BY DI.SITE_SEQ			
 		) AS DEV_SUM ON A.SITE_SEQ = DEV_SUM.SITE_SEQ
 		
+		<!-- 금일 5분전 발전량 -->
 		LEFT OUTER JOIN (
 				SELECT SA.SITE_SEQ,	   
-					       SUM(SA.GENT_QNT) AS GENT_QNT,
-					       SUM(SA.TDAY_GENT_QNT) AS TDAY_GENT_QNT,
-					       SUM(SA.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT
+					       SA.GENT_QNT
+				FROM REMS.invrtr_oprt_min_hst SA
+				LEFT JOIN REMS.invrtr_oprt_min_hst SB
+				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
+				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW' AND TO_TIMESTAMP(SA.MSR_TOD, 'YYYYMMDDHH24MISS') >= (now()::timestamp - '5 minutes'::interval)				
+			) F ON A.SITE_SEQ = F.SITE_SEQ 
+		
+		<!-- 금일 누적 발전량 -->	
+		LEFT OUTER JOIN (
+				SELECT SA.SITE_SEQ,
+					       SA.TDAY_GENT_QNT					       
+				FROM REMS.invrtr_oprt_min_hst SA
+				LEFT JOIN REMS.invrtr_oprt_min_hst SB
+				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
+				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW' AND TO_CHAR(TO_TIMESTAMP(SA.MSR_TOD, 'YYYYMMDDHH24MISS'), 'YYYYMMDD') = TO_CHAR(now(), 'YYYYMMDD')
+			) G ON A.SITE_SEQ = G.SITE_SEQ 	
+		
+		<!-- 누적 발전량 -->
+		LEFT OUTER JOIN (
+				SELECT SA.SITE_SEQ,
+					       SA.ACCUM_GENT_QNT					       
 				FROM REMS.invrtr_oprt_min_hst SA
 				LEFT JOIN REMS.invrtr_oprt_min_hst SB
 				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
 				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW'
-				GROUP BY SA.SITE_SEQ
-			) F ON A.SITE_SEQ = F.SITE_SEQ 
+			) H ON A.SITE_SEQ = H.SITE_SEQ 		
 					
 		WHERE A.DEL_YN <![CDATA[<>]]> 'Y'
 			 
@@ -263,46 +287,47 @@
 				   A.ADDR_EUBMYUN,
 				   A.ADDR_DONGRI,	
 				   A.CNT_PSN_HPNO,
-				   A.CNT_PSN_NM,			   
-				   F.GENT_QNT,
-				   F.TDAY_GENT_QNT,
-				   F.ACCUM_GENT_QNT,
-				   SUM(G.INSTL_CPCT) AS INSTL_CPCT
-			FROM REMS.SITE_INF A			
-			LEFT OUTER JOIN REMS.DEV_INF G ON A.SITE_SEQ = G.SITE_SEQ AND G.SVC_CD = 'PV_POW'			
-			LEFT OUTER JOIN (
-				SELECT SA.SITE_SEQ,	   
-					       SUM(SA.GENT_QNT) AS GENT_QNT,
-					       SUM(SA.TDAY_GENT_QNT) AS TDAY_GENT_QNT,
-					       SUM(SA.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT
-				FROM REMS.invrtr_oprt_min_hst SA
-				LEFT JOIN REMS.invrtr_oprt_min_hst SB
-				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
-				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW'
-				GROUP BY SA.SITE_SEQ
-			) F ON A.SITE_SEQ = F.SITE_SEQ 
+				   A.CNT_PSN_NM,
+				   COALESCE(DEV_SUM.TOTAL_CPCT, 0) AS INSTL_CPCT,				   
+				   COALESCE(NOW_MON_SUM.MONTH_GENT_QNT, 0) AS MONTH_GENT_QNT,
+				   COALESCE(AF_MON_SUM.MONTH_GENT_QNT, 0) AS AF_MONTH_GENT_QNT,
+				   COALESCE(NOW_MON_SUM.MONTH_GENT_TIME, 0) AS MONTH_GENT_TIME,
+				   COALESCE(NOW_MON_SUM.TOTAL_GENT_PROFT_AMT, 0) AS TOTAL_GENT_PROFT_AMT,				   
+				   trunc(COALESCE((NOW_MON_SUM.MONTH_GENT_QNT - AF_MON_SUM.MONTH_GENT_QNT) / AF_MON_SUM.MONTH_GENT_QNT * 100, 0), 2) AS MONTH_CHANGE_RATE
+			FROM REMS.SITE_INF A
+			
+			LEFT OUTER JOIN
+			(
+				SELECT GD.SITE_SEQ, 
+					   SUM(COALESCE(GD.TDAY_GENT_QNT, 0)) AS MONTH_GENT_QNT,
+				 	   SUM(COALESCE(GD.TDAY_GENT_TIME, 0)) AS MONTH_GENT_TIME,
+					   SUM(COALESCE(GD.RDUC_AMT, 0)) AS TOTAL_GENT_PROFT_AMT
+				FROM REMS.GENT_DAY_SUM GD
+				WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMM') = to_char(now(), 'YYYYMM') 
+				GROUP BY GD.SITE_SEQ
+			) AS NOW_MON_SUM ON A.SITE_SEQ = NOW_MON_SUM.SITE_SEQ
+			
+			LEFT OUTER JOIN
+			(
+				SELECT GD.SITE_SEQ, 
+					   SUM(COALESCE(GD.TDAY_GENT_QNT, 0)) AS MONTH_GENT_QNT,
+				 	   SUM(COALESCE(GD.TDAY_GENT_TIME, 0)) AS MONTH_GENT_TIME,
+					   SUM(COALESCE(GD.RDUC_AMT, 0)) AS TOTAL_GENT_PROFT_AMT
+				FROM REMS.GENT_DAY_SUM GD
+				WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMM') = to_char(now(), 'YYYYMM') 
+				GROUP BY GD.SITE_SEQ
+			) AS AF_MON_SUM ON A.SITE_SEQ = AF_MON_SUM.SITE_SEQ
+			
+			LEFT OUTER JOIN
+			(
+				SELECT DI.SITE_SEQ, SUM(COALESCE(DI.INSTL_CPCT, 0)) AS TOTAL_CPCT
+				FROM REMS.DEV_INF DI
+				WHERE DI.SVC_CD = 'PV_POW'
+				GROUP BY DI.SITE_SEQ
+			) AS DEV_SUM ON A.SITE_SEQ = DEV_SUM.SITE_SEQ
 			
 			WHERE A.SITE_SEQ = ${siteSeq}
 			
-			GROUP BY A.SITE_SEQ,
-				       A.CUST_SEQ,
-					   A.SITE_NM,
-					   A.LAT,
-					   A.LNG,
-					   A.ZIPCD,
-					   A.ADDR,
-					   A.ADDR_ADT,
-					   A.DST_NM,
-					   A.DST_CD,
-					   A.RMRK,				   
-					   A.ADDR_SIDO,
-					   A.ADDR_SIGUNGU,
-					   A.ADDR_EUBMYUN,
-					   A.ADDR_DONGRI,
-					   A.CNT_PSN_HPNO,
-				       A.CNT_PSN_NM,
-				       F.GENT_QNT,
-				   	   F.ACCUM_GENT_QNT
 	</select>
 		
 </mapper>

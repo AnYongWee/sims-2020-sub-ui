@@ -849,7 +849,7 @@ html body {
 
 .dropdown-item:hover, .dropdown-item:focus {
   color: #536fd5;
-  background-color: #f8f9fa; }
+  background-color: #5882FA; }
 
 .dropdown-item.active, .dropdown-item:active {
   color: #3f5dd0;

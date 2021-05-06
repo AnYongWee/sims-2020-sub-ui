@@ -3,13 +3,14 @@
 
 <main id="js-page-content" role="main" class="page-content">
                              
-<ol class="breadcrumb bg-fusion-300 border border-primary">
-	<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-bell-exclamation mr-1 fs-md"></i> 경보이력</a></li>	
-</ol>
+<ol class="breadcrumb page-breadcrumb">
+			<li class="breadcrumb-item"><a href="javascript:void(0);">경보이력</a></li>
+			<li class="breadcrumb-item">이벤트</li>		
+		</ol>
 
 <div class="card border mb-4 mb-xl-0">
 	<div class="card-header  py-2 pr-2 d-flex align-items-center flex-wrap">
-		<div class="row">
+		<div class="row w-100">
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
@@ -38,7 +39,7 @@
 				</div>
 			</div>
 			
-			<div class="col-xs-3 p-1">
+			<%-- <div class="col-xs-3 p-1">
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text search-lable-sm">등급</span>
@@ -50,7 +51,7 @@
 						</c:forEach>						
 					</select>
 				</div>
-			</div>
+			</div> --%>
 			
 			<div class="col-xs-3 p-1">
 				<div class="input-group">
@@ -100,15 +101,15 @@
 					<thead>							
 						<tr class="bg-fusion-300">
 							<th class="text-center align-middle font-weight-bold">고유번호</th>
-							<th class="text-center align-middle font-weight-bold">발생시간</th> 
-							<th class="text-center align-middle font-weight-bold">사이트명</th>
-							<th class="text-center align-middle font-weight-bold">인버터</th>
-							<th class="text-center align-middle font-weight-bold">이벤트코드</th>
-							<th class="text-center align-middle font-weight-bold">이벤트명</th>
-							<th class="text-center align-middle font-weight-bold">이벤트내용</th>
-							<th class="text-center align-middle font-weight-bold">등급</th>
-							<th class="text-center align-middle font-weight-bold">상태</th>								
-							<th class="text-center align-middle font-weight-bold">처리시간</th>
+							<th class="text-center align-middle font-weight-bold pl-4">발생시간</th> 
+							<th class="text-center align-middle font-weight-bold pl-4">사이트명</th>
+							<th class="text-center align-middle font-weight-bold pl-4">인버터</th>
+							<th class="text-center align-middle font-weight-bold pl-4">이벤트코드</th>
+							<th class="text-center align-middle font-weight-bold pl-4">이벤트명</th>
+							<th class="text-center align-middle font-weight-bold pl-4">이벤트내용</th>
+							<!-- <th class="text-center align-middle font-weight-bold pl-4">등급</th> -->
+							<th class="text-center align-middle font-weight-bold pl-4">상태</th>								
+							<th class="text-center align-middle font-weight-bold pl-4">처리시간</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -125,6 +126,9 @@
 </main>
 
 <script>
+
+	var myTable;
+
 	$(document).ready(function(){
 		//날짜 선택 input 
 		$('.date-picker').datepicker({
@@ -149,20 +153,18 @@
 	});
 	
 	//데이터 조회
-	function search(){		
-		datatableInitialization();
+	function search(){	
+		if (myTable){
+			myTable.api().ajax.reload();						
+		}else{
+			datatableInitialization();	
+		}
 	}
 	
 	//데이터 테이블 설정
 	function datatableInitialization() {
 		
-		var startDate = $("#start-date-day").val();
-		startDate = startDate.replace(/-/gi, "");
-		
-		var endDate = $("#end-date-day").val();
-		endDate = endDate.replace(/-/gi, "");
-		
-        var myTable = $('#evt-list').dataTable(
+        myTable = $('#evt-list').dataTable(
         {       
             fixedHeader: true,
             destroy: true,
@@ -173,17 +175,17 @@
             scrollCollapse: true,
             paging : true,
             serverSide : true,
-            
+            order: [[ 1, "desc" ]],
             ajax : {
 				url : '/ajax/getEvtHstList.do',
 				type : 'POST',				
 				data : {					
-					searchDevSeq : $("#searchDevSeq").val(),
-					searchEvtCd : $("#searchEvtCd").val(),
-					searchGdCd : $("#searchGdCd").val(),
-					searchStsCd : $("#searchStsCd").val(),
-					startDate : startDate,
-					endDate : endDate
+					searchDevSeq : function() { return $("#searchDevSeq").val()}, 
+					searchEvtCd :  function() { return $("#searchEvtCd").val()},
+					searchGdCd :  function() { return $("#searchGdCd").val()},
+					searchStsCd :  function() { return $("#searchStsCd").val()},
+					startDate :  function() { return  $("#start-date-day").val().replace(/-/gi, "")},
+					endDate :  function() { return $("#end-date-day").val().replace(/-/gi, "")}
 				},						
 				dataSrc: function ( data ) {	                
 	                return data.list;
@@ -200,9 +202,9 @@
             	{ id: "siteNm", data: "siteNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
             	{ id: "devNm", data: "devNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
             	{ id: "evtCd", data: "evtCd", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
-            	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-left' },
-            	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-left' },
-            	{ id: "evtGdVal", data: "evtGdVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
+            	{ id: "evtNm", data: "evtNm", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "evtDesc", data: "evtDesc", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	/* { id: "evtGdVal", data: "evtGdVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
             		render: function(data, type) {   
             			if (data == "경계"){
             				return '<h4><span class="badge badge-danger badge-pill">' + data + '</span></h4>';	
@@ -213,7 +215,7 @@
             			}
             		}
             		
-            	},
+            	}, */
             	{ id: "evtStsVal", data: "evtStsVal", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
             	{ id: "crlTod", data: "crlTod", "visible": true, "searchable": false, type: "readonly", className : 'text-center', 
             		render: function(data, type) {            			

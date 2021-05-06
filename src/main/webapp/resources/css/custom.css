@@ -228,4 +228,13 @@ transparent
 	/* .sitemap {height: 40% !important} */
 } 
 
- 
+
+.report .first {position:relative;width:247px;height:76px;background: url('/resources/assets/img/site_1.png') no-repeat;margin-bottom:8px;}
+
+.custom_row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;    
+} 

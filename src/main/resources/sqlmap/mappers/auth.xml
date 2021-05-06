@@ -74,5 +74,31 @@
 		INNER JOIN REMS.AUTHORITIES B ON A.AUTHORITY = B.AUTHORITY
 		WHERE B.USR_ID = #{usrId}		
 	</select>
+	
+	<!-- 로그인 이력 추가 -->
+	<insert id="insertUserLoginHst" parameterType="sqisoft.com.model.UserLoginHstInfo">
+		 INSERT INTO REMS.USER_LOGIN_HST(USR_ID, 
+		 													LGIN_DT,
+		 													CONN_IP, 
+		 													SESSN_ID, 
+		 													AUTH_TOKN, 
+		 													OTP_ATHN_NO)
+												VALUES (#{usrId}, 
+															current_timestamp,
+															#{connIp}, 
+															#{sessnId}, 
+															#{authTokn}, 
+															#{otpAthnNo});
+													
+	</insert>	
+	
+	<!-- 로그아웃 이력 추가 -->
+	<insert id="updateUserLogoutHst" parameterType="sqisoft.com.model.UserLoginHstInfo">
+		UPDATE REMS.USER_LOGIN_HST SET LGOT_DT = current_timestamp,
+														  UPDTR = #{updtr},
+														  UPDT_DT = current_timestamp
+		WHERE SESSN_ID = #{sessnId}
+													
+	</insert>	
 		
 </mapper>

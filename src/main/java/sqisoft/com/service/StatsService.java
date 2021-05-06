@@ -63,7 +63,7 @@ public class StatsService {
 			result.add(item);
 		}
 		
-		return list;
+		return result;
 	}
 	
 	/*일자별 발전량 통계*/
@@ -120,7 +120,7 @@ public class StatsService {
 			cal.add(Calendar.DATE, 1);
 		}
 		
-		return list;
+		return result;
 	}
 	
 	/*월별 발전량 통계*/
@@ -175,7 +175,7 @@ public class StatsService {
 			cal.add(Calendar.MONTH, 1);
 		}
 		
-		return list;
+		return result;
 	}	
 }
 

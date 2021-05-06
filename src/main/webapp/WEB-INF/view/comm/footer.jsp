@@ -39,6 +39,14 @@ $(document).ready(function(){
 	  	$(this).find('form')[0].reset();
 	  	$(this).find('form').removeClass('was-validated');
 	});
+	
+	$(document).ajaxComplete(function(e, xhr, settings){
+		console.log(xhr.status);
+	    if(xhr.status === 302){
+	        //로그인 화면 이동
+	        location.href = "/login.do";
+	    }
+	});
 });
 
 //사이트 정보 갱신

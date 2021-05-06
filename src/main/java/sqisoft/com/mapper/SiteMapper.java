@@ -22,4 +22,12 @@ public interface SiteMapper {
 	/*사이트 정보 조회*/
 	SiteInfo selectSiteInfo(Map<String, Object> param) throws Exception;
 	
+	/*사이트 정보 추가*/
+	int insertSiteInfo(SiteInfo siteInfo) throws Exception;
+	
+	/*사이트 정보 수정*/
+	int updateSiteInfo(SiteInfo siteInfo) throws Exception;
+	
+	/*사이트 정보 삭제*/
+	int deleteSiteInfo(Map<String, Object> param) throws Exception;
 }

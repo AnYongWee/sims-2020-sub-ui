@@ -5,10 +5,15 @@
 	<resultMap type="sqisoft.com.model.SiteInfo" id="siteInfoMap">
 		<id column="SITE_SEQ" property="siteSeq" />
 		<id column="CUST_SEQ" property="custSeq" />		
-		<id column="CUST_NM" property="custNm" />
+		<id column="CUST_NM" property="custNm" />		
+		<id column="KEPCO_CUST_NO" property="kepcoCustNo" />
+		<id column="ISMART_PWD" property="ismartPwd" />		
 		<id column="SITE_NM" property="siteNm" />
+		<id column="CONN_STS_CD" property="connStsCd" />
 		<id column="CONN_STS" property="connSts" />
+		<id column="BIZ_TYPE_CD" property="bizTypeCd" />
 		<id column="BIZ_TYPE" property="bizType" />
+		<id column="CONN_TYPE_CD" property="connTypeCd" />
 		<id column="CONN_TYPE" property="connType" />
 		<id column="TLNO" property="tlNo" />
 		<id column="CNT_PSN_NM" property="cntPsnNm" />
@@ -20,7 +25,14 @@
 		<id column="ADDR" property="addr" />
 		<id column="ADDR_ADT" property="addrAdt" />
 		<id column="DST_NM" property="dstNm" />
-		<id column="DST_CD" property="dstCd" />
+		<id column="DST_CD" property="dstCd" />		
+		<id column="CNT_PSN_ID" property="cntPsnId" />
+		<id column="WETH_RGN_CD" property="wethRgnCd" />
+		<id column="SUNRIS_RGN_NM" property="sunrisRgnNm" />
+		<id column="BILL_CD" property="billCd" />
+		<id column="URL" property="url" />
+		<id column="INSP_EXP_DATE" property="inspExpDate" />
+		<id column="AIR_QLTY_OBSV" property="airQltyObsv" />
 		<id column="RMRK" property="rmrk" />		
 		<id column="ADDR_SIDO" property="addrSido" />
 		<id column="ADDR_SIGUNGU" property="addrSigungu" />
@@ -29,8 +41,16 @@
 		<id column="GENT_QNT" property="gentQnt" />
 		<id column="TDAY_GENT_QNT" property="tdayGentQnt" />		
 		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />		
-		<id column="total_cnt" property="totalCnt" />
-		
+		<id column="IMG_1" property="img1" />
+		<id column="IMG_2" property="img2" />
+		<id column="IMG_3" property="img3" />		
+		<id column="img_file_nm_1" property="imgFileNm1" />
+		<id column="img_file_nm_2" property="imgFileNm2" />
+		<id column="img_file_nm_3" property="imgFileNm3" />		
+		<id column="img_content_type_1" property="imgContentType1" />
+		<id column="img_content_type_2" property="imgContentType2" />
+		<id column="img_content_type_3" property="imgContentType3" />				
+		<id column="total_cnt" property="totalCnt" />		
 		<id column="INSTL_CPCT" property="instlCpct" />
 		<id column="MONTH_GENT_QNT" property="monthGentQnt" />
 		<id column="MONTH_GENT_TIME" property="monthGentTime" />
@@ -60,7 +80,10 @@
 				   A.CNT_PSN_NM,			   
 				   F.GENT_QNT,
 				   F.ACCUM_GENT_QNT,
-				   SUM(G.INSTL_CPCT) AS INSTL_CPCT
+				   SUM(G.INSTL_CPCT) AS INSTL_CPCT,
+				   A.img_file_nm_1,
+				   A.img_file_nm_2,
+				   A.img_file_nm_3
 			FROM REMS.SITE_INF A			
 			LEFT OUTER JOIN REMS.DEV_INF G ON A.SITE_SEQ = G.SITE_SEQ AND G.SVC_CD = 'PV_POW'			
 			LEFT OUTER JOIN (
@@ -70,10 +93,11 @@
 				FROM REMS.invrtr_oprt_min_hst SA
 				LEFT JOIN REMS.invrtr_oprt_min_hst SB
 				ON SA.SITE_SEQ = SB.SITE_SEQ AND SA.DEV_SEQ = SB.DEV_SEQ AND SA.SVC_CD = SB.SVC_CD AND SA.MSR_TOD <![CDATA[<]]> SB.MSR_TOD
-				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW'
+				WHERE SB.SITE_SEQ IS NULL AND SA.SVC_CD = 'PV_POW' 
 				GROUP BY SA.SITE_SEQ
 			) F ON A.SITE_SEQ = F.SITE_SEQ 
 			
+			WHERE A.DEL_YN <![CDATA[<>]]> 'Y'
 			
 			GROUP BY A.SITE_SEQ,
 				       A.CUST_SEQ,
@@ -119,7 +143,10 @@
 				   A.CNT_PSN_NM,		   
 				   SUM(F.GENT_QNT) AS GENT_QNT,
 				   SUM(F.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT,
-				   SUM(G.INSTL_CPCT) AS INSTL_CPCT
+				   SUM(G.INSTL_CPCT) AS INSTL_CPCT,
+				   A.img_file_nm_1,
+				   A.img_file_nm_2,
+				   A.img_file_nm_3
 			FROM REMS.SITE_INF A
 			LEFT OUTER JOIN REMS.USR_SITE_REL B ON A.SITE_SEQ = B.SITE_SEQ
 			LEFT OUTER JOIN REMS.GRP_SITE_REL C ON A.SITE_SEQ = C.SITE_SEQ
@@ -128,7 +155,7 @@
 			LEFT OUTER JOIN REMS.INVRTR_OPRT_MIN_HST F ON A.SITE_SEQ = F.SITE_SEQ AND F.SVC_CD = 'PV_POW'
 			LEFT OUTER JOIN REMS.DEV_INF G ON A.SITE_SEQ = G.SITE_SEQ AND G.SVC_CD = 'PV_POW'
 			
-			WHERE D.USR_ID = #{usrId} or E.USR_ID = #{usrId}
+			WHERE D.USR_ID = #{usrId} or E.USR_ID = #{usrId} AND A.DEL_YN <![CDATA[<>]]> 'Y'
 			
 			GROUP BY A.SITE_SEQ,
 				       A.CUST_SEQ,
@@ -271,23 +298,48 @@
 	
 	<!-- 사이트 정보 조회 -->
 	<select id="selectSiteInfo" parameterType="map" resultMap="siteInfoMap">
-	    SELECT A.SITE_SEQ,
-			       A.CUST_SEQ,
-				   A.SITE_NM,
-				   A.LAT,
-				   A.LNG,
-				   A.ZIPCD,
-				   A.ADDR,
-				   A.ADDR_ADT,
-				   A.DST_NM,
-				   A.DST_CD,
-				   A.RMRK,				   
-				   A.ADDR_SIDO,
-				   A.ADDR_SIGUNGU,
-				   A.ADDR_EUBMYUN,
-				   A.ADDR_DONGRI,	
-				   A.CNT_PSN_HPNO,
-				   A.CNT_PSN_NM,
+	    SELECT A.SITE_SEQ, 
+		 			A.CUST_SEQ, 
+		 			A.KEPCO_CUST_NO, 
+		 			A.ISMART_PWD, 
+		 			A.SITE_NM, 
+		 			A.BIZ_TYPE_CD, 
+		 			A.CONN_STS_CD, 
+		 			A.CONN_TYPE_CD, 
+		 			A.LAT, 
+		 			A.LNG, 
+		 			A.ZIPCD, 
+		 			A.ADDR, 
+		 			A.ADDR_ADT, 
+		 			A.ADDR_SIDO, 
+		 			A.ADDR_SIGUNGU, 
+		 			A.ADDR_EUBMYUN, 
+		 			A.ADDR_DONGRI, 
+		 			A.CNT_PSN_ID, 
+		 			A.CNT_PSN_NM, 
+		 			A.CNT_PSN_HPNO, 
+		 			A.TLNO, 
+		 			A.WETH_RGN_CD, 
+		 			A.SUNRIS_RGN_NM, 
+		 			A.BILL_CD, 
+		 			A.URL, 
+		 			A.DST_NM, 
+		 			A.DST_CD, 
+		 			A.RMRK, 
+		 			A.DEL_YN, 
+		 			A.CRETR, 
+		 			A.CRET_DT,
+		 			A.INSP_EXP_DATE, 
+		 			A.AIR_QLTY_OBSV, 
+		 			A.IMG_1, 
+		 			A.IMG_2, 
+		 			A.IMG_3,
+		 			A.img_file_nm_1,
+		 			A.img_file_nm_2,
+		 			A.img_file_nm_3,
+		 			A.img_content_type_1,
+		 			A.img_content_type_2,
+		 			A.img_content_type_3,		 										 
 				   COALESCE(DEV_SUM.TOTAL_CPCT, 0) AS INSTL_CPCT,				   
 				   COALESCE(NOW_MON_SUM.MONTH_GENT_QNT, 0) AS MONTH_GENT_QNT,
 				   COALESCE(AF_MON_SUM.MONTH_GENT_QNT, 0) AS AF_MONTH_GENT_QNT,
@@ -329,5 +381,156 @@
 			WHERE A.SITE_SEQ = ${siteSeq}
 			
 	</select>
-		
+	
+	
+	<!-- 사이트 정보 추가 -->
+	<insert id="insertSiteInfo" parameterType="sqisoft.com.model.SiteInfo">
+		 INSERT INTO REMS.SITE_INF(SITE_SEQ, 
+		 										 CUST_SEQ, 
+		 										 KEPCO_CUST_NO, 
+		 										 ISMART_PWD, 
+		 										 SITE_NM, 
+		 										 BIZ_TYPE_CD, 
+		 										 CONN_STS_CD, 
+		 										 CONN_TYPE_CD, 
+		 										 LAT, 
+		 										 LNG, 
+		 										 ZIPCD, 
+		 										 ADDR, 
+		 										 ADDR_ADT, 
+		 										 ADDR_SIDO, 
+		 										 ADDR_SIGUNGU, 
+		 										 ADDR_EUBMYUN, 
+		 										 ADDR_DONGRI, 
+		 										 CNT_PSN_ID, 
+		 										 CNT_PSN_NM, 
+		 										 CNT_PSN_HPNO, 
+		 										 TLNO, 
+		 										 WETH_RGN_CD, 
+		 										 SUNRIS_RGN_NM, 
+		 										 BILL_CD, 
+		 										 URL, 
+		 										 DST_NM, 
+		 										 DST_CD, 
+		 										 RMRK, 
+		 										 DEL_YN, 
+		 										 CRETR, 
+		 										 CRET_DT,
+		 										 INSP_EXP_DATE, 
+		 										 AIR_QLTY_OBSV, 
+		 										 IMG_1, 
+		 										 IMG_2, 
+		 										 IMG_3,
+		 										 img_file_nm_1,
+		 										 img_file_nm_2,
+		 										 img_file_nm_3,
+		 										 img_content_type_1,
+		 										 img_content_type_2,
+		 										 img_content_type_3)
+									VALUES (nextval('rems.site_inf_seq')
+								 				,${custSeq} 
+												,#{kepcoCustNo} 
+												,#{ismartPwd} 
+												,#{siteNm}  
+												,#{bizTypeCd}  
+												,#{connStsCd}  
+												,#{connTypeCd}  
+												,${lat}  
+												,${lng}  
+												,#{zipCd}  
+												,#{addr}  
+												,#{addrAdt}  
+												,#{addrSido}  
+												,#{addrSigungu}  
+												,#{addrEubmyun}  
+												,#{addrDongri}  
+												,#{cntPsnId}  
+												,#{cntPsnNm}  
+												,#{cntPsnHpno}  
+												,#{tlNo}  
+												,#{wethRgnCd}  
+												,#{sunrisRgnNm}  
+												,#{billCd}  
+												,#{url}  
+												,#{dstNm}  
+												,#{dstCd}  
+												,#{rmrk}  
+												,'N'
+												,#{cretr}   
+												,current_timestamp
+												,#{inspExpDate}
+												,#{airQltyObsv}  
+												,#{img1}  
+												,#{img2}  
+												,#{img3} 
+												,#{imgFileNm1} 
+												,#{imgFileNm2} 
+												,#{imgFileNm3}
+												,#{imgContentType1}
+												,#{imgContentType2}
+												,#{imgContentType3} );
+	</insert>	
+	
+	<!-- 사이트 정보 수정 -->
+	<update id="updateSiteInfo" parameterType="sqisoft.com.model.SiteInfo">
+		 UPDATE REMS.SITE_INF SET CUST_SEQ = ${custSeq}, 
+		 										 KEPCO_CUST_NO = #{kepcoCustNo}, 
+		 										 ISMART_PWD = #{ismartPwd}, 
+		 										 SITE_NM = #{siteNm}, 
+		 										 BIZ_TYPE_CD = #{bizTypeCd}, 
+		 										 CONN_STS_CD = #{connStsCd}, 
+		 										 CONN_TYPE_CD = #{connTypeCd}, 
+		 										 LAT = #{lat}, 
+		 										 LNG = #{lng}, 
+		 										 ZIPCD = #{zipCd}, 
+		 										 ADDR = #{addr}, 
+		 										 ADDR_ADT = #{addrAdt}, 
+		 										 ADDR_SIDO = #{addrSido}, 
+		 										 ADDR_SIGUNGU = #{addrSigungu}, 
+		 										 ADDR_EUBMYUN = #{addrEubmyun}, 
+		 										 ADDR_DONGRI = #{addrDongri}, 
+		 										 CNT_PSN_ID = #{cntPsnId}, 
+		 										 CNT_PSN_NM = #{cntPsnNm}, 
+		 										 CNT_PSN_HPNO = #{cntPsnHpno}, 
+		 										 TLNO = #{tlNo}, 
+		 										 WETH_RGN_CD = #{wethRgnCd}, 
+		 										 SUNRIS_RGN_NM = #{sunrisRgnNm}, 
+		 										 BILL_CD = #{billCd}, 
+		 										 URL = #{url}, 
+		 										 DST_NM = #{dstNm}, 
+		 										 DST_CD = #{dstCd}, 
+		 										 RMRK = #{rmrk},
+		 										 
+		 										 INSP_EXP_DATE = #{inspExpDate}, 
+		 										 AIR_QLTY_OBSV = #{airQltyObsv},
+		 										 
+		 										 <if test="img1  != null"> 
+		 										 	IMG_1 = #{img1},
+		 										 	img_file_nm_1 = #{imgFileNm1},
+		 										 	img_content_type_1 = #{imgContentType1},
+		 										 </if> 
+		 										 
+		 										 <if test="img2  != null"> 
+		 										 	IMG_2 = #{img2},
+		 										 	img_file_nm_2 = #{imgFileNm2},
+		 										 	img_content_type_2 = #{imgContentType2},
+		 										 </if>
+		 										 
+		 										 <if test="img3  != null"> 
+		 										 	IMG_3 = #{img3},
+		 										 	img_file_nm_3 = #{imgFileNm3},
+		 										 	img_content_type_3 = #{imgContentType3},
+		 										 </if>
+		 										 
+		 										 UPDTR = #{updtr},
+												 UPDT_DT = current_timestamp
+												 
+		 								WHERE SITE_SEQ = ${siteSeq} 
+	</update>	
+	
+	<!-- 고객사 정보 삭제 -->
+	<update id="deleteSiteInfo" parameterType="map">
+		UPDATE REMS.SITE_INF SET del_yn = 'Y'
+		WHERE site_seq = ${siteSeq}
+	</update>	
 </mapper>

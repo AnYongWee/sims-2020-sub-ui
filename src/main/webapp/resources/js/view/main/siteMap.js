@@ -130,6 +130,13 @@ function siteLoop(sites){
 		isSiteDraw = false;
 	}
 	
+	//위경도 설정이 안된 사이트의 경우 통과
+	if (sites[siteIndex].lat == 0 && sites[siteIndex].lng == 0){
+		siteIndex++;
+		siteLoop(sites);
+		return;
+	} 
+	
 	panTo(sites[siteIndex]);
 	
 	siteIndex++;

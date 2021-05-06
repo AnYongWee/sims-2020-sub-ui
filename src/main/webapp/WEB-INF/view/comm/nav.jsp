@@ -15,7 +15,7 @@
 	<nav id="js-primary-nav2" class="primary-nav p-3" role="navigation" style="overflow: auto;width: auto;height: 100%;">
 		
 		<div class="card site-border mb-3">	
-			<select class="custom-select form-control" id="nav_siteList">
+			<select class="custom-select form-control select2-placeholder" id="nav_siteList">
 				<option value="" selected>전체</option>
 				<c:forEach items="${siteList}" var="row" varStatus="i">
 					<c:choose>						
@@ -36,14 +36,14 @@
 			<!-- 사이트이미지 슬라이드 -->
 			<div id="carouselControls-${row.siteSeq}" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner">
-					<div class="carousel-item active">
-						<img class="d-block w-100 p-2" src="${pageContext.request.contextPath}/resources/assets/img/site_1.png" height="130" data-holder-rendered="true">
+					<div class="carousel-item active">						
+						<img class="d-block w-100 p-2" id="site_img_1" src="${pageContext.request.contextPath}/resources/assets/img/site_1.png" height="130" data-holder-rendered="true">
 					</div>
 					<div class="carousel-item">
-						<img class="d-block w-100 p-2" src="${pageContext.request.contextPath}/resources/assets/img/site_2.png" height="130" data-holder-rendered="true">
+						<img class="d-block w-100 p-2" id="site_img_2" src="${pageContext.request.contextPath}/resources/assets/img/site_2.png" height="130" data-holder-rendered="true">
 					</div>
 					<div class="carousel-item">
-						<img class="d-block w-100 p-2" src="${pageContext.request.contextPath}/resources/assets/img/site_3.png" height="130" data-holder-rendered="true">
+						<img class="d-block w-100 p-2" id="site_img_3" src="${pageContext.request.contextPath}/resources/assets/img/site_3.png" height="130" data-holder-rendered="true">
 					</div>
 				</div>
 				
@@ -100,8 +100,10 @@
 				</li>
 				<li class="list-group-item">
 					<div class="row">
-						<div class="col-4">							
-							<img class="d-block w-100 p-2" src="${pageContext.request.contextPath}/resources/assets/img/pngwing.com.png" height="100" data-holder-rendered="true">
+						<div class="col-4">		
+							<div class="w-100 h-100 d-flex align-items-center justify-content-center text-primary">
+								<i class="fad fa-cloud-sun d-block w-100 fa-3x"></i>
+							</div>
 						</div>
 						<div class="col-8">
 							<div class="row">
@@ -140,10 +142,6 @@
 					</div>							
 				</li>
 			</ul>
-						
-			
-			
-	        
 			                                  
 			<div class="filter-message js-filter-message bg-success-600"></div>
 		
@@ -157,6 +155,12 @@
 <script>
 		
 	$(document).ready(function() {
+		
+		$(".select2-placeholder").select2({
+			placeholder: "전체",
+			allowClear: true
+		});
+		
 		$("#nav_siteList").bind( "change", function() {
 			navInfoReload();
 		});
@@ -196,14 +200,32 @@
 				
 				if (data.resultCode == 0){
 					$('#nav_custNm').html(data.info.custNm);
+					
+					if (data.info.imgFileNm1 != null){
+						$('#site_img_1').attr("src", getContextPath() + '/ajax/getCompanyImage.do?custSeq=' + data.info.custSeq + '&no=1');
+					}else{
+						$('#site_img_1').attr("src", getContextPath() + '/resources/assets/img/site_1.png');
+					}
+					
+					if (data.info.imgFileNm2 != null){
+						$('#site_img_2').attr("src", getContextPath() + '/ajax/getCompanyImage.do?custSeq=' + data.info.custSeq + '&no=2');
+					}else{
+						$('#site_img_2').attr("src", getContextPath() + '/resources/assets/img/site_2.png');
+					}
+					
+					if (data.info.imgFileNm3 != null){
+						$('#site_img_3').attr("src", getContextPath() + '/ajax/getCompanyImage.do?custSeq=' + data.info.custSeq + '&no=3');
+					}else{
+						$('#site_img_3').attr("src", getContextPath() + '/resources/assets/img/site_3.png');
+					}
+					
 				}else{
 					console.log("네비게이션 고객사 정보 조회 오류 발생");
 					console.log(data.resultMessage);												
 				}
 			},
 			error: function(e){
-				console.log("네비게이션 고객사 정보 요청 예외 발생");
-				console.log(e);						
+				console.log("요청에 실패 하였습니다. (/ajax/getCompanyInfo.do)");						
 			}
 		});
 	}
@@ -224,14 +246,14 @@
 					$('#nav_monthGentTime').html(data.info.monthGentTime);
 					$('#nav_monthChangeRate').html(data.info.monthChangeRate);
 					$('#nav_totGentProftAmt').html(data.info.totalGentProftAmt);
+					
 				}else{
 					console.log("네비게이션 고객사 정보 조회 오류 발생");
 					console.log(data.resultMessage);												
 				}
 			},
 			error: function(e){
-				console.log("네비게이션 고객사 정보 요청 예외 발생");
-				console.log(e);						
+				console.log("요청에 실패 하였습니다. (/ajax/getCompanyGentInfo.do)");						
 			}
 		});
 	}
@@ -256,14 +278,32 @@
 					$('#nav_monthGentTime').html(data.info.monthGentTime);
 					$('#nav_monthChangeRate').html(data.info.monthChangeRate);
 					$('#nav_totGentProftAmt').html(data.info.totalGentProftAmt);
+					
+					if (data.info.imgFileNm1 != null){
+						$('#site_img_1').attr("src", getContextPath() + '/ajax/getSiteImage.do?siteSeq=' + data.info.siteSeq + '&no=1');
+					}else{
+						$('#site_img_1').attr("src", getContextPath() + '/resources/assets/img/site_1.png');
+					}
+					
+					if (data.info.imgFileNm2 != null){
+						$('#site_img_2').attr("src", getContextPath() + '/ajax/getSiteImage.do?siteSeq=' + data.info.siteSeq + '&no=2');
+					}else{
+						$('#site_img_2').attr("src", getContextPath() + '/resources/assets/img/site_2.png');
+					}
+					
+					if (data.info.imgFileNm3 != null){
+						$('#site_img_3').attr("src", getContextPath() + '/ajax/getSiteImage.do?siteSeq=' + data.info.siteSeq + '&no=3');
+					}else{
+						$('#site_img_3').attr("src", getContextPath() + '/resources/assets/img/site_3.png');
+					}
+					
 				}else{
 					console.log("네비게이션 사이트 정보 조회 오류 발생");
 					console.log(data.resultMessage);												
 				}
 			},
 			error: function(e){
-				console.log("네비게이션 사이트 정보 요청 예외 발생");
-				console.log(e);						
+				console.log("요청에 실패 하였습니다. (/ajax/getSiteInfo.do)");				
 			}
 		});
 	}
@@ -299,17 +339,25 @@
 					checked : true
 				},
 				success : function(data) {
-					try {
+					try {						
 						//각화면에서 필요한 데이터를 조회 하는 공통 합수 호출 
 						//암묵적으로 화면에서 데이터를 조회 하는 function 명을 search 로 정한다.
 						search();	
 					} catch (e) {}		
 				},
-				error: function(e){
-					alert("요청에 실패 하였습니다.");
+				error: function(e){					
+					console.log("요청에 실패 하였습니다. (/ajax/updateSiteSeq.do)");
 				}
 			});
 		}
+	}
+	
+	function getContextPath() {
+
+		var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+
+		return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+
 	}
 	
 </script>

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import sqisoft.com.mapper.SiteMapper;
+import sqisoft.com.model.CompanyInfo;
 import sqisoft.com.model.SiteInfo;
 import sqisoft.com.model.UsrInfo;
 
@@ -52,5 +53,22 @@ public class SiteService {
 		param.put("siteSeq", siteSeq);
 		
 		return siteMapper.selectSiteInfo(param);
+	}
+	
+	/*사이트 정보 추가*/
+	public int insertSiteInfo(SiteInfo siteInfo) throws Exception{		
+		return siteMapper.insertSiteInfo(siteInfo);
+	}
+	
+	/*사이트 정보 수정*/
+	public int updateSiteInfo(SiteInfo siteInfo) throws Exception{		
+		return siteMapper.updateSiteInfo(siteInfo);
+	}
+	
+	/*고객사 정보 삭제*/
+	public int deleteSiteInfo(String siteSeq) throws Exception{		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("siteSeq", siteSeq);
+		return siteMapper.deleteSiteInfo(param);
 	}
 }

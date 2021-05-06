@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -104,6 +105,22 @@ public class CommHandlr {
 			return true;
 		}
 		return false;
+	}
+	
+	//접속자 IP 가져오기
+	public String clientIp(HttpServletRequest request) {
+		
+		String ip = request.getHeader("X-FORWARDED-FOR");
+		
+		if (ip == null) {
+			ip = request.getRemoteAddr();
+		}	
+		
+		if (ip.equals("0:0:0:0:0:0:0:1")) {
+			ip = "127.0.0.1";
+		}
+		
+		return ip;
 	}
 	
 }

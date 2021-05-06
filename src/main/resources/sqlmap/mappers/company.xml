@@ -13,7 +13,18 @@
 		<id column="CNT_PSN_NM" property="cntPsnNm" />		
 		<id column="CNT_PSN_POS" property="cntPsnPos" />
 		<id column="CNT_PSN_HPNO" property="cntPsnHpno" />		
-		<id column="CNT_PSN_EML" property="cntPsnEml" />		
+		<id column="CNT_PSN_EML" property="cntPsnEml" />
+		
+		<id column="IMG_1" property="img1" />
+		<id column="IMG_2" property="img2" />
+		<id column="IMG_3" property="img3" />		
+		<id column="img_file_nm_1" property="imgFileNm1" />
+		<id column="img_file_nm_2" property="imgFileNm2" />
+		<id column="img_file_nm_3" property="imgFileNm3" />		
+		<id column="img_content_type_1" property="imgContentType1" />
+		<id column="img_content_type_2" property="imgContentType2" />
+		<id column="img_content_type_3" property="imgContentType3" />				
+				
 		<id column="CRETR" property="cretr" />
 		<id column="CRET_DT" property="cretDt" />
 		<id column="UPDTR" property="updtr" />
@@ -114,7 +125,16 @@
 				   A.CRET_DT,
 				   A.UPDTR,
 				   A.UPDT_DT,
-				   COUNT(*) OVER() AS TOTAL_CNT
+				   COUNT(*) OVER() AS TOTAL_CNT,
+				   A.IMG_1, 
+		 		   A.IMG_2, 
+		 		   A.IMG_3,
+		 		   A.img_file_nm_1,
+		 		   A.img_file_nm_2,
+		 		   A.img_file_nm_3,
+		 		   A.img_content_type_1,
+		 		   A.img_content_type_2,
+		 		   A.img_content_type_3		 
 		FROM REMS.CUST_INF A
 		LEFT OUTER JOIN REMS.CD_DTL B ON A.CUST_TYPE_CD = B.DTL_CD AND B.GRP_CD = 'CUST_TYPE_CD'
 		
@@ -148,8 +168,17 @@
 		 								   cnt_psn_eml, 
 		 								   del_yn, 
 		 								   cretr, 
-		 								   cret_dt)
-								 VALUES(nextval('rems.site_inf_seq')
+		 								   cret_dt,
+		 								   IMG_1, 
+		 								   IMG_2, 
+		 								   IMG_3,
+		 								   img_file_nm_1,
+		 								   img_file_nm_2,
+		 								   img_file_nm_3,
+		 								   img_content_type_1,
+		 								   img_content_type_2,
+		 								   img_content_type_3)
+								 VALUES(nextval('rems.cust_inf_seq')
 								 			,#{custNm}
 								 			,#{bizNo}
 								 			,#{custTypeCd}
@@ -161,7 +190,17 @@
 								 			,#{cntPsnEml}								 			
 								 			,'N'							 			
 								 			,#{cretr}
-								 			,current_timestamp)				
+								 			,current_timestamp
+								 			,#{img1}  
+											,#{img2}  
+											,#{img3} 
+											,#{imgFileNm1} 
+											,#{imgFileNm2} 
+											,#{imgFileNm3}
+											,#{imgContentType1}
+											,#{imgContentType2}
+											,#{imgContentType3})
+													
 	</insert>	
 	
 	<!-- 고객사 정보 수정 -->
@@ -175,8 +214,28 @@
 												  cnt_psn_pos = #{cntPsnPos},
 												  cnt_psn_hpno = #{cntPsnHpno},
 												  cnt_psn_eml = #{cntPsnEml},
+												  
+												  <if test="img1  != null"> 
+		 										 	IMG_1 = #{img1},
+		 										 	img_file_nm_1 = #{imgFileNm1},
+		 										 	img_content_type_1 = #{imgContentType1},
+			 									 </if> 
+			 										 
+			 									 <if test="img2  != null"> 
+			 										IMG_2 = #{img2},
+			 									 	img_file_nm_2 = #{imgFileNm2},
+			 									 	img_content_type_2 = #{imgContentType2},
+			 									 </if>
+			 										 
+			 									 <if test="img3  != null"> 
+			 									 	IMG_3 = #{img3},
+			 									 	img_file_nm_3 = #{imgFileNm3},
+			 									 	img_content_type_3 = #{imgContentType3},
+			 									 </if>
+			 									 
 												  updtr = #{updtr},
 												  updt_dt = current_timestamp
+												  
 		WHERE cust_seq = ${custSeq}
 	</update>	
 	

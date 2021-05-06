@@ -18,7 +18,7 @@ public class StringUtil {
          try {
         	 if (str == null || str.length() == 0) {
         		 //문자열 값이 없을 경우 체크 하지 않음
-        		 return true;
+        		 return false;
         	 }
         	 
         	 Double.parseDouble(str);

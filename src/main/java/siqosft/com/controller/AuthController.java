@@ -25,6 +25,7 @@ import sqisoft.com.model.CustInfo;
 import sqisoft.com.model.MenuInfo;
 import sqisoft.com.model.RolesInfo;
 import sqisoft.com.model.SiteInfo;
+import sqisoft.com.model.UserLoginHstInfo;
 import sqisoft.com.model.UsrInfo;
 import sqisoft.com.service.AuthService;
 import sqisoft.com.service.CompanyService;
@@ -91,7 +92,7 @@ public class AuthController extends  CommHandlr{
 	 */
 	@RequestMapping(value = "/loginAction.do", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> loginAction(HttpSession session, @RequestParam(required=true) String user_id, @RequestParam(required=true) String user_pwd, Model model) throws Exception {		
+	public Map<String, Object> loginAction(HttpSession session, HttpServletRequest request, @RequestParam(required=true) String user_id, @RequestParam(required=true) String user_pwd, Model model) throws Exception {		
 
 		Map<String, Object> result = new HashMap<String, Object>();        
 		
@@ -142,6 +143,14 @@ public class AuthController extends  CommHandlr{
 	 				//고객사 정보 세션 저장
 		 			session.setAttribute("companyInfo", companyInfo);
 	 			}
+	 			
+	 			//로그인 히스토리 저장
+	 			UserLoginHstInfo userLoginHstInfo = new UserLoginHstInfo();
+	 			userLoginHstInfo.setUsrId(rslt.getUsrId());
+	 			userLoginHstInfo.setSessnId(session.getId());
+	 			userLoginHstInfo.setConnIp(clientIp(request));
+	 			authService.insertUserLoginHst(userLoginHstInfo);
+	 			
 	 		}
 	     }catch(Exception err) {
 	    	 err.printStackTrace();	    	 
@@ -160,6 +169,20 @@ public class AuthController extends  CommHandlr{
 	@RequestMapping(value = "/logOut.do", method = RequestMethod.GET)	
 	public String logOut(HttpSession session, HttpServletRequest request, Model model) throws Exception {		
 
+		//로그아웃 히스토리 저장
+		try {
+			String userId = getUserId(session).getUsrId();
+			
+			UserLoginHstInfo userLoginHstInfo = new UserLoginHstInfo();
+			userLoginHstInfo.setUsrId(userId);
+			userLoginHstInfo.setSessnId(session.getId());	
+			userLoginHstInfo.setUpdtr(userId);
+			authService.updateUserLogoutHst(userLoginHstInfo);	
+		}catch(Exception e) {
+			
+		}
+			
+		//세션 정보 삭제
 		session.removeAttribute("usrInfo");
 		session.removeAttribute("menuList");
 				

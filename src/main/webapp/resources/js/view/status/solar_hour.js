@@ -40,15 +40,15 @@
 			},
 			
             columns: [
-            	{  id: "tgtTime", data: "tgtTime", "visible": true, "searchable": false, type: "readonly", className : 'text-center font-weight-bold' },
-            	{ id: "instlCpct", data: "instlCpct", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },            	
-            	{ id: "gentQnt", data: "gentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "accumGentQnt", data: "accumGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "gentEffi", data: "gentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "accumGentEffi", data: "accumGentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "invrtrEffi", data: "invrtrEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "sysEffi", data: "sysEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold' },
-            	{ id: "rducAmt", data: "rducAmt", "visible": true, "searchable": false, type: "readonly", className : 'text-right font-weight-bold', render: $.fn.dataTable.render.number( ',', '.', 0, '' ) }
+            	{  id: "tgtTime", data: "tgtTime", "visible": true, "searchable": false, type: "readonly", className : 'text-center' },
+            	{ id: "instlCpct", data: "instlCpct", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },            	
+            	{ id: "gentQnt", data: "gentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "accumGentQnt", data: "accumGentQnt", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "gentEffi", data: "gentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "accumGentEffi", data: "accumGentEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "invrtrEffi", data: "invrtrEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "sysEffi", data: "sysEffi", "visible": true, "searchable": false, type: "readonly", className : 'text-right' },
+            	{ id: "rducAmt", data: "rducAmt", "visible": true, "searchable": false, type: "readonly", className : 'text-right', render: $.fn.dataTable.render.number( ',', '.', 0, '' ) }
             ]
         });
 	}
@@ -68,6 +68,9 @@
 	        exporting: {
 	            enabled: false
 			},
+			credits: {
+	            enabled: false
+	        },
 		    xAxis: {
 		    	categories: categories,
 		    	labels: {

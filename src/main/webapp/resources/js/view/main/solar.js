@@ -123,9 +123,12 @@
 	}
 	
 	//시간별 그래프 그리기
+	var hourChartHeight;
 	function drawChart_hour(categories, genList, genEffi, prnmtrList){
 		
-		Highcharts.chart('container', {
+		hourChartHeight = $('#row-right-middle').height();
+		
+		hourChart = Highcharts.chart('container', {
 
 		    title: { 
 		    	text: '' 
@@ -133,6 +136,9 @@
 		    chart: {
 	            renderTo: 'container',
 	            backgroundColor: 'transparent'
+	        },
+	        credits: {
+	            enabled: false
 	        },
 	        exporting: {
 	            enabled: false
@@ -142,15 +148,20 @@
 		    	labels: {
 		            formatter: function() {		            			            	
 		            	return this.value + " 시";
+		            },
+		            style: {
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
-		          }
+		          }      
 		    },
 		    yAxis: [{ 
 		    	// 발전량 Y축 설정
 		        labels: {
-		            format: '{value} kWh',
+		            format: '{value} kWh',		            
 		            style: {
-		                color: Highcharts.getOptions().colors[1]
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		        },
 		        title: {
@@ -198,20 +209,38 @@
 		        		}
 		    		}		    		
 		    ]
-		});
+		}, function(hourChart){			
+			hourChart.setSize($('#row-right-middle').width(), hourChartHeight - 95, {duration:0});
+	    	hourChart.yAxis[0].isDirty = true;
+	    	hourChart.redraw();
+		});	
 	}
 	
+	function setHourChartHeight() {
+		if (hourChart){
+			hourChart.setSize($('#row-right-middle').width(), hourChartHeight - 95, {duration:0});
+			hourChart.yAxis[0].isDirty = true;
+			hourChart.redraw();	
+		}    	
+    }
+	
 	//일별 그래프 그리기
+	var dayChartHeight;
 	function drawHighChart_day(categories, genList, genTimeList, prnmtrList){
 		
-		Highcharts.chart('container', {
+		dayChartHeight = $('#row-right-middle').height();
+		
+		dayChart = Highcharts.chart('container', {
 
 		    title: { 
-		    	text: '' 
+		    	text: ''		    	
 			},
 		    chart: {
 	            renderTo: 'container',
 	            backgroundColor: 'transparent'
+	        },
+	        credits: {
+	            enabled: false
 	        },
 	        exporting: {
 	            enabled: false
@@ -222,15 +251,20 @@
 		            formatter: function() {
 		            	var data = String(this.value);		            	
 		            	return data.substr(2,2) + "/" + data.substr(4,2) + "/" + data.substr(6,2);
+		            },
+		            style: {
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		          }
 		    },
 		    yAxis: [{ 
 		    	// 발전량 Y축 설정
 		        labels: {
-		            format: '{value} kWh',
+		            format: '{value} kWh',		            
 		            style: {
-		                color: Highcharts.getOptions().colors[1]
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		        },
 		        title: {
@@ -287,13 +321,28 @@
 		            		valueSuffix: ' h'
 		        		}
 		    }]
-		});
+		}, function(dayChart){			   
+			dayChart.setSize($('#row-right-middle').width(), dayChartHeight - 95, {duration:0});
+	    	dayChart.yAxis[0].isDirty = true;
+	    	dayChart.redraw();	
+		});		
 	}
 	
-	//시간별 그래프 그리기
+	function setDayChartHeight() {
+		if (dayChart){
+			dayChart.setSize($('#row-right-middle').width(), dayChartHeight - 95, {duration:0});
+	    	dayChart.yAxis[0].isDirty = true;
+	    	dayChart.redraw();	
+		}    	
+    }
+	
+	//월별 그래프 그리기
+	var monthChartHeight;
 	function drawHighChart_month(categories, genList, genTimeList, prnmtrList){
 		
-		Highcharts.chart('container', {
+		monthChartHeight = $('#row-right-middle').height();
+		
+		monthChart = Highcharts.chart('container', {
 
 		    title: { 
 		    	text: '' 
@@ -301,6 +350,9 @@
 		    chart: {
 	            renderTo: 'container',
 	            backgroundColor: 'transparent'
+	        },
+	        credits: {
+	            enabled: false
 	        },
 	        exporting: {
 	            enabled: false
@@ -311,6 +363,10 @@
 		            formatter: function() {
 		            	var data = String(this.value);		            	
 		            	return data.substr(2,2) + "/" + data.substr(4,2);
+		            },
+		            style: {
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		          }
 		    },
@@ -319,13 +375,15 @@
 		        labels: {
 		            format: '{value} kWh',
 		            style: {
-		                color: Highcharts.getOptions().colors[1]
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		        },
 		        title: {
-		            text: '',
+		            text: '',		            
 		            style: {
-		                color: Highcharts.getOptions().colors[2]
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		        },
 		        opposite: false	        
@@ -334,9 +392,10 @@
 		    { 
 		    	// 발전시간 Y축 설정
 		        labels: {
-		            format: '{value} h',
+		            format: '{value} h',		            
 		            style: {
-		                color: Highcharts.getOptions().colors[1]
+		            	fontWeight: 'bold',
+		                color:'#9a9696'
 		            }
 		        },
 		        title: {
@@ -376,5 +435,17 @@
 		            		valueSuffix: ' h'
 		        		}
 		    }]
-		});
+		}, function(monthChart){			
+			monthChart.setSize($('#row-right-middle').width(), monthChartHeight - 95, {duration:0});
+	    	monthChart.yAxis[0].isDirty = true;
+	    	monthChart.redraw();
+		});	
 	}
+	
+	function setMonthChartHeight() {
+		if (monthChart){
+			monthChart.setSize($('#row-right-middle').width(), monthChartHeight - 95, {duration:0});
+			monthChart.yAxis[0].isDirty = true;
+			monthChart.redraw();	
+		}    	
+    }

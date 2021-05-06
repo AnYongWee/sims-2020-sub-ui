@@ -44,15 +44,17 @@
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/notifications/sweetalert2/sweetalert2.bundle.css">
         <!--===============================================================================================-->
         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/formplugins/select2/select2.bundle.css">
-        <!--===============================================================================================-->
-        
+        <!--===============================================================================================-->        
+         <link rel="stylesheet" media="screen, print" href="${pageContext.request.contextPath}/resources/css/smart/fa-duotone.css">
+         <!--===============================================================================================-->
+         
 		<!--===============================================================================================-->
 		<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/custom.css" />  
-        <!--===============================================================================================-->
+        <!--===============================================================================================-->        
 						
     </head>
     <!-- BEGIN Body -->
-    <body class="mod-bg-1 mod-skin-light header-function-fixed nav-function-fixed footer-function-fixed">
+    <body class="mod-bg-1 mod-skin-light header-function-fixed nav-function-fixed footer-function-fixed" >
 
 		<!-- BEGIN Color profile -->
 		<!-- this area is hidden and will not be seen on screens or screen readers -->
@@ -184,8 +186,8 @@
 	</script>
 
 	<!-- BEGIN Page Wrapper -->
-        <div class="page-wrapper">
-            <div class="page-inner">
+        <div class="page-wrapper" style="overflow-y:hidden;">
+            <div class="page-inner" >
             	
             	<tiles:insertAttribute name="header"/>
             	

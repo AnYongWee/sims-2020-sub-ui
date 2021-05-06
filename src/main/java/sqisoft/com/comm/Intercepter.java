@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -35,8 +36,16 @@ public class Intercepter extends HandlerInterceptorAdapter{
 		// 세션 로그인 정보 확인
 		HttpSession session = request.getSession();
 		if (session.getAttribute("usrInfo") == null) {
-			logger.info("current user is not logged");
-			response.sendRedirect("/login.do");
+			
+			logger.info(String.format("current user is not logged (%s)", request.getRequestURI()) );
+			
+			if (request.getRequestURI().indexOf("ajax") > -1) {
+				response.getWriter().write("something");
+				response.setStatus(302);
+			}else {
+				response.sendRedirect("/login.do");					
+			}
+						
 			return false;
 		}
  

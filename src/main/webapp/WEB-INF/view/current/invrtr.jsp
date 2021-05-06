@@ -114,9 +114,10 @@ var gaugeOptions = {
 			
 <main id="js-page-content" role="main" class="page-content">                   
 
-	<div>                             
-		<ol class="breadcrumb bg-fusion-300 border border-primary">
-			<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-plug mr-1 fs-md"></i> 인버터 현황</a></li>	
+	<div>    
+		<ol class="breadcrumb page-breadcrumb">
+			<li class="breadcrumb-item"><a href="javascript:void(0);">인버터</a></li>
+			<li class="breadcrumb-item">인버터 현황</li>		
 		</ol>
 	</div>
 	
@@ -148,15 +149,15 @@ var gaugeOptions = {
 							<div class="row align-items-center">
 								<div class="col-sm-2 text-center">
 					                <span class="d-block" style="font-size:12px">전일<br/>발전량</span>
-					                <span class="d-block h2 fw-900" id="beforeGentQnt-${row.devSeq}">${row.beforeGentQnt}</span>
+					                <span class="d-block fw-900" id="beforeGentQnt-${row.devSeq}" style="font-size:15px">${row.beforeGentQnt}</span>
 					                <span style="font-size:12px;opacity:0.4">kWh</span>		                
 								</div>
 								<figure class="highcharts-figure col-sm-8 text-center">
 									<div id="container-${row.devSeq}" class="chart-container" style="height:150px;"></div>					    			   
 								</figure>
-								<div class="col-sm-2 text-center">
+								<div class="col-sm-2 text-center pl-0 pr-0">
 									<span class="d-block" style="font-size:12px">누적<br/>발전량</span>
-					                <span class="d-block h2 fw-900" id="accumGentQnt-${row.devSeq}" style="font-size:20px">${row.accumGentQnt}</span>
+					                <span class="d-block h2 fw-900" id="accumGentQnt-${row.devSeq}" style="font-size:15px">${row.accumGentQnt}</span>
 					                <span style="font-size:12px;opacity:0.4">kWh</span>
 								</div>
 							</div>
@@ -222,7 +223,7 @@ var gaugeOptions = {
 								if (obj){
 									
 									//테스트를 위해 랜덤 함수 추가
-									gentQnt = Math.floor(Math.random( )*3 + 1)
+									//gentQnt = Math.floor(Math.random( )*3 + 1)
 									
 									obj.chart.series[0].points[0].update(gentQnt);
 									
@@ -258,7 +259,7 @@ var gaugeOptions = {
 			}
 		});
 		
-		}, 1000 * 2); 
+		}, 1000 * 300); 
 		
 	});
 		

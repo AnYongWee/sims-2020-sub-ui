@@ -12,9 +12,10 @@
 
 <main id="js-page-content" role="main" class="page-content">
         
-<div>                             
-	<ol class="breadcrumb bg-fusion-300 border border-primary">
-		<li class="breadcrumb-item text-white ml-2"><a class="text-white" href="#"> <i class="fal fa-chart-line mr-1 fs-md"></i> 통계</a></li>	
+<div>     
+	 <ol class="breadcrumb page-breadcrumb">
+		<li class="breadcrumb-item"><a href="javascript:void(0);">통계</a></li>
+		<li class="breadcrumb-item">발전량 통계</li>		
 	</ol>
 </div>
 
@@ -235,7 +236,7 @@
 			$('#end-date-month').datepicker('setDate', 'today');	
 			
 			$("#date-picker-month").show();
-			$("#datatable-month").show();			
+			$("#datatable-month").show();
 		}
 		
 		search();

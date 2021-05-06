@@ -36,6 +36,18 @@ public class CompanyInfo {
 	/*담당자이메일*/
 	private String cntPsnEml;
 	
+	private byte[] img1;
+	private byte[] img2;
+	private byte[] img3;
+	
+	private String imgFileNm1;
+	private String imgFileNm2;
+	private String imgFileNm3;
+	
+	private String imgContentType1;
+	private String imgContentType2;
+	private String imgContentType3;
+	
 	/*생성자*/
 	private String cretr;
 	/*생성일시*/
@@ -113,6 +125,60 @@ public class CompanyInfo {
 	public void setCntPsnEml(String cntPsnEml) {
 		this.cntPsnEml = cntPsnEml;
 	}
+	public byte[] getImg1() {
+		return img1;
+	}
+	public void setImg1(byte[] img1) {
+		this.img1 = img1;
+	}
+	public byte[] getImg2() {
+		return img2;
+	}
+	public void setImg2(byte[] img2) {
+		this.img2 = img2;
+	}
+	public byte[] getImg3() {
+		return img3;
+	}
+	public void setImg3(byte[] img3) {
+		this.img3 = img3;
+	}
+	public String getImgFileNm1() {
+		return imgFileNm1;
+	}
+	public void setImgFileNm1(String imgFileNm1) {
+		this.imgFileNm1 = imgFileNm1;
+	}
+	public String getImgFileNm2() {
+		return imgFileNm2;
+	}
+	public void setImgFileNm2(String imgFileNm2) {
+		this.imgFileNm2 = imgFileNm2;
+	}
+	public String getImgFileNm3() {
+		return imgFileNm3;
+	}
+	public void setImgFileNm3(String imgFileNm3) {
+		this.imgFileNm3 = imgFileNm3;
+	}
+	public String getImgContentType1() {
+		return imgContentType1;
+	}
+	public void setImgContentType1(String imgContentType1) {
+		this.imgContentType1 = imgContentType1;
+	}
+	public String getImgContentType2() {
+		return imgContentType2;
+	}
+	public void setImgContentType2(String imgContentType2) {
+		this.imgContentType2 = imgContentType2;
+	}
+	public String getImgContentType3() {
+		return imgContentType3;
+	}
+	public void setImgContentType3(String imgContentType3) {
+		this.imgContentType3 = imgContentType3;
+	}
 	public String getCretr() {
 		return cretr;
 	}
@@ -142,5 +208,5 @@ public class CompanyInfo {
 	}
 	public void setTotalCnt(int totalCnt) {
 		this.totalCnt = totalCnt;
-	}	
+	}
 }

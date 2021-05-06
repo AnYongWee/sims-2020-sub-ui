@@ -54,6 +54,27 @@
 				<value>/login.do</value>		
 				<value>/loginAction.do</value>				
 				<!-- ajax -->
+				<!-- <value>/ajax/updateSiteSeq.do</value>
+				<value>/ajax/updateAllSiteSeq.do</value>
+				<value>/ajax/siteReplace.do</value>
+				<value>/ajax/getCompanyList.do</value>
+				<value>/ajax/getCompanyInfo.do</value>
+				<value>/ajax/newCompanyInfo.do</value>
+				<value>/ajax/updateCompanyInfo.do</value>
+				<value>/ajax/delCompanyInfo.do</value>
+				<value>/ajax/getEvtHstList.do</value>
+				<value>/ajax/getCompanyGentInfo.do</value>
+				<value>/ajax/getSiteGentTopList.do</value>
+				<value>/ajax/getSiteGentInfo.do</value>
+				<value>/ajax/getInvrtrOprtList.do</value>
+				<value>/ajax/getSiteList.do</value>
+				<value>/ajax/getSiteInfo.do</value>
+				<value>/ajax/newSiteInfo.do</value>
+				<value>/ajax/updateSiteInfo.do</value>
+				<value>/ajax/delSiteInfo.do</value>
+				<value>/ajax/getSolarHourSummary.do</value>
+				<value>/ajax/getSolarDaySummary.do</value>
+				<value>/ajax/getSolarMonthSummary.do</value>		 -->		
 			</list>
 		</property>
   </bean>

@@ -3,7 +3,10 @@
 <mapper namespace="sqisoft.com.mapper.GentMapper">
 
 	<resultMap type="sqisoft.com.model.GentInfo" id="gentInfoMap">
-		<id column="TOTAL_CPCT" property="totalCpct" />
+		<id column="TOTAL_CPCT" property="totalCpct" />		
+		<id column="DAY_GENT_QNT" property="dayGentQnt" />
+		<id column="AF_DAY_GENT_QNT" property="afDayGentQnt" />
+		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />		
 		<id column="NOW_GENT_QNT" property="nowGentQnt" />
 		<id column="MONTH_GENT_QNT" property="monthGentQnt" />
 		<id column="MONTH_GENT_TIME" property="monthGentTime" />
@@ -14,7 +17,12 @@
 	<!-- 고객사 발전정보 조회 -->
 	<select id="selectCompanyGentInfo" parameterType="map" resultMap="gentInfoMap">
 		
-	    SELECT SUM(COALESCE(DEV_SUM.TOTAL_CPCT, 0)) AS TOTAL_CPCT,				   
+	    SELECT SUM(COALESCE(DEV_SUM.TOTAL_CPCT, 0)) AS TOTAL_CPCT,	
+	    		
+	    		   SUM(COALESCE(DAY_SUM.DAY_GENT_QNT, 0)) AS DAY_GENT_QNT,
+	    		   SUM(COALESCE(AF_DAY_SUM.DAY_GENT_QNT, 0)) AS AF_DAY_GENT_QNT,
+	    		   SUM(COALESCE(DAY_SUM.ACCUM_GENT_QNT, 0)) AS ACCUM_GENT_QNT,
+	    		   
 				   SUM(COALESCE(NOW_MON_SUM.MONTH_GENT_QNT, 0)) AS MONTH_GENT_QNT,
 				   SUM(COALESCE(AF_MON_SUM.MONTH_GENT_QNT, 0)) AS AF_MONTH_GENT_QNT,
 				   SUM(COALESCE(NOW_MON_SUM.MONTH_GENT_TIME, 0)) AS MONTH_GENT_TIME,
@@ -48,6 +56,30 @@
 		
 		LEFT OUTER JOIN
 		(
+			SELECT SI.CUST_SEQ, 
+				   SUM(COALESCE(GD.GENT_QNT, 0)) AS DAY_GENT_QNT,			 	   
+				   SUM(COALESCE(GD.RDUC_AMT, 0)) AS TOTAL_GENT_PROFT_AMT,
+				   COALESCE(MAX(GD.ACCUM_GENT_QNT), 0) AS ACCUM_GENT_QNT
+			FROM REMS.GENT_TIME_SUM GD 
+			INNER JOIN REMS.SITE_INF SI ON GD.SITE_SEQ = SI.SITE_SEQ
+			WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMMDD') = to_char(now(), 'YYYYMMDD') 
+			GROUP BY SI.CUST_SEQ
+		) AS DAY_SUM ON A.CUST_SEQ = DAY_SUM.CUST_SEQ
+		
+		LEFT OUTER JOIN
+		(
+			SELECT SI.CUST_SEQ, 
+				   SUM(COALESCE(GD.TDAY_GENT_QNT, 0)) AS DAY_GENT_QNT,
+			 	   SUM(COALESCE(GD.TDAY_GENT_TIME, 0)) AS DAY_GENT_TIME,
+				   SUM(COALESCE(GD.RDUC_AMT, 0)) AS DAY_GENT_PROFT_AMT
+			FROM REMS.GENT_DAY_SUM GD 
+			INNER JOIN REMS.SITE_INF SI ON GD.SITE_SEQ = SI.SITE_SEQ
+			WHERE to_char(to_date(GD.TGT_DATE, 'YYYYMMDD'), 'YYYYMMDD') = to_char(now() - interval '2 day', 'YYYYMMDD') 
+			GROUP BY SI.CUST_SEQ
+		) AS AF_DAY_SUM ON A.CUST_SEQ = AF_DAY_SUM.CUST_SEQ
+		
+		LEFT OUTER JOIN
+		(
 			SELECT SI.CUST_SEQ, SUM(COALESCE(DI.INSTL_CPCT, 0)) AS TOTAL_CPCT
 			FROM REMS.DEV_INF DI 
 			INNER JOIN REMS.SITE_INF SI ON DI.SITE_SEQ = SI.SITE_SEQ
@@ -56,6 +88,8 @@
 		) AS DEV_SUM ON A.CUST_SEQ = DEV_SUM.CUST_SEQ
 		
 		<where>
+			AND A.DEL_YN <![CDATA[<>]]> 'Y'
+			
 			<if test="custSeq  != null and custSeq != '' "> 
 			 	AND A.CUST_SEQ = ${custSeq} 
 			 </if>			 
@@ -63,5 +97,125 @@
 		
 	</select>
 	
+	
+	<resultMap type="sqisoft.com.model.SiteGentInfo" id="siteGentInfoMap">
+		<id column="SITE_SEQ" property="siteSeq" />
+		<id column="SITE_NM" property="siteNm" />
+		<id column="TDAY_GENT_QNT" property="tdayGentQnt" />
+		<id column="MONTH_GENT_QNT" property="monthGentQnt" />
+		<id column="ACCUM_GENT_QNT" property="accumGentQnt" />		
+		<id column="RDUC_AMT" property="rducAmt" />			
+		<id column="DC_POWR" property="dcPowr" />			
+		<id column="DC_VOLT" property="dcVolt" />			
+		<id column="DC_CURR" property="dcCurr" />			
+		<id column="AC_POWR" property="acPowr" />			
+		<id column="AC_VOLT" property="acVolt" />			
+		<id column="AC_CURR" property="acCurr" />			
+		<id column="OUTDR_TEMPR" property="outdrTempr" />			
+		<id column="MODL_TEMPR" property="modlTempr" />			
+		<id column="INCL_IRRAD_QNT" property="inclIrradQnt" />			
+		<id column="HORZ_IRRAD_QNT" property="horzIrradQnt" />			
+		<id column="VERT_IRRAD_QNT" property="vertIrradQnt" />
+		<id column="INSTL_CPCT" property="instlCpct" />
+		
+	</resultMap>
+	
+	<!-- 사이트 발전량 조회 (top.10) -->
+	<select id="selectSiteGentTopList" parameterType="map" resultMap="siteGentInfoMap">
+		
+		SELECT * FROM
+	    (SELECT SI.SITE_SEQ, 
+	    		   SI.SITE_NM, 
+				   SUM(CASE WHEN TS.TGT_DATE = #{nowDate} THEN TS.GENT_QNT ELSE 0 END) AS TDAY_GENT_QNT,
+				   SUM(CASE WHEN TO_CHAR(TO_DATE(TS.TGT_DATE, 'YYYYMMDD'), 'YYYYMM') = TO_CHAR(TO_DATE(#{nowDate}, 'YYYYMMDD'), 'YYYYMM') THEN TS.GENT_QNT ELSE 0 END) AS MONTH_GENT_QNT,
+				   COALESCE(MAX(TS.ACCUM_GENT_QNT), 0) AS ACCUM_GENT_QNT
+		FROM REMS.SITE_INF SI
+		LEFT OUTER JOIN REMS.GENT_TIME_SUM TS ON SI.SITE_SEQ = TS.SITE_SEQ AND TS.TGT_DATE <![CDATA[>=]]> (SUBSTRING(#{nowDate}, 1, 6) || '01') AND TS.TGT_DATE <![CDATA[<=]]> #{nowDate}
+		
+		<where>
+		 
+			AND SI.DEL_YN <![CDATA[<>]]> 'Y'
+			
+			<if test="custSeq  != null and custSeq != '' "> 
+			 	AND SI.CUST_SEQ = ${custSeq} 
+			 </if>		
+			
+		</where>
+		 
+		GROUP BY SI.SITE_SEQ, SI.SITE_NM) Z
+		ORDER BY TDAY_GENT_QNT DESC
+		LIMIT 10
+		
+	</select>
+	
+	<!-- 사이트 발전정보 조회 -->
+	<select id="selectSiteGentInfo" parameterType="map" resultMap="siteGentInfoMap">
+		
+	    SELECT SI.SITE_SEQ,
+	    		   SI.SITE_NM,
+				   A.RDUC_AMT,
+				   B.DC_POWR,
+				   B.DC_VOLT,
+				   B.DC_CURR,
+				   B.AC_POWR,
+				   B.AC_VOLT,
+				   B.AC_CURR,
+				   B.TDAY_GENT_QNT,
+				   B.ACCUM_GENT_QNT,
+				   C.OUTDR_TEMPR,
+				   C.MODL_TEMPR,
+				   C.INCL_IRRAD_QNT,
+				   C.HORZ_IRRAD_QNT,
+				   C.VERT_IRRAD_QNT,
+				   D.INSTL_CPCT
+			FROM REMS.SITE_INF SI
+			
+			LEFT OUTER JOIN (
+				SELECT GA.SITE_SEQ, 
+					   SUM(GA.RDUC_AMT) AS RDUC_AMT
+				FROM REMS.GENT_TIME_SUM GA				
+				WHERE TO_TIMESTAMP((GA.TGT_DATE || GA.TGT_TIME), 'YYYYMMDDHH24MISS') >= (now()::timestamp - '5 minutes'::interval)
+				GROUP BY GA.SITE_SEQ
+			) A ON SI.SITE_SEQ = A.SITE_SEQ
+			
+			LEFT OUTER JOIN (
+				SELECT SA.SITE_SEQ, 
+					   SUM(SA.DC_POWR) AS DC_POWR,
+					   SUM(SA.DC_VOLT) AS DC_VOLT,
+					   SUM(SA.DC_CURR) AS DC_CURR,
+					   SUM(SA.AC_POWR) AS AC_POWR,
+					   SUM(SA.AC_VOLT) AS AC_VOLT,
+					   SUM(SA.AC_CURR) AS AC_CURR,
+					   SUM(SA.TDAY_GENT_QNT) AS TDAY_GENT_QNT,
+					   SUM(SA.ACCUM_GENT_QNT) AS ACCUM_GENT_QNT
+				FROM REMS.INVRTR_TIME_SUM SA				
+				WHERE TO_TIMESTAMP((SA.TGT_DATE || SA.TGT_TIME), 'YYYYMMDDHH24MISS') >= (now()::timestamp - '5 minutes'::interval)		
+				GROUP BY SA.SITE_SEQ
+			) B ON SI.SITE_SEQ = B.SITE_SEQ
+			
+			LEFT OUTER JOIN (
+				SELECT PA.SITE_SEQ, 
+					   AVG(PA.OUTDR_TEMPR) AS OUTDR_TEMPR,
+					   AVG(PA.MODL_TEMPR) AS MODL_TEMPR,
+					   SUM(PA.INCL_IRRAD_QNT) AS INCL_IRRAD_QNT,
+					   SUM(PA.HORZ_IRRAD_QNT) AS HORZ_IRRAD_QNT,
+					   SUM(PA.VERT_IRRAD_QNT) AS VERT_IRRAD_QNT
+				FROM REMS.PRNMTR_TIME_SUM PA				
+				WHERE TO_TIMESTAMP((PA.TGT_DATE || PA.TGT_TIME), 'YYYYMMDDHH24MISS') >= (now()::timestamp - '5 minutes'::interval)				
+				GROUP BY PA.SITE_SEQ
+			) C ON SI.SITE_SEQ = C.SITE_SEQ
+		
+		LEFT OUTER JOIN (
+			SELECT DI.SITE_SEQ,
+				   	   SUM(DI.INSTL_CPCT) AS INSTL_CPCT
+			FROM REMS.DEV_INF DI 
+			GROUP BY DI.SITE_SEQ
+		) D ON SI.SITE_SEQ = D.SITE_SEQ
+			
+		<where>
+			AND SI.SITE_SEQ =  ${siteSeq}						 
+		</where>
+		
+	</select>
 		
 </mapper>
